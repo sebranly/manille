@@ -1,4 +1,4 @@
-import { getCardPoints } from '../scores';
+import { compareCardRanks, getCardPoints, getLowCardNumericValue } from '../scores';
 import { CardRank } from '../types';
 
 const { Ace, Eight, Jack, King, Nine, Queen, Seven, Ten } = CardRank;
@@ -12,4 +12,61 @@ test('getCardPoints', () => {
   expect(getCardPoints(Nine)).toBe(0);
   expect(getCardPoints(Eight)).toBe(0);
   expect(getCardPoints(Seven)).toBe(0);
+});
+
+test('getLowCardNumericValue', () => {
+  expect(getLowCardNumericValue(Ten)).toBe(-1);
+  expect(getLowCardNumericValue(Ace)).toBe(-1);
+  expect(getLowCardNumericValue(King)).toBe(-1);
+  expect(getLowCardNumericValue(Queen)).toBe(-1);
+  expect(getLowCardNumericValue(Jack)).toBe(-1);
+  expect(getLowCardNumericValue(Nine)).toBe(9);
+  expect(getLowCardNumericValue(Eight)).toBe(8);
+  expect(getLowCardNumericValue(Seven)).toBe(7);
+});
+
+test('compareCardRanks', () => {
+  // Output is 1
+  expect(compareCardRanks(Ten, Ace)).toBe(1);
+  expect(compareCardRanks(Ace, King)).toBe(1);
+  expect(compareCardRanks(King, Queen)).toBe(1);
+  expect(compareCardRanks(Queen, Jack)).toBe(1);
+  expect(compareCardRanks(Jack, Nine)).toBe(1);
+  expect(compareCardRanks(Nine, Eight)).toBe(1);
+  expect(compareCardRanks(Eight, Seven)).toBe(1);
+
+  expect(compareCardRanks(Ten, Ace)).toBe(1);
+  expect(compareCardRanks(Ten, King)).toBe(1);
+  expect(compareCardRanks(Ten, Queen)).toBe(1);
+  expect(compareCardRanks(Ten, Jack)).toBe(1);
+  expect(compareCardRanks(Ten, Nine)).toBe(1);
+  expect(compareCardRanks(Ten, Eight)).toBe(1);
+  expect(compareCardRanks(Ten, Seven)).toBe(1);
+
+  // Output is 0
+  expect(compareCardRanks(Ten, Ten)).toBe(0);
+  expect(compareCardRanks(Ace, Ace)).toBe(0);
+  expect(compareCardRanks(King, King)).toBe(0);
+  expect(compareCardRanks(Queen, Queen)).toBe(0);
+  expect(compareCardRanks(Jack, Jack)).toBe(0);
+  expect(compareCardRanks(Nine, Nine)).toBe(0);
+  expect(compareCardRanks(Eight, Eight)).toBe(0);
+  expect(compareCardRanks(Seven, Seven)).toBe(0);
+
+  // Output is -1
+  expect(compareCardRanks(Ace, Ten)).toBe(-1);
+  expect(compareCardRanks(King, Ace)).toBe(-1);
+  expect(compareCardRanks(Queen, King)).toBe(-1);
+  expect(compareCardRanks(Jack, Queen)).toBe(-1);
+  expect(compareCardRanks(Nine, Jack)).toBe(-1);
+  expect(compareCardRanks(Eight, Nine)).toBe(-1);
+  expect(compareCardRanks(Seven, Eight)).toBe(-1);
+
+  expect(compareCardRanks(Seven, Ten)).toBe(-1);
+  expect(compareCardRanks(Seven, Ace)).toBe(-1);
+  expect(compareCardRanks(Seven, King)).toBe(-1);
+  expect(compareCardRanks(Seven, Queen)).toBe(-1);
+  expect(compareCardRanks(Seven, Jack)).toBe(-1);
+  expect(compareCardRanks(Seven, Nine)).toBe(-1);
+  expect(compareCardRanks(Seven, Eight)).toBe(-1);
 });
