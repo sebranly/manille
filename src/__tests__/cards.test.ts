@@ -53,6 +53,7 @@ test('orderCards', () => {
 
   expect(orderCards(cardsDeck)).toStrictEqual(copyCardsDeck);
 
+  // TODO: should I create a mock?
   const cards = [
     { rank: Eight, suit: Diamonds },
     { rank: Jack, suit: Spades },

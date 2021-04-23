@@ -1,7 +1,9 @@
-import { compareCardRanks, getCardPoints, getLowCardNumericValue } from '../scores';
-import { CardRank } from '../types';
+import { compareCardRanks, getCardPoints, getCardsPoints, getLowCardNumericValue } from '../scores';
+import { generateDeck, generateSuit } from '../cards';
+import { CardRank, CardSuit } from '../types';
 
 const { Ace, Eight, Jack, King, Nine, Queen, Seven, Ten } = CardRank;
+const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
 
 test('getCardPoints', () => {
   expect(getCardPoints(Ten)).toBe(5);
@@ -12,6 +14,27 @@ test('getCardPoints', () => {
   expect(getCardPoints(Nine)).toBe(0);
   expect(getCardPoints(Eight)).toBe(0);
   expect(getCardPoints(Seven)).toBe(0);
+});
+
+test('getCardsPoints', () => {
+  const cardsSuit = generateSuit(Spades);
+  expect(getCardsPoints(cardsSuit)).toBe(15);
+
+  const cardsDeck = generateDeck();
+  expect(getCardsPoints(cardsDeck)).toBe(60);
+
+  const cards = [
+    { rank: Eight, suit: Diamonds },
+    { rank: Jack, suit: Spades },
+    { rank: Seven, suit: Diamonds },
+    { rank: Ace, suit: Hearts },
+    { rank: Ace, suit: Spades },
+    { rank: Ten, suit: Spades },
+    { rank: Nine, suit: Clubs },
+    { rank: King, suit: Clubs }
+  ];
+
+  expect(getCardsPoints(cards)).toBe(17);
 });
 
 test('getLowCardNumericValue', () => {
