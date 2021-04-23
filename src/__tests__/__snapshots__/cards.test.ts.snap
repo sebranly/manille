@@ -1,5 +1,138 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`cutDeck 1`] = `
+Array [
+  Object {
+    "rank": "king",
+    "suit": "diamonds",
+  },
+  Object {
+    "rank": "queen",
+    "suit": "diamonds",
+  },
+  Object {
+    "rank": "jack",
+    "suit": "diamonds",
+  },
+  Object {
+    "rank": "nine",
+    "suit": "diamonds",
+  },
+  Object {
+    "rank": "eight",
+    "suit": "diamonds",
+  },
+  Object {
+    "rank": "seven",
+    "suit": "diamonds",
+  },
+  Object {
+    "rank": "ten",
+    "suit": "spades",
+  },
+  Object {
+    "rank": "ace",
+    "suit": "spades",
+  },
+  Object {
+    "rank": "king",
+    "suit": "spades",
+  },
+  Object {
+    "rank": "queen",
+    "suit": "spades",
+  },
+  Object {
+    "rank": "jack",
+    "suit": "spades",
+  },
+  Object {
+    "rank": "nine",
+    "suit": "spades",
+  },
+  Object {
+    "rank": "eight",
+    "suit": "spades",
+  },
+  Object {
+    "rank": "seven",
+    "suit": "spades",
+  },
+  Object {
+    "rank": "ten",
+    "suit": "hearts",
+  },
+  Object {
+    "rank": "ace",
+    "suit": "hearts",
+  },
+  Object {
+    "rank": "king",
+    "suit": "hearts",
+  },
+  Object {
+    "rank": "queen",
+    "suit": "hearts",
+  },
+  Object {
+    "rank": "jack",
+    "suit": "hearts",
+  },
+  Object {
+    "rank": "nine",
+    "suit": "hearts",
+  },
+  Object {
+    "rank": "eight",
+    "suit": "hearts",
+  },
+  Object {
+    "rank": "seven",
+    "suit": "hearts",
+  },
+  Object {
+    "rank": "ten",
+    "suit": "clubs",
+  },
+  Object {
+    "rank": "ace",
+    "suit": "clubs",
+  },
+  Object {
+    "rank": "king",
+    "suit": "clubs",
+  },
+  Object {
+    "rank": "queen",
+    "suit": "clubs",
+  },
+  Object {
+    "rank": "jack",
+    "suit": "clubs",
+  },
+  Object {
+    "rank": "nine",
+    "suit": "clubs",
+  },
+  Object {
+    "rank": "eight",
+    "suit": "clubs",
+  },
+  Object {
+    "rank": "seven",
+    "suit": "clubs",
+  },
+  Object {
+    "rank": "ten",
+    "suit": "diamonds",
+  },
+  Object {
+    "rank": "ace",
+    "suit": "diamonds",
+  },
+]
+`;
+
 exports[`generateDeck 1`] = `
 Array [
   Object {
@@ -68,67 +201,67 @@ Array [
   },
   Object {
     "rank": "ten",
-    "suit": "hearts",
+    "suit": "spades",
   },
   Object {
     "rank": "ace",
-    "suit": "hearts",
+    "suit": "spades",
   },
   Object {
     "rank": "king",
-    "suit": "hearts",
+    "suit": "spades",
   },
   Object {
     "rank": "queen",
-    "suit": "hearts",
+    "suit": "spades",
   },
   Object {
     "rank": "jack",
-    "suit": "hearts",
+    "suit": "spades",
   },
   Object {
     "rank": "nine",
-    "suit": "hearts",
+    "suit": "spades",
   },
   Object {
     "rank": "eight",
-    "suit": "hearts",
+    "suit": "spades",
   },
   Object {
     "rank": "seven",
-    "suit": "hearts",
+    "suit": "spades",
   },
   Object {
     "rank": "ten",
-    "suit": "spades",
+    "suit": "hearts",
   },
   Object {
     "rank": "ace",
-    "suit": "spades",
+    "suit": "hearts",
   },
   Object {
     "rank": "king",
-    "suit": "spades",
+    "suit": "hearts",
   },
   Object {
     "rank": "queen",
-    "suit": "spades",
+    "suit": "hearts",
   },
   Object {
     "rank": "jack",
-    "suit": "spades",
+    "suit": "hearts",
   },
   Object {
     "rank": "nine",
-    "suit": "spades",
+    "suit": "hearts",
   },
   Object {
     "rank": "eight",
-    "suit": "spades",
+    "suit": "hearts",
   },
   Object {
     "rank": "seven",
-    "suit": "spades",
+    "suit": "hearts",
   },
 ]
 `;

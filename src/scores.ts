@@ -1,4 +1,5 @@
-import { CardRank } from './types';
+import { Card, CardRank } from './types';
+import { SCORE_THRESHOLD } from './constants';
 import { compareValues } from './utils';
 
 export const getCardPoints = (rank: CardRank) => {
@@ -26,6 +27,22 @@ export const getCardPoints = (rank: CardRank) => {
     default:
       return 0;
   }
+};
+
+export const getCardsPoints = (cards: Card[]) => {
+  const points = cards.map((card: Card) => getCardPoints(card.rank));
+  const reducer = (accumulator: number, currentValue: number) => accumulator + currentValue;
+
+  // TODO: find solution not involving cast
+  return (points as number[]).reduce(reducer);
+};
+
+export const getScore = (cards: Card[], multiplier: 1 | 2 | 4 = 1) => {
+  const points = getCardsPoints(cards);
+
+  if (points <= SCORE_THRESHOLD) return 0;
+
+  return (points - SCORE_THRESHOLD) * multiplier;
 };
 
 export const getLowCardNumericValue = (rank: CardRank) => {

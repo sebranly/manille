@@ -1,7 +1,9 @@
-import { compareCardRanks, getCardPoints, getLowCardNumericValue } from '../scores';
-import { CardRank } from '../types';
+import { compareCardRanks, getCardPoints, getCardsPoints, getLowCardNumericValue, getScore } from '../scores';
+import { generateDeck, generateSuit } from '../cards';
+import { CardRank, CardSuit } from '../types';
 
 const { Ace, Eight, Jack, King, Nine, Queen, Seven, Ten } = CardRank;
+const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
 
 test('getCardPoints', () => {
   expect(getCardPoints(Ten)).toBe(5);
@@ -12,6 +14,51 @@ test('getCardPoints', () => {
   expect(getCardPoints(Nine)).toBe(0);
   expect(getCardPoints(Eight)).toBe(0);
   expect(getCardPoints(Seven)).toBe(0);
+});
+
+test('getCardsPoints', () => {
+  const cardsSuit = generateSuit(Spades);
+  expect(getCardsPoints(cardsSuit)).toBe(15);
+
+  const cardsDeck = generateDeck();
+  expect(getCardsPoints(cardsDeck)).toBe(60);
+
+  const cards = [
+    { rank: Eight, suit: Diamonds },
+    { rank: Jack, suit: Spades },
+    { rank: Seven, suit: Diamonds },
+    { rank: Ace, suit: Hearts },
+    { rank: Ace, suit: Spades },
+    { rank: Ten, suit: Spades },
+    { rank: Nine, suit: Clubs },
+    { rank: King, suit: Clubs }
+  ];
+
+  expect(getCardsPoints(cards)).toBe(17);
+});
+
+test('getScore', () => {
+  const cardsDeck = generateDeck();
+  expect(getScore(cardsDeck)).toBe(30);
+  expect(getScore(cardsDeck, 2)).toBe(60);
+  expect(getScore(cardsDeck, 4)).toBe(120);
+
+  const cardsSuit1 = generateSuit(Spades);
+  expect(getScore(cardsSuit1)).toBe(0);
+  expect(getScore(cardsSuit1, 2)).toBe(0);
+  expect(getScore(cardsSuit1, 4)).toBe(0);
+
+  const cardsSuit2 = generateSuit(Hearts);
+  const cardsTwoSuits = [...cardsSuit1, ...cardsSuit2];
+  expect(getScore(cardsTwoSuits)).toBe(0);
+  expect(getScore(cardsTwoSuits, 2)).toBe(0);
+  expect(getScore(cardsTwoSuits, 4)).toBe(0);
+
+  const cardsSuit3 = generateSuit(Diamonds);
+  const cardsThreeSuits = [...cardsTwoSuits, ...cardsSuit3];
+  expect(getScore(cardsThreeSuits)).toBe(15);
+  expect(getScore(cardsThreeSuits, 2)).toBe(30);
+  expect(getScore(cardsThreeSuits, 4)).toBe(60);
 });
 
 test('getLowCardNumericValue', () => {
