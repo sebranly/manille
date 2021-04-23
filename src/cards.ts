@@ -21,7 +21,7 @@ export const generateSuit = (suit: CardSuit) => {
 export const generateDeck = () => {
   const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
 
-  const cards: Card[] = [Clubs, Diamonds, Hearts, Spades].map(generateSuit).reduce((a, b) => a.concat(b));
+  const cards: Card[] = [Clubs, Diamonds, Spades, Hearts].map(generateSuit).reduce((a, b) => a.concat(b));
 
   return cards;
 };

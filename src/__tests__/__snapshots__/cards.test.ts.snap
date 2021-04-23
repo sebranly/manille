@@ -28,67 +28,67 @@ Array [
   },
   Object {
     "rank": "ten",
-    "suit": "hearts",
+    "suit": "spades",
   },
   Object {
     "rank": "ace",
-    "suit": "hearts",
+    "suit": "spades",
   },
   Object {
     "rank": "king",
-    "suit": "hearts",
+    "suit": "spades",
   },
   Object {
     "rank": "queen",
-    "suit": "hearts",
+    "suit": "spades",
   },
   Object {
     "rank": "jack",
-    "suit": "hearts",
+    "suit": "spades",
   },
   Object {
     "rank": "nine",
-    "suit": "hearts",
+    "suit": "spades",
   },
   Object {
     "rank": "eight",
-    "suit": "hearts",
+    "suit": "spades",
   },
   Object {
     "rank": "seven",
-    "suit": "hearts",
+    "suit": "spades",
   },
   Object {
     "rank": "ten",
-    "suit": "spades",
+    "suit": "hearts",
   },
   Object {
     "rank": "ace",
-    "suit": "spades",
+    "suit": "hearts",
   },
   Object {
     "rank": "king",
-    "suit": "spades",
+    "suit": "hearts",
   },
   Object {
     "rank": "queen",
-    "suit": "spades",
+    "suit": "hearts",
   },
   Object {
     "rank": "jack",
-    "suit": "spades",
+    "suit": "hearts",
   },
   Object {
     "rank": "nine",
-    "suit": "spades",
+    "suit": "hearts",
   },
   Object {
     "rank": "eight",
-    "suit": "spades",
+    "suit": "hearts",
   },
   Object {
     "rank": "seven",
-    "suit": "spades",
+    "suit": "hearts",
   },
   Object {
     "rank": "ten",
@@ -201,67 +201,67 @@ Array [
   },
   Object {
     "rank": "ten",
-    "suit": "hearts",
+    "suit": "spades",
   },
   Object {
     "rank": "ace",
-    "suit": "hearts",
+    "suit": "spades",
   },
   Object {
     "rank": "king",
-    "suit": "hearts",
+    "suit": "spades",
   },
   Object {
     "rank": "queen",
-    "suit": "hearts",
+    "suit": "spades",
   },
   Object {
     "rank": "jack",
-    "suit": "hearts",
+    "suit": "spades",
   },
   Object {
     "rank": "nine",
-    "suit": "hearts",
+    "suit": "spades",
   },
   Object {
     "rank": "eight",
-    "suit": "hearts",
+    "suit": "spades",
   },
   Object {
     "rank": "seven",
-    "suit": "hearts",
+    "suit": "spades",
   },
   Object {
     "rank": "ten",
-    "suit": "spades",
+    "suit": "hearts",
   },
   Object {
     "rank": "ace",
-    "suit": "spades",
+    "suit": "hearts",
   },
   Object {
     "rank": "king",
-    "suit": "spades",
+    "suit": "hearts",
   },
   Object {
     "rank": "queen",
-    "suit": "spades",
+    "suit": "hearts",
   },
   Object {
     "rank": "jack",
-    "suit": "spades",
+    "suit": "hearts",
   },
   Object {
     "rank": "nine",
-    "suit": "spades",
+    "suit": "hearts",
   },
   Object {
     "rank": "eight",
-    "suit": "spades",
+    "suit": "hearts",
   },
   Object {
     "rank": "seven",
-    "suit": "spades",
+    "suit": "hearts",
   },
 ]
 `;
