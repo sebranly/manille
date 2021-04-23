@@ -1,11 +1,10 @@
-import { cutDeck, generateDeck, generateSuit } from '../cards';
+import { cutDeck, generateDeck, generateSuit, orderCards } from '../cards';
 import { CardRank, CardSuit } from '../types';
 
 const { Ace, Eight, Jack, King, Nine, Queen, Seven, Ten } = CardRank;
+const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
 
 test('generateSuit', () => {
-  const { Hearts } = CardSuit;
-
   expect(generateSuit(Hearts)).toStrictEqual([
     { rank: Ten, suit: Hearts },
     { rank: Ace, suit: Hearts },
@@ -41,4 +40,38 @@ test('cutDeck', () => {
 
   expect(deck6).toMatchSnapshot();
   expect(deck6).toHaveLength(32);
+});
+
+test('orderCards', () => {
+  const cardsSuit = generateSuit(Spades);
+  const copyCardsSuit = [...cardsSuit];
+
+  expect(orderCards(cardsSuit)).toStrictEqual(copyCardsSuit);
+
+  const cardsDeck = generateDeck();
+  const copyCardsDeck = [...cardsDeck];
+
+  expect(orderCards(cardsDeck)).toStrictEqual(copyCardsDeck);
+
+  const cards = [
+    { rank: Eight, suit: Diamonds },
+    { rank: Jack, suit: Spades },
+    { rank: Seven, suit: Diamonds },
+    { rank: Ace, suit: Hearts },
+    { rank: Ace, suit: Spades },
+    { rank: Ten, suit: Spades },
+    { rank: Nine, suit: Clubs },
+    { rank: King, suit: Clubs }
+  ];
+
+  expect(orderCards(cards)).toStrictEqual([
+    { rank: King, suit: Clubs },
+    { rank: Nine, suit: Clubs },
+    { rank: Eight, suit: Diamonds },
+    { rank: Seven, suit: Diamonds },
+    { rank: Ten, suit: Spades },
+    { rank: Ace, suit: Spades },
+    { rank: Jack, suit: Spades },
+    { rank: Ace, suit: Hearts }
+  ]);
 });

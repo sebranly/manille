@@ -1,5 +1,6 @@
 import { Card, CardRank, CardSuit } from './types';
 import { CARDS_PER_DECK } from './constants';
+import { compareCardRanks } from './scores';
 
 export const generateSuit = (suit: CardSuit) => {
   const { Ace, Eight, Jack, King, Nine, Queen, Seven, Ten } = CardRank;
@@ -34,4 +35,23 @@ export const cutDeck = (cards: Card[], cardsBefore: number) => {
   const part2 = cards.slice(safeCardsBefore);
 
   return [...part2, ...part1];
+};
+
+export const orderCards = (cards: Card[]) => {
+  const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
+
+  // TODO: create function for it
+  const clubs = cards.filter((card: Card) => card.suit === Clubs);
+  const diamonds = cards.filter((card: Card) => card.suit === Diamonds);
+  const hearts = cards.filter((card: Card) => card.suit === Hearts);
+  const spades = cards.filter((card: Card) => card.suit === Spades);
+
+  const newCardsGroups = [clubs, diamonds, spades, hearts];
+
+  const orderedCardsGroup = newCardsGroups.map((cardsGroup: Card[]) => {
+    return cardsGroup.sort((a, b) => -1 * compareCardRanks(a.rank, b.rank));
+  });
+
+  // TODO: create function for it
+  return orderedCardsGroup.reduce((a, b) => a.concat(b));
 };
