@@ -1,6 +1,7 @@
 import { Card, CardRank, CardSuit } from './types';
 import { CARDS_PER_DECK } from './constants';
 import { compareCardRanks } from './scores';
+import { flattenArray } from './utils';
 
 export const generateSuit = (suit: CardSuit) => {
   const { Ace, Eight, Jack, King, Nine, Queen, Seven, Ten } = CardRank;
@@ -22,7 +23,7 @@ export const generateSuit = (suit: CardSuit) => {
 export const generateDeck = () => {
   const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
 
-  const cards: Card[] = [Clubs, Diamonds, Spades, Hearts].map(generateSuit).reduce((a, b) => a.concat(b));
+  const cards: Card[] = flattenArray([Clubs, Diamonds, Spades, Hearts].map(generateSuit));
 
   return cards;
 };
@@ -55,8 +56,7 @@ export const orderCards = (cards: Card[]) => {
 
   const orderedCardsGroup = newCardsGroups.map(sortSuit);
 
-  // TODO: create function for it
-  return orderedCardsGroup.reduce((a, b) => a.concat(b));
+  return flattenArray(orderedCardsGroup);
 };
 
 export const sortSuit = (cardsSuit: Card[]) => {
