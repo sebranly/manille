@@ -109,10 +109,10 @@ test('getPlayableCards', () => {
   expect(c14).toStrictEqual(copyCards);
   expect(c14).toHaveLength(8);
 
+  // It returns one card if player only has one card left
   const oneCard = [{ rank: Eight, suit: Diamonds }];
   const copyOneCard = [...oneCard];
 
-  // It returns one card if player only have one card left
   const c15 = getPlayableCards(
     oneCard,
     [
@@ -443,7 +443,8 @@ test('getPlayableCards', () => {
     { rank: Seven, suit: Spades }
   ]);
 
-  // No-trump suit
+  // No-trump suit ("en voiture")
+
   // Player 3 starts and requests trump suit, player 0 plays next and has no suit
   const c29 = getPlayableCards(
     [
@@ -473,7 +474,7 @@ test('getPlayableCards', () => {
     { rank: Ace, suit: Hearts }
   ]);
 
-  // Player 1 starts and requests trump suit, player 0 plays last and has no suit
+  // Player 1 starts and requests any suit ("en voiture"), player 0 plays last and has no suit
   const c30 = getPlayableCards(
     [
       { rank: King, suit: Clubs },
@@ -506,7 +507,7 @@ test('getPlayableCards', () => {
     { rank: Ace, suit: Hearts }
   ]);
 
-  // Player 3 starts and requests trump suit, player 0 plays next and has only one card from that suit
+  // Player 3 starts and requests any suit ("en voiture"), player 0 plays next and has only one card from that suit
   const c31 = getPlayableCards(
     [
       { rank: King, suit: Clubs },
@@ -526,7 +527,7 @@ test('getPlayableCards', () => {
 
   expect(c31).toStrictEqual([{ rank: Jack, suit: Spades }]);
 
-  // Player 1 starts and requests trump suit, player 0 plays last and has only one card from that suit
+  // Player 1 starts and requests any suit ("en voiture"), player 0 plays last and has only one card from that suit
   const c32 = getPlayableCards(
     [
       { rank: King, suit: Clubs },
@@ -550,7 +551,7 @@ test('getPlayableCards', () => {
 
   expect(c32).toStrictEqual([{ rank: Jack, suit: Spades }]);
 
-  // Opponent player plays the ten of trump suit so player 0 can play any card from trump suit
+  // Opponent player plays the ten of any suit ("en voiture") so player 0 can play any card from that suit
   const c33 = getPlayableCards(
     [
       { rank: Ace, suit: Spades },
@@ -578,7 +579,7 @@ test('getPlayableCards', () => {
     { rank: Seven, suit: Spades }
   ]);
 
-  // Same team player plays the ten of trump suit so player 0 can play any card from trump suit
+  // Same team player plays the ten of any suit ("en voiture") so player 0 can play any card from that suit
   const c34 = getPlayableCards(
     [
       { rank: Ace, suit: Spades },
@@ -609,7 +610,7 @@ test('getPlayableCards', () => {
     { rank: Seven, suit: Spades }
   ]);
 
-  // Opponent player plays a middle card from trump suit so player 0 has to play any higher card from trump
+  // Opponent player plays a middle card from any suit ("en voiture") so player 0 has to play any higher card from that suit
   const c35 = getPlayableCards(
     [
       { rank: Ten, suit: Spades },
@@ -635,7 +636,7 @@ test('getPlayableCards', () => {
     { rank: Jack, suit: Spades }
   ]);
 
-  // Same team player plays a middle card from trump suit so player 0 has to play any higher card from trump
+  // Same team player plays a middle card from any suit ("en voiture") so player 0 has to play any higher card from that suit
   const c36 = getPlayableCards(
     [
       { rank: Ten, suit: Spades },
@@ -664,7 +665,7 @@ test('getPlayableCards', () => {
     { rank: Jack, suit: Spades }
   ]);
 
-  // Opponent player plays a middle card from trump suit and player 0 cannot go higher but has to provide trump suit
+  // Opponent player plays a middle card from any suit ("en voiture") and player 0 cannot go higher but has to provide that suit
   const c37 = getPlayableCards(
     [
       { rank: Ten, suit: Hearts },
@@ -690,7 +691,7 @@ test('getPlayableCards', () => {
     { rank: Seven, suit: Spades }
   ]);
 
-  // Same team player plays a middle card from trump suit and player 0 cannot go higher but has to provide trump suit
+  // Same team player plays a middle card from any suit ("en voiture") and player 0 cannot go higher but has to provide that suit
   const c38 = getPlayableCards(
     [
       { rank: Ten, suit: Hearts },
@@ -719,7 +720,7 @@ test('getPlayableCards', () => {
     { rank: Seven, suit: Spades }
   ]);
 
-  // Not a trump suite at all
+  // Not a trump suit at all (nor "en voiture")
 
   // Player 3 plays a non-trump suit and player 0 has to provide
   const c39 = getPlayableCards(
@@ -747,11 +748,11 @@ test('getPlayableCards', () => {
     { rank: Seven, suit: Spades }
   ]);
 
-  // Player 1 plays a non-trump suit and player 0 has to provide while playing last
+  // Player 1 plays a non-trump suit and player 0 plays last and has to provide
   const c40 = getPlayableCards(
     [
       { rank: Ten, suit: Hearts },
-      { rank: Ace, suit: Hearts },
+      { rank: Ace, suit: Clubs },
       { rank: Ten, suit: Spades },
       { rank: Queen, suit: Spades },
       { rank: Jack, suit: Spades },
@@ -839,7 +840,7 @@ test('getPlayableCards', () => {
     { rank: Seven, suit: Diamonds }
   ]);
 
-  // Player 0 has to trump
+  // Player 0 cannot provide but has some cards from the trump suit. Opponents lead (player 3) so player 0 has to trump
   const c43 = getPlayableCards(
     [
       { rank: Ten, suit: Hearts },
@@ -866,7 +867,7 @@ test('getPlayableCards', () => {
     { rank: Seven, suit: Clubs }
   ]);
 
-  // Player 0 cannot provide but has some cards from the trump suit. Opponents lead so player 0 has to trump
+  // Player 0 cannot provide but has some cards from the trump suit. Opponents lead (player 1) so player 0 has to trump
   const c44 = getPlayableCards(
     [
       { rank: Ten, suit: Hearts },
@@ -879,9 +880,9 @@ test('getPlayableCards', () => {
       { rank: Seven, suit: Clubs }
     ],
     [
-      { rank: Ace, suit: Spades },
+      { rank: Ten, suit: Spades },
       { rank: Queen, suit: Spades },
-      { rank: Ten, suit: Spades }
+      { rank: Ace, suit: Spades }
     ],
     0,
     1,
