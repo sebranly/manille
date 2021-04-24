@@ -1,4 +1,4 @@
-import { cutDeck, filterBySuit, generateDeck, generateSuit, orderCards } from '../cards';
+import { cutDeck, filterBySuit, generateDeck, generateSuit, orderCards, sortSuit } from '../cards';
 import { CardRank, CardSuit } from '../types';
 
 const { Ace, Eight, Jack, King, Nine, Queen, Seven, Ten } = CardRank;
@@ -109,4 +109,41 @@ test('filterBySuit', () => {
   ]);
 
   expect(filterBySuit(deck, false)).toStrictEqual([]);
+});
+
+test('sortSuit', () => {
+  const suit = generateSuit(Clubs);
+
+  expect(sortSuit(suit)).toStrictEqual([
+    { rank: Ten, suit: Clubs },
+    { rank: Ace, suit: Clubs },
+    { rank: King, suit: Clubs },
+    { rank: Queen, suit: Clubs },
+    { rank: Jack, suit: Clubs },
+    { rank: Nine, suit: Clubs },
+    { rank: Eight, suit: Clubs },
+    { rank: Seven, suit: Clubs }
+  ]);
+
+  const unsortedSuit = [
+    { rank: Eight, suit: Clubs },
+    { rank: Ace, suit: Clubs },
+    { rank: Queen, suit: Clubs },
+    { rank: King, suit: Clubs },
+    { rank: Jack, suit: Clubs },
+    { rank: Ten, suit: Clubs },
+    { rank: Seven, suit: Clubs },
+    { rank: Nine, suit: Clubs }
+  ];
+
+  expect(sortSuit(unsortedSuit)).toStrictEqual([
+    { rank: Ten, suit: Clubs },
+    { rank: Ace, suit: Clubs },
+    { rank: King, suit: Clubs },
+    { rank: Queen, suit: Clubs },
+    { rank: Jack, suit: Clubs },
+    { rank: Nine, suit: Clubs },
+    { rank: Eight, suit: Clubs },
+    { rank: Seven, suit: Clubs }
+  ]);
 });

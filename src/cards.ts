@@ -53,11 +53,12 @@ export const orderCards = (cards: Card[]) => {
 
   const newCardsGroups = [clubs, diamonds, spades, hearts];
 
-  const orderedCardsGroup = newCardsGroups.map((cardsGroup: Card[]) => {
-    // TODO: create function for it
-    return cardsGroup.sort((a, b) => -1 * compareCardRanks(a.rank, b.rank));
-  });
+  const orderedCardsGroup = newCardsGroups.map(sortSuit);
 
   // TODO: create function for it
   return orderedCardsGroup.reduce((a, b) => a.concat(b));
+};
+
+export const sortSuit = (cardsSuit: Card[]) => {
+  return cardsSuit.sort((a, b) => -1 * compareCardRanks(a.rank, b.rank));
 };

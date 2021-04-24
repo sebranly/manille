@@ -3,7 +3,7 @@ import { Card, CardRank, CardSuit } from './types';
 import { findIndex } from 'lodash';
 import { NUMBER_PLAYERS } from './constants';
 import { isSameTeam } from '.';
-import { filterBySuit } from './cards';
+import { filterBySuit, sortSuit } from './cards';
 
 export const getPlayableCards = (
   cards: Card[],
@@ -41,7 +41,7 @@ export const getPlayableCardsTrumpSuit = (cards: Card[], playedCards: Card[]) =>
 
   // TODO: create function for it
   const playedCardsTrump = filterBySuit(playedCards, playedTrumpSuit);
-  const sortedPlayedCardsTrump = playedCardsTrump.sort((a, b) => -1 * compareCardRanks(a.rank, b.rank));
+  const sortedPlayedCardsTrump = sortSuit(playedCardsTrump);
   const highestPlayedCardTrump = sortedPlayedCardsTrump[0];
   const { Ten } = CardRank;
 
@@ -82,7 +82,7 @@ export const getPlayableCardsNonTrumpSuit = (
 
   if (playedCardsTrump.length === 0) {
     const playedCardsSuit = filterBySuit(playedCards, requestedSuit);
-    const sortedPlayedCardsSuit = playedCardsSuit.sort((a, b) => -1 * compareCardRanks(a.rank, b.rank));
+    const sortedPlayedCardsSuit = sortSuit(playedCardsSuit);
     const highestPlayedCardSuit = sortedPlayedCardsSuit[0];
 
     const arrayId = findIndex(
@@ -98,7 +98,7 @@ export const getPlayableCardsNonTrumpSuit = (
     return cardsTrump;
   }
 
-  const sortedPlayedCardsTrump = playedCardsTrump.sort((a, b) => -1 * compareCardRanks(a.rank, b.rank));
+  const sortedPlayedCardsTrump = sortSuit(playedCardsTrump);
   const highestPlayedCardTrump = sortedPlayedCardsTrump[0];
 
   const arrayId = findIndex(
