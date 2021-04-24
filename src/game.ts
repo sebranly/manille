@@ -43,9 +43,6 @@ export const getPlayableCardsTrumpSuit = (cards: Card[], playedCards: Card[]) =>
   const playedCardsTrump = filterBySuit(playedCards, playedTrumpSuit);
   const sortedPlayedCardsTrump = sortSuit(playedCardsTrump);
   const highestPlayedCardTrump = sortedPlayedCardsTrump[0];
-  const { Ten } = CardRank;
-
-  if (highestPlayedCardTrump.rank === Ten) return cardsTrump;
 
   const higherCardsTrump = cardsTrump.filter(
     (card: Card) => compareCardRanks(card.rank, highestPlayedCardTrump.rank) === 1
