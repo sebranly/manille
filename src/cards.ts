@@ -37,14 +37,19 @@ export const cutDeck = (cards: Card[], cardsBefore: number) => {
   return [...part2, ...part1];
 };
 
+export const filterBySuit = (cards: Card[], suit: CardSuit | false) => {
+  const cardsSuit = cards.filter((card: Card) => card.suit === suit);
+
+  return cardsSuit;
+};
+
 export const orderCards = (cards: Card[]) => {
   const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
 
-  // TODO: create function for it
-  const clubs = cards.filter((card: Card) => card.suit === Clubs);
-  const diamonds = cards.filter((card: Card) => card.suit === Diamonds);
-  const hearts = cards.filter((card: Card) => card.suit === Hearts);
-  const spades = cards.filter((card: Card) => card.suit === Spades);
+  const clubs = filterBySuit(cards, Clubs);
+  const diamonds = filterBySuit(cards, Diamonds);
+  const hearts = filterBySuit(cards, Hearts);
+  const spades = filterBySuit(cards, Spades);
 
   const newCardsGroups = [clubs, diamonds, spades, hearts];
 

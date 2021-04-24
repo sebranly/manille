@@ -3,6 +3,7 @@ import { Card, CardRank, CardSuit } from './types';
 import { findIndex } from 'lodash';
 import { NUMBER_PLAYERS } from './constants';
 import { isSameTeam } from '.';
+import { filterBySuit } from './cards';
 
 export const getPlayableCards = (
   cards: Card[],
@@ -33,14 +34,13 @@ export const getPlayableCards = (
 export const getPlayableCardsTrumpSuit = (cards: Card[], playedCards: Card[]) => {
   const playedTrumpSuit = playedCards[0].suit;
 
-  // TODO: create a function for it
-  const cardsTrump = cards.filter((card: Card) => card.suit === playedTrumpSuit);
+  const cardsTrump = filterBySuit(cards, playedTrumpSuit);
 
   if (cardsTrump.length === 0) return cards;
   if (cardsTrump.length === 1) return cardsTrump;
 
   // TODO: create function for it
-  const playedCardsTrump = playedCards.filter((card: Card) => card.suit === playedTrumpSuit);
+  const playedCardsTrump = filterBySuit(playedCards, playedTrumpSuit);
   const sortedPlayedCardsTrump = playedCardsTrump.sort((a, b) => -1 * compareCardRanks(a.rank, b.rank));
   const highestPlayedCardTrump = sortedPlayedCardsTrump[0];
   const { Ten } = CardRank;
@@ -64,12 +64,12 @@ export const getPlayableCardsNonTrumpSuit = (
   trumpSuit: CardSuit | false
 ) => {
   const requestedSuit = playedCards[0].suit;
-  const cardsSuit = cards.filter((card: Card) => card.suit === requestedSuit);
+  const cardsSuit = filterBySuit(cards, requestedSuit);
 
   // If player has the suit, player has to provide
   if (cardsSuit.length > 0) return cardsSuit;
 
-  const cardsTrump = cards.filter((card: Card) => card.suit === trumpSuit);
+  const cardsTrump = filterBySuit(cards, trumpSuit);
 
   // If player does not have the suit and has no cards from the trump suit, they can play any (meaningless) card
   if (!cardsTrump.length) return cards;
@@ -78,10 +78,10 @@ export const getPlayableCardsNonTrumpSuit = (
   if (playedCards.length === 1) return cardsTrump;
 
   // At this point, player cannot provide but has some cards from trump suit. We determine if using those cards is an obligation.
-  const playedCardsTrump = playedCards.filter((card: Card) => card.suit === trumpSuit);
+  const playedCardsTrump = filterBySuit(playedCards, trumpSuit);
 
   if (playedCardsTrump.length === 0) {
-    const playedCardsSuit = playedCards.filter((card: Card) => card.suit === requestedSuit);
+    const playedCardsSuit = filterBySuit(playedCards, requestedSuit);
     const sortedPlayedCardsSuit = playedCardsSuit.sort((a, b) => -1 * compareCardRanks(a.rank, b.rank));
     const highestPlayedCardSuit = sortedPlayedCardsSuit[0];
 
