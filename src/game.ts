@@ -1,5 +1,5 @@
 import { compareCardRanks } from './scores';
-import { Card, CardRank, CardSuit } from './types';
+import { Card, CardSuit } from './types';
 import { findIndex } from 'lodash';
 import { NUMBER_PLAYERS } from './constants';
 import { isSameTeam } from '.';
@@ -31,6 +31,25 @@ export const getPlayableCards = (
   return playableCards;
 };
 
+export const getHighestPlayedCardSuit = (playedCards: Card[], suit: CardSuit | false) => {
+  const playedCardsSuit = filterBySuit(playedCards, suit);
+  const sortedPlayedCardsSuit = sortSuit(playedCardsSuit);
+  const highestPlayedCardSuit = sortedPlayedCardsSuit[0];
+
+  return highestPlayedCardSuit;
+};
+
+export const getHigherCardsSuit = (cards: Card[], playedCards: Card[], suit: CardSuit | false) => {
+  const cardsSuit = filterBySuit(cards, suit);
+  const highestPlayedCardSuit = getHighestPlayedCardSuit(playedCards, suit);
+
+  const higherCardsSuit = cardsSuit.filter(
+    (card: Card) => compareCardRanks(card.rank, highestPlayedCardSuit.rank) === 1
+  );
+
+  return higherCardsSuit;
+};
+
 export const getPlayableCardsTrumpSuit = (cards: Card[], playedCards: Card[]) => {
   const playedTrumpSuit = playedCards[0].suit;
 
@@ -39,14 +58,7 @@ export const getPlayableCardsTrumpSuit = (cards: Card[], playedCards: Card[]) =>
   if (cardsTrump.length === 0) return cards;
   if (cardsTrump.length === 1) return cardsTrump;
 
-  // TODO: create function for it
-  const playedCardsTrump = filterBySuit(playedCards, playedTrumpSuit);
-  const sortedPlayedCardsTrump = sortSuit(playedCardsTrump);
-  const highestPlayedCardTrump = sortedPlayedCardsTrump[0];
-
-  const higherCardsTrump = cardsTrump.filter(
-    (card: Card) => compareCardRanks(card.rank, highestPlayedCardTrump.rank) === 1
-  );
+  const higherCardsTrump = getHigherCardsSuit(cards, playedCards, playedTrumpSuit);
 
   if (higherCardsTrump.length === 0) return cardsTrump;
 
@@ -74,45 +86,41 @@ export const getPlayableCardsNonTrumpSuit = (
   // If player does not have the suit but can trump, and plays right after first opponent, they have to "trump" ("couper")
   if (playedCards.length === 1) return cardsTrump;
 
-  // At this point, player cannot provide but has some cards from trump suit. We determine if using those cards is an obligation.
+  // At this point, player cannot provide but has some cards from trump suit.
+  // We determine if using those cards is an obligation.
   const playedCardsTrump = filterBySuit(playedCards, trumpSuit);
 
   if (playedCardsTrump.length === 0) {
-    const playedCardsSuit = filterBySuit(playedCards, requestedSuit);
-    const sortedPlayedCardsSuit = sortSuit(playedCardsSuit);
-    const highestPlayedCardSuit = sortedPlayedCardsSuit[0];
-
-    const arrayId = findIndex(
-      playedCards,
-      (card: Card) => card.rank === highestPlayedCardSuit.rank && card.suit === highestPlayedCardSuit.suit
-    );
-
-    // TODO: create function for it
-    const leaderId = (startingPlayerId + arrayId) % NUMBER_PLAYERS;
-
-    if (isSameTeam(currentPlayerId, leaderId)) return cards;
+    const isLeading = isTeammateLeading(playedCards, currentPlayerId, startingPlayerId, requestedSuit);
+    if (isLeading) return cards;
 
     return cardsTrump;
   }
 
-  const sortedPlayedCardsTrump = sortSuit(playedCardsTrump);
-  const highestPlayedCardTrump = sortedPlayedCardsTrump[0];
+  const isLeading = isTeammateLeading(playedCards, currentPlayerId, startingPlayerId, trumpSuit);
+  if (isLeading) return cards;
+
+  const higherCardsTrump = getHigherCardsSuit(cards, playedCards, trumpSuit);
+
+  if (higherCardsTrump.length === 0) return cards;
+
+  return higherCardsTrump;
+};
+
+export const isTeammateLeading = (
+  playedCards: Card[],
+  currentPlayerId: number,
+  startingPlayerId: number,
+  suit: CardSuit | false
+) => {
+  const highestPlayedCardTrump = getHighestPlayedCardSuit(playedCards, suit);
 
   const arrayId = findIndex(
     playedCards,
     (card: Card) => card.rank === highestPlayedCardTrump.rank && card.suit === highestPlayedCardTrump.suit
   );
 
-  // TODO: create function for it
   const leaderId = (startingPlayerId + arrayId) % NUMBER_PLAYERS;
 
-  if (isSameTeam(currentPlayerId, leaderId)) return cards;
-
-  const higherCardsTrump = cardsTrump.filter(
-    (card: Card) => compareCardRanks(card.rank, highestPlayedCardTrump.rank) === 1
-  );
-
-  if (higherCardsTrump.length === 0) return cards;
-
-  return higherCardsTrump;
+  return isSameTeam(currentPlayerId, leaderId);
 };
