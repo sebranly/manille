@@ -98,7 +98,6 @@ export const getPlayableCardsNonTrumpSuit = (
     return cardsTrump;
   }
 
-  // TODO: write unit tests from here
   const sortedPlayedCardsTrump = playedCardsTrump.sort((a, b) => -1 * compareCardRanks(a.rank, b.rank));
   const highestPlayedCardTrump = sortedPlayedCardsTrump[0];
 

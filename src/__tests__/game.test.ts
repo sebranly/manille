@@ -929,4 +929,98 @@ test('getPlayableCards', () => {
     { rank: Eight, suit: Clubs },
     { rank: Seven, suit: Clubs }
   ]);
+
+  // Player 0 cannot provide but has some cards from the trump suit. Opponents don't lead (player 2 trumped) so player 0 does not have to trump
+  const c46 = getPlayableCards(
+    [
+      { rank: Ten, suit: Hearts },
+      { rank: Ace, suit: Hearts },
+      { rank: Ten, suit: Clubs },
+      { rank: Ace, suit: Clubs },
+      { rank: Queen, suit: Clubs },
+      { rank: Jack, suit: Clubs },
+      { rank: Eight, suit: Clubs },
+      { rank: Seven, suit: Clubs }
+    ],
+    [
+      { rank: Ace, suit: Spades },
+      { rank: Ten, suit: Clubs },
+      { rank: Queen, suit: Spades }
+    ],
+    0,
+    1,
+    Clubs
+  );
+
+  expect(c46).toStrictEqual([
+    { rank: Ten, suit: Hearts },
+    { rank: Ace, suit: Hearts },
+    { rank: Ten, suit: Clubs },
+    { rank: Ace, suit: Clubs },
+    { rank: Queen, suit: Clubs },
+    { rank: Jack, suit: Clubs },
+    { rank: Eight, suit: Clubs },
+    { rank: Seven, suit: Clubs }
+  ]);
+
+  // Player 0 cannot provide but has some cards from the trump suit. Opponents lead (player 3 trumped) so player 0 has to trump over
+  const c47 = getPlayableCards(
+    [
+      { rank: Ten, suit: Hearts },
+      { rank: Ace, suit: Hearts },
+      { rank: Ten, suit: Clubs },
+      { rank: Ace, suit: Clubs },
+      { rank: King, suit: Clubs },
+      { rank: Jack, suit: Clubs },
+      { rank: Eight, suit: Clubs },
+      { rank: Seven, suit: Clubs }
+    ],
+    [
+      { rank: Ace, suit: Spades },
+      { rank: Ten, suit: Spades },
+      { rank: Queen, suit: Clubs }
+    ],
+    0,
+    1,
+    Clubs
+  );
+
+  expect(c47).toStrictEqual([
+    { rank: Ten, suit: Clubs },
+    { rank: Ace, suit: Clubs },
+    { rank: King, suit: Clubs }
+  ]);
+
+  // Player 0 cannot provide but has some cards from the trump suit. Opponents lead (player 3 trumped) but player 0 cannot trump over
+  const c48 = getPlayableCards(
+    [
+      { rank: Ten, suit: Hearts },
+      { rank: Ace, suit: Hearts },
+      { rank: Ten, suit: Diamonds },
+      { rank: King, suit: Clubs },
+      { rank: Queen, suit: Clubs },
+      { rank: Jack, suit: Clubs },
+      { rank: Eight, suit: Clubs },
+      { rank: Seven, suit: Clubs }
+    ],
+    [
+      { rank: Ace, suit: Spades },
+      { rank: Ten, suit: Spades },
+      { rank: Ace, suit: Clubs }
+    ],
+    0,
+    1,
+    Clubs
+  );
+
+  expect(c48).toStrictEqual([
+    { rank: Ten, suit: Hearts },
+    { rank: Ace, suit: Hearts },
+    { rank: Ten, suit: Diamonds },
+    { rank: King, suit: Clubs },
+    { rank: Queen, suit: Clubs },
+    { rank: Jack, suit: Clubs },
+    { rank: Eight, suit: Clubs },
+    { rank: Seven, suit: Clubs }
+  ]);
 });
