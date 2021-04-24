@@ -77,6 +77,7 @@ export const getPlayableCardsNonTrumpSuit = (
   // If player does not have the suit but can trump, and plays right after first opponent, they have to "trump" ("couper")
   if (playedCards.length === 1) return cardsTrump;
 
+  // At this point, player cannot provide but has some cards from trump suit. We determine if using those cards is an obligation.
   const playedCardsTrump = playedCards.filter((card: Card) => card.suit === trumpSuit);
 
   if (playedCardsTrump.length === 0) {
@@ -97,6 +98,7 @@ export const getPlayableCardsNonTrumpSuit = (
     return cardsTrump;
   }
 
+  // TODO: write unit tests from here
   const sortedPlayedCardsTrump = playedCardsTrump.sort((a, b) => -1 * compareCardRanks(a.rank, b.rank));
   const highestPlayedCardTrump = sortedPlayedCardsTrump[0];
 

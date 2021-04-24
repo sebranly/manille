@@ -718,4 +718,215 @@ test('getPlayableCards', () => {
     { rank: Eight, suit: Spades },
     { rank: Seven, suit: Spades }
   ]);
+
+  // Not a trump suite at all
+
+  // Player 3 plays a non-trump suit and player 0 has to provide
+  const c39 = getPlayableCards(
+    [
+      { rank: Ten, suit: Hearts },
+      { rank: Ace, suit: Hearts },
+      { rank: Ten, suit: Spades },
+      { rank: Queen, suit: Spades },
+      { rank: Jack, suit: Spades },
+      { rank: Eight, suit: Spades },
+      { rank: Seven, suit: Spades },
+      { rank: Ace, suit: Diamonds }
+    ],
+    [{ rank: Ace, suit: Spades }],
+    0,
+    3,
+    Clubs
+  );
+
+  expect(c39).toStrictEqual([
+    { rank: Ten, suit: Spades },
+    { rank: Queen, suit: Spades },
+    { rank: Jack, suit: Spades },
+    { rank: Eight, suit: Spades },
+    { rank: Seven, suit: Spades }
+  ]);
+
+  // Player 1 plays a non-trump suit and player 0 has to provide while playing last
+  const c40 = getPlayableCards(
+    [
+      { rank: Ten, suit: Hearts },
+      { rank: Ace, suit: Hearts },
+      { rank: Ten, suit: Spades },
+      { rank: Queen, suit: Spades },
+      { rank: Jack, suit: Spades },
+      { rank: Eight, suit: Spades },
+      { rank: Seven, suit: Spades },
+      { rank: Ace, suit: Diamonds }
+    ],
+    [
+      { rank: Ace, suit: Spades },
+      { rank: King, suit: Spades },
+      { rank: Nine, suit: Spades }
+    ],
+    0,
+    1,
+    Clubs
+  );
+
+  expect(c40).toStrictEqual([
+    { rank: Ten, suit: Spades },
+    { rank: Queen, suit: Spades },
+    { rank: Jack, suit: Spades },
+    { rank: Eight, suit: Spades },
+    { rank: Seven, suit: Spades }
+  ]);
+
+  // Player 3 plays a non-trump suit and player 0 hasn't got any card from that suit nor from the trump suit
+  const c41 = getPlayableCards(
+    [
+      { rank: Ten, suit: Hearts },
+      { rank: Ace, suit: Hearts },
+      { rank: Ten, suit: Diamonds },
+      { rank: Ace, suit: Diamonds },
+      { rank: Queen, suit: Diamonds },
+      { rank: Jack, suit: Diamonds },
+      { rank: Eight, suit: Diamonds },
+      { rank: Seven, suit: Diamonds }
+    ],
+    [{ rank: Ace, suit: Spades }],
+    0,
+    3,
+    Clubs
+  );
+
+  expect(c41).toStrictEqual([
+    { rank: Ten, suit: Hearts },
+    { rank: Ace, suit: Hearts },
+    { rank: Ten, suit: Diamonds },
+    { rank: Ace, suit: Diamonds },
+    { rank: Queen, suit: Diamonds },
+    { rank: Jack, suit: Diamonds },
+    { rank: Eight, suit: Diamonds },
+    { rank: Seven, suit: Diamonds }
+  ]);
+
+  // Player 1 plays a non-trump suit and player 0 hasn't got any card from that suit nor from the trump suit
+  const c42 = getPlayableCards(
+    [
+      { rank: Ten, suit: Hearts },
+      { rank: Ace, suit: Hearts },
+      { rank: Ten, suit: Diamonds },
+      { rank: Ace, suit: Diamonds },
+      { rank: Queen, suit: Diamonds },
+      { rank: Jack, suit: Diamonds },
+      { rank: Eight, suit: Diamonds },
+      { rank: Seven, suit: Diamonds }
+    ],
+    [
+      { rank: Ace, suit: Spades },
+      { rank: King, suit: Spades },
+      { rank: Nine, suit: Spades }
+    ],
+    0,
+    1,
+    Clubs
+  );
+
+  expect(c42).toStrictEqual([
+    { rank: Ten, suit: Hearts },
+    { rank: Ace, suit: Hearts },
+    { rank: Ten, suit: Diamonds },
+    { rank: Ace, suit: Diamonds },
+    { rank: Queen, suit: Diamonds },
+    { rank: Jack, suit: Diamonds },
+    { rank: Eight, suit: Diamonds },
+    { rank: Seven, suit: Diamonds }
+  ]);
+
+  // Player 0 has to trump
+  const c43 = getPlayableCards(
+    [
+      { rank: Ten, suit: Hearts },
+      { rank: Ace, suit: Hearts },
+      { rank: Ten, suit: Clubs },
+      { rank: Ace, suit: Clubs },
+      { rank: Queen, suit: Clubs },
+      { rank: Jack, suit: Clubs },
+      { rank: Eight, suit: Clubs },
+      { rank: Seven, suit: Clubs }
+    ],
+    [{ rank: Ace, suit: Spades }],
+    0,
+    3,
+    Clubs
+  );
+
+  expect(c43).toStrictEqual([
+    { rank: Ten, suit: Clubs },
+    { rank: Ace, suit: Clubs },
+    { rank: Queen, suit: Clubs },
+    { rank: Jack, suit: Clubs },
+    { rank: Eight, suit: Clubs },
+    { rank: Seven, suit: Clubs }
+  ]);
+
+  // Player 0 cannot provide but has some cards from the trump suit. Opponents lead so player 0 has to trump
+  const c44 = getPlayableCards(
+    [
+      { rank: Ten, suit: Hearts },
+      { rank: Ace, suit: Hearts },
+      { rank: Ten, suit: Clubs },
+      { rank: Ace, suit: Clubs },
+      { rank: Queen, suit: Clubs },
+      { rank: Jack, suit: Clubs },
+      { rank: Eight, suit: Clubs },
+      { rank: Seven, suit: Clubs }
+    ],
+    [
+      { rank: Ace, suit: Spades },
+      { rank: Queen, suit: Spades },
+      { rank: Ten, suit: Spades }
+    ],
+    0,
+    1,
+    Clubs
+  );
+
+  expect(c44).toStrictEqual([
+    { rank: Ten, suit: Clubs },
+    { rank: Ace, suit: Clubs },
+    { rank: Queen, suit: Clubs },
+    { rank: Jack, suit: Clubs },
+    { rank: Eight, suit: Clubs },
+    { rank: Seven, suit: Clubs }
+  ]);
+
+  // Player 0 cannot provide but has some cards from the trump suit. Opponents don't lead so player 0 does not have to trump
+  const c45 = getPlayableCards(
+    [
+      { rank: Ten, suit: Hearts },
+      { rank: Ace, suit: Hearts },
+      { rank: Ten, suit: Clubs },
+      { rank: Ace, suit: Clubs },
+      { rank: Queen, suit: Clubs },
+      { rank: Jack, suit: Clubs },
+      { rank: Eight, suit: Clubs },
+      { rank: Seven, suit: Clubs }
+    ],
+    [
+      { rank: Ace, suit: Spades },
+      { rank: Ten, suit: Spades },
+      { rank: Queen, suit: Spades }
+    ],
+    0,
+    1,
+    Clubs
+  );
+
+  expect(c45).toStrictEqual([
+    { rank: Ten, suit: Hearts },
+    { rank: Ace, suit: Hearts },
+    { rank: Ten, suit: Clubs },
+    { rank: Ace, suit: Clubs },
+    { rank: Queen, suit: Clubs },
+    { rank: Jack, suit: Clubs },
+    { rank: Eight, suit: Clubs },
+    { rank: Seven, suit: Clubs }
+  ]);
 });
