@@ -1,9 +1,9 @@
 import { NUMBER_PLAYERS } from './constants';
 import { getPlayerId } from './game';
-import { Card, CardSuit, Knowledge } from './types';
+import { Card, CardSuit, KnowledgeSuit } from './types';
 
 export const updateKnowledgePanelSuits = (
-  knowledgePanel: Knowledge[],
+  knowledgePanel: KnowledgeSuit[],
   playedCards: Card[],
   startingPlayerId: number
 ) => {
@@ -43,7 +43,7 @@ export const updateKnowledgePanelSuits = (
 };
 
 export const initializeKnowledgePanel = () => {
-  const knowledgePanel: Knowledge[] = [];
+  const knowledgePanel: KnowledgeSuit[] = [];
 
   for (let i = 0; i < NUMBER_PLAYERS; i++) {
     knowledgePanel[i] = {

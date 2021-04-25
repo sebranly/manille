@@ -1,5 +1,5 @@
 import { initializeKnowledgePanel, updateKnowledgePanelSuits } from '../ia';
-import { CardRank, CardSuit, Knowledge } from '../types';
+import { CardRank, CardSuit, KnowledgeSuit } from '../types';
 
 const { Ace, Eight, Jack, King, Nine, Queen, Seven, Ten } = CardRank;
 const { Clubs, Diamonds, Hearts, Spades } = CardSuit;

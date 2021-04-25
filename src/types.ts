@@ -40,7 +40,7 @@ export interface Game {
   rounds: Round[];
 }
 
-export interface Knowledge {
+export interface KnowledgeSuit {
   hasClubs: boolean;
   hasDiamonds: boolean;
   hasHearts: boolean;
