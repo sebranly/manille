@@ -1,4 +1,4 @@
-import { cutDeck, filterBySuit, generateDeck, generateSuit, orderCards, sortSuit } from '../cards';
+import { cutDeck, excludeSuit, filterBySuit, generateDeck, generateSuit, orderCards, sortSuit } from '../cards';
 import { CardRank, CardSuit } from '../types';
 
 const { Ace, Eight, Jack, King, Nine, Queen, Seven, Ten } = CardRank;
@@ -109,6 +109,29 @@ test('filterBySuit', () => {
   ]);
 
   expect(filterBySuit(deck, false)).toStrictEqual([]);
+});
+
+test('excludeSuit', () => {
+  expect(excludeSuit([], Clubs)).toStrictEqual([]);
+
+  const suit1 = generateSuit(Clubs);
+  expect(excludeSuit(suit1, Diamonds)).toStrictEqual([
+    { rank: Ten, suit: Clubs },
+    { rank: Ace, suit: Clubs },
+    { rank: King, suit: Clubs },
+    { rank: Queen, suit: Clubs },
+    { rank: Jack, suit: Clubs },
+    { rank: Nine, suit: Clubs },
+    { rank: Eight, suit: Clubs },
+    { rank: Seven, suit: Clubs }
+  ]);
+
+  const suit2 = generateSuit(Clubs);
+  expect(excludeSuit(suit2, Clubs)).toStrictEqual([]);
+
+  const deck = generateDeck();
+  expect(excludeSuit(deck, Clubs)).toHaveLength(24);
+  expect(excludeSuit(deck, Clubs)).toMatchSnapshot();
 });
 
 test('sortSuit', () => {

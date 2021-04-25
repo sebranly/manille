@@ -1,8 +1,23 @@
-import { initializeKnowledgePanel, updateKnowledgePanelSuits } from '../ia';
+import { generateDeck, generateSuit } from '../cards';
+import {
+  initializeKnowledgePanel,
+  initializeKnowledgeCards,
+  updateKnowledgePanelCards,
+  updateKnowledgePanelSuits
+} from '../ia';
 import { CardRank, CardSuit, KnowledgeSuit } from '../types';
 
 const { Ace, Eight, Jack, King, Nine, Queen, Seven, Ten } = CardRank;
 const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
+
+test('initializeKnowledgeCards', () => {
+  expect(initializeKnowledgeCards([], 2)).toStrictEqual([generateDeck(), generateDeck(), [], generateDeck()]);
+
+  const suit = generateSuit(Spades);
+  const otherSuits = [...generateSuit(Clubs), ...generateSuit(Diamonds), ...generateSuit(Hearts)];
+
+  expect(initializeKnowledgeCards(suit, 2)).toStrictEqual([otherSuits, otherSuits, suit, otherSuits]);
+});
 
 test('initializeKnowledgePanel', () => {
   expect(initializeKnowledgePanel()).toStrictEqual([
@@ -183,5 +198,44 @@ test('updateKnowledgePanelSuits', () => {
       hasHearts: true,
       hasSpades: false
     }
+  ]);
+});
+
+test('updateKnowledgePanelCards', () => {
+  const deck = generateDeck();
+
+  const knowledgeCards = [deck, deck, [], deck];
+  const knowledgeSuits: KnowledgeSuit[] = [
+    {
+      hasClubs: true,
+      hasDiamonds: false,
+      hasHearts: true,
+      hasSpades: true
+    },
+    {
+      hasClubs: false,
+      hasDiamonds: true,
+      hasHearts: false,
+      hasSpades: false
+    },
+    {
+      hasClubs: true,
+      hasDiamonds: true,
+      hasHearts: true,
+      hasSpades: true
+    },
+    {
+      hasClubs: false,
+      hasDiamonds: false,
+      hasHearts: true,
+      hasSpades: true
+    }
+  ];
+
+  expect(updateKnowledgePanelCards(knowledgeSuits, knowledgeCards, 2)).toStrictEqual([
+    [...generateSuit(Clubs), ...generateSuit(Spades), ...generateSuit(Hearts)],
+    generateSuit(Diamonds),
+    [],
+    [...generateSuit(Spades), ...generateSuit(Hearts)]
   ]);
 });

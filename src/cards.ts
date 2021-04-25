@@ -44,6 +44,12 @@ export const filterBySuit = (cards: Card[], suit: CardSuit | false) => {
   return cardsSuit;
 };
 
+export const excludeSuit = (cards: Card[], suit: CardSuit) => {
+  const cardsSuit = cards.filter((card: Card) => card.suit !== suit);
+
+  return cardsSuit;
+};
+
 export const orderCards = (cards: Card[]) => {
   const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
 

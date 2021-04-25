@@ -1,3 +1,5 @@
+import { differenceWith, isEqual } from 'lodash';
+import { excludeSuit, generateDeck } from './cards';
 import { NUMBER_PLAYERS } from './constants';
 import { getPlayerId } from './game';
 import { Card, CardSuit, KnowledgeSuit } from './types';
@@ -42,6 +44,35 @@ export const updateKnowledgePanelSuits = (
   return kp;
 };
 
+export const updateKnowledgePanelCards = (knowledgePanel: KnowledgeSuit[], knowledgeCards: Card[][], botId: number) => {
+  const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
+
+  for (let playerId = 0; playerId < NUMBER_PLAYERS; playerId++) {
+    // Note: ignore bot for now
+    if (playerId !== botId) {
+      const { hasClubs, hasDiamonds, hasHearts, hasSpades } = knowledgePanel[playerId];
+
+      if (!hasClubs) {
+        knowledgeCards[playerId] = excludeSuit(knowledgeCards[playerId], Clubs);
+      }
+
+      if (!hasDiamonds) {
+        knowledgeCards[playerId] = excludeSuit(knowledgeCards[playerId], Diamonds);
+      }
+
+      if (!hasHearts) {
+        knowledgeCards[playerId] = excludeSuit(knowledgeCards[playerId], Hearts);
+      }
+
+      if (!hasSpades) {
+        knowledgeCards[playerId] = excludeSuit(knowledgeCards[playerId], Spades);
+      }
+    }
+  }
+
+  return knowledgeCards;
+};
+
 export const initializeKnowledgePanel = () => {
   const knowledgePanel: KnowledgeSuit[] = [];
 
@@ -55,4 +86,20 @@ export const initializeKnowledgePanel = () => {
   }
 
   return knowledgePanel;
+};
+
+export const initializeKnowledgeCards = (cards: Card[], botId: number) => {
+  const deck = generateDeck();
+
+  const nonBotRemainingCards = differenceWith(deck, cards, isEqual);
+
+  const knowledgeCards = [];
+
+  for (let playerId = 0; playerId < NUMBER_PLAYERS; playerId++) {
+    const isBot = playerId === botId;
+
+    knowledgeCards[playerId] = isBot ? cards : nonBotRemainingCards;
+  }
+
+  return knowledgeCards;
 };
