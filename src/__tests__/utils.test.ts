@@ -1,6 +1,6 @@
 import { generateSuit } from '../cards';
 import { CardSuit } from '../types';
-import { compareValues, flattenArray, getSureValues, getSureValuesWithLength } from '../utils';
+import { compareValues, flattenArray, getSureValues, adjustValues } from '../utils';
 
 const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
 
@@ -66,16 +66,16 @@ test('getSureValues', () => {
   expect(getSureValues([[1, 2, 3, 4], [1], [3], [2]])).toStrictEqual([[4], [], [], []]);
 });
 
-test('getSureValuesWithLength', () => {
+test('adjustValues', () => {
   let result;
 
-  expect(getSureValuesWithLength([[]], [1])).toStrictEqual([[]]);
-  expect(getSureValuesWithLength([[], []], [1, 1])).toStrictEqual([[], []]);
+  expect(adjustValues([[]], [1])).toStrictEqual([[]]);
+  expect(adjustValues([[], []], [1, 1])).toStrictEqual([[], []]);
 
-  result = getSureValuesWithLength([[1], [2], [3], [4]], [1, 1, 1, 1]);
+  result = adjustValues([[1], [2], [3], [4]], [1, 1, 1, 1]);
   expect(result).toStrictEqual([[1], [2], [3], [4]]);
 
-  result = getSureValuesWithLength(
+  result = adjustValues(
     [
       [1, 11],
       [2, 12],
@@ -91,4 +91,15 @@ test('getSureValuesWithLength', () => {
     [3, 13],
     [4, 14, 40]
   ]);
+
+  result = adjustValues([[1], [2, 12], [3, 13, 30], [4, 14, 40, 400]], [1, 2, 3, 4]);
+  expect(result).toStrictEqual([[1], [2, 12], [3, 13, 30], [4, 14, 40, 400]]);
+
+  result = adjustValues([[1], [1, 2, 12], [1, 2, 12, 3, 13, 30], [1, 2, 12, 3, 13, 30, 4, 14, 40, 400]], [1, 2, 3, 4]);
+
+  expect(result).toStrictEqual([[1], [2, 12], [3, 13, 30], [4, 14, 40, 400]]);
+
+  result = adjustValues([[1, 2, 12, 3, 13, 30, 4, 14, 40, 400], [1, 2, 12, 3, 13, 30], [1, 2, 12], [1]], [4, 3, 2, 1]);
+
+  expect(result).toStrictEqual([[4, 14, 40, 400], [3, 13, 30], [2, 12], [1]]);
 });

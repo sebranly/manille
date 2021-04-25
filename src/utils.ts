@@ -1,3 +1,4 @@
+import { difference, isEqual } from 'lodash';
 import { Card } from './types';
 
 export const compareValues = (a: number, b: number) => {
@@ -42,8 +43,39 @@ export const getSureValues = (array: any[][]) => {
   return sureValues;
 };
 
-export const getSureValuesWithLength = (array: any[][], length: number[]) => {
-  const sureValuesBasic = getSureValues(array);
+export const adjustValues = (array: any[][], length: number[]) => {
+  let canLoopAgain = true;
 
-  return sureValuesBasic;
+  while (canLoopAgain) {
+    canLoopAgain = false;
+
+    const sureValues = getSureValues(array);
+
+    for (let i = 0; i < array.length; i++) {
+      const expectedLength = length[i];
+      const values = sureValues[i];
+
+      if (values.length === expectedLength) {
+        const newArray = sureValues[i];
+
+        if (!isEqual(newArray, array[i])) {
+          canLoopAgain = true;
+          array[i] = newArray;
+        }
+
+        for (let j = 0; j < array.length; j++) {
+          if (i !== j) {
+            const newSubArray = difference(array[j], values);
+
+            if (!isEqual(newSubArray, array[j])) {
+              canLoopAgain = true;
+              array[j] = newSubArray;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return array;
 };
