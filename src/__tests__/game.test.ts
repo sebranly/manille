@@ -7,16 +7,16 @@ const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
 test('getLeaderFold', () => {
   // It returns -1 if no 4 played cards
   const id1 = getLeaderFold([], 0, false);
-  expect(id1).toStrictEqual(-1);
+  expect(id1).toBe(-1);
 
   const id2 = getLeaderFold([], 0, Spades);
-  expect(id2).toStrictEqual(-1);
+  expect(id2).toBe(-1);
 
   const id3 = getLeaderFold([{ rank: Ten, suit: Spades }], 0, false);
-  expect(id3).toStrictEqual(-1);
+  expect(id3).toBe(-1);
 
   const id4 = getLeaderFold([{ rank: Ten, suit: Spades }], 0, Spades);
-  expect(id4).toStrictEqual(-1);
+  expect(id4).toBe(-1);
 
   const id5 = getLeaderFold(
     [
@@ -27,7 +27,7 @@ test('getLeaderFold', () => {
     false
   );
 
-  expect(id5).toStrictEqual(-1);
+  expect(id5).toBe(-1);
 
   const id6 = getLeaderFold(
     [
@@ -38,7 +38,7 @@ test('getLeaderFold', () => {
     Spades
   );
 
-  expect(id6).toStrictEqual(-1);
+  expect(id6).toBe(-1);
 
   const id7 = getLeaderFold(
     [
@@ -50,7 +50,7 @@ test('getLeaderFold', () => {
     false
   );
 
-  expect(id7).toStrictEqual(-1);
+  expect(id7).toBe(-1);
 
   const id8 = getLeaderFold(
     [
@@ -62,7 +62,130 @@ test('getLeaderFold', () => {
     Spades
   );
 
-  expect(id8).toStrictEqual(-1);
+  expect(id8).toBe(-1);
+
+  // Is "en voiture"
+  const id9 = getLeaderFold(
+    [
+      { rank: Ace, suit: Spades },
+      { rank: Ten, suit: Spades },
+      { rank: King, suit: Spades },
+      { rank: Queen, suit: Spades }
+    ],
+    0,
+    false
+  );
+
+  expect(id9).toBe(1);
+
+  const id10 = getLeaderFold(
+    [
+      { rank: Ace, suit: Spades },
+      { rank: Ten, suit: Spades },
+      { rank: King, suit: Diamonds },
+      { rank: Queen, suit: Diamonds }
+    ],
+    0,
+    false
+  );
+
+  expect(id10).toBe(1);
+
+  // Is "atout"
+  const id11 = getLeaderFold(
+    [
+      { rank: Ace, suit: Spades },
+      { rank: Ten, suit: Spades },
+      { rank: King, suit: Spades },
+      { rank: Queen, suit: Spades }
+    ],
+    0,
+    Spades
+  );
+
+  expect(id11).toBe(1);
+
+  const id12 = getLeaderFold(
+    [
+      { rank: Ace, suit: Spades },
+      { rank: Ten, suit: Spades },
+      { rank: King, suit: Diamonds },
+      { rank: Queen, suit: Diamonds }
+    ],
+    0,
+    Spades
+  );
+
+  expect(id12).toBe(1);
+
+  // Is not "atout" and there is no "atout" being played
+
+  const id13 = getLeaderFold(
+    [
+      { rank: Ace, suit: Spades },
+      { rank: Ten, suit: Spades },
+      { rank: King, suit: Spades },
+      { rank: Queen, suit: Spades }
+    ],
+    0,
+    Clubs
+  );
+
+  expect(id13).toBe(1);
+
+  const id14 = getLeaderFold(
+    [
+      { rank: Ace, suit: Spades },
+      { rank: Ten, suit: Spades },
+      { rank: King, suit: Diamonds },
+      { rank: Queen, suit: Diamonds }
+    ],
+    0,
+    Clubs
+  );
+
+  expect(id14).toBe(1);
+
+  // It not "atout" but there are "atouts"
+
+  const id15 = getLeaderFold(
+    [
+      { rank: Ace, suit: Spades },
+      { rank: King, suit: Spades },
+      { rank: Ten, suit: Spades },
+      { rank: Seven, suit: Clubs }
+    ],
+    0,
+    Clubs
+  );
+
+  expect(id15).toBe(3);
+
+  const id16 = getLeaderFold(
+    [
+      { rank: Ten, suit: Spades },
+      { rank: Seven, suit: Clubs },
+      { rank: Eight, suit: Clubs },
+      { rank: Jack, suit: Spades }
+    ],
+    0,
+    Clubs
+  );
+
+  expect(id16).toBe(2);
+
+  const id17 = getLeaderFold(
+    [
+      { rank: Ten, suit: Spades },
+      { rank: Seven, suit: Clubs },
+      { rank: Eight, suit: Clubs },
+      { rank: Jack, suit: Clubs }
+    ],
+    0,
+    Clubs
+  );
+
+  expect(id17).toBe(3);
 });
 
 test('getPlayableCards', () => {
