@@ -1,8 +1,69 @@
-import { getPlayableCards, getPlayableCardsTrumpSuit } from '../game';
+import { getLeaderFold, getPlayableCards, getPlayableCardsTrumpSuit } from '../game';
 import { CardRank, CardSuit } from '../types';
 
 const { Ace, Eight, Jack, King, Nine, Queen, Seven, Ten } = CardRank;
 const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
+
+test('getLeaderFold', () => {
+  // It returns -1 if no 4 played cards
+  const id1 = getLeaderFold([], 0, false);
+  expect(id1).toStrictEqual(-1);
+
+  const id2 = getLeaderFold([], 0, Spades);
+  expect(id2).toStrictEqual(-1);
+
+  const id3 = getLeaderFold([{ rank: Ten, suit: Spades }], 0, false);
+  expect(id3).toStrictEqual(-1);
+
+  const id4 = getLeaderFold([{ rank: Ten, suit: Spades }], 0, Spades);
+  expect(id4).toStrictEqual(-1);
+
+  const id5 = getLeaderFold(
+    [
+      { rank: Ten, suit: Spades },
+      { rank: Ace, suit: Spades }
+    ],
+    0,
+    false
+  );
+
+  expect(id5).toStrictEqual(-1);
+
+  const id6 = getLeaderFold(
+    [
+      { rank: Ten, suit: Spades },
+      { rank: Ace, suit: Spades }
+    ],
+    0,
+    Spades
+  );
+
+  expect(id6).toStrictEqual(-1);
+
+  const id7 = getLeaderFold(
+    [
+      { rank: Ten, suit: Spades },
+      { rank: Ace, suit: Spades },
+      { rank: King, suit: Spades }
+    ],
+    0,
+    false
+  );
+
+  expect(id7).toStrictEqual(-1);
+
+  const id8 = getLeaderFold(
+    [
+      { rank: Ten, suit: Spades },
+      { rank: Ace, suit: Spades },
+      { rank: King, suit: Spades }
+    ],
+    0,
+    Spades
+  );
+
+  expect(id8).toStrictEqual(-1);
+});
 
 test('getPlayableCards', () => {
   // It returns empty if empty ~ no played cards
