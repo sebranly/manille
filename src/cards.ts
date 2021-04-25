@@ -50,6 +50,15 @@ export const excludeSuit = (cards: Card[], suit: CardSuit) => {
   return cardsSuit;
 };
 
+export const excludeCards = (cards: Card[], cardsToExclude: Card[]) => {
+  const newCards = cards.filter(
+    (card: Card) =>
+      !cardsToExclude.some((cardExclude: Card) => card.rank === cardExclude.rank && card.suit === cardExclude.suit)
+  );
+
+  return newCards;
+};
+
 export const orderCards = (cards: Card[]) => {
   const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
 

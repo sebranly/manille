@@ -44,38 +44,38 @@ export const updateKnowledgePanelSuits = (
   return kp;
 };
 
-export const updateKnowledgePanelCardsBasic = (
-  knowledgePanel: KnowledgeSuit[],
-  knowledgeCards: Card[][],
-  botId: number
-) => {
+export const updateKnowledgePanelCardsBasic = (knowledgePanel: KnowledgeSuit[], knowledgeCards: Card[][]) => {
   const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
 
   for (let playerId = 0; playerId < NUMBER_PLAYERS; playerId++) {
-    // Note: ignore bot for now
-    if (playerId !== botId) {
-      const { hasClubs, hasDiamonds, hasHearts, hasSpades } = knowledgePanel[playerId];
+    const { hasClubs, hasDiamonds, hasHearts, hasSpades } = knowledgePanel[playerId];
 
-      if (!hasClubs) {
-        knowledgeCards[playerId] = excludeSuit(knowledgeCards[playerId], Clubs);
-      }
+    if (!hasClubs) {
+      knowledgeCards[playerId] = excludeSuit(knowledgeCards[playerId], Clubs);
+    }
 
-      if (!hasDiamonds) {
-        knowledgeCards[playerId] = excludeSuit(knowledgeCards[playerId], Diamonds);
-      }
+    if (!hasDiamonds) {
+      knowledgeCards[playerId] = excludeSuit(knowledgeCards[playerId], Diamonds);
+    }
 
-      if (!hasHearts) {
-        knowledgeCards[playerId] = excludeSuit(knowledgeCards[playerId], Hearts);
-      }
+    if (!hasHearts) {
+      knowledgeCards[playerId] = excludeSuit(knowledgeCards[playerId], Hearts);
+    }
 
-      if (!hasSpades) {
-        knowledgeCards[playerId] = excludeSuit(knowledgeCards[playerId], Spades);
-      }
+    if (!hasSpades) {
+      knowledgeCards[playerId] = excludeSuit(knowledgeCards[playerId], Spades);
     }
   }
 
   return knowledgeCards;
 };
+
+// export const updateKnowledgePanelCards = (knowledgePanel: KnowledgeSuit[], knowledgeCards: Card[][], cards: Card[][], allPlayedCards[]: Card[][]) => {
+//   const newKnowledgeCards = updateKnowledgePanelCardsBasic(knowledgePanel, knowledgeCards);
+
+//   const
+
+// };
 
 export const initializeKnowledgePanel = () => {
   const knowledgePanel: KnowledgeSuit[] = [];
