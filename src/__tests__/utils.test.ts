@@ -67,20 +67,25 @@ test('getSureValues', () => {
 });
 
 test('getSureValuesWithLength', () => {
+  let result;
+
   expect(getSureValuesWithLength([[]], [1])).toStrictEqual([[]]);
   expect(getSureValuesWithLength([[], []], [1, 1])).toStrictEqual([[], []]);
-  expect(getSureValuesWithLength([[1], [2], [3], [4]], [1, 1, 1, 1])).toStrictEqual([[1], [2], [3], [4]]);
-  expect(
-    getSureValuesWithLength(
-      [
-        [1, 11],
-        [2, 12],
-        [3, 13],
-        [4, 14, 40]
-      ],
-      [2, 2, 2, 3]
-    )
-  ).toStrictEqual([
+
+  result = getSureValuesWithLength([[1], [2], [3], [4]], [1, 1, 1, 1]);
+  expect(result).toStrictEqual([[1], [2], [3], [4]]);
+
+  result = getSureValuesWithLength(
+    [
+      [1, 11],
+      [2, 12],
+      [3, 13],
+      [4, 14, 40]
+    ],
+    [2, 2, 2, 3]
+  );
+
+  expect(result).toStrictEqual([
     [1, 11],
     [2, 12],
     [3, 13],
