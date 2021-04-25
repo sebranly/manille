@@ -1,8 +1,9 @@
 import { generateSuit } from '../cards';
-import { CardSuit } from '../types';
+import { CardRank, CardSuit } from '../types';
 import { compareValues, flattenArray, getSureValues, adjustValues } from '../utils';
 
 const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
+const { King, Queen, Jack, Nine } = CardRank;
 
 test('compareValues', () => {
   // Output is 1
@@ -102,4 +103,41 @@ test('adjustValues', () => {
   result = adjustValues([[1, 2, 12, 3, 13, 30, 4, 14, 40, 400], [1, 2, 12, 3, 13, 30], [1, 2, 12], [1]], [4, 3, 2, 1]);
 
   expect(result).toStrictEqual([[4, 14, 40, 400], [3, 13, 30], [2, 12], [1]]);
+
+  result = adjustValues([[1], [1, 2, 12, 3, 13, 30, 4, 14, 40, 400], [1, 2, 12], [1, 2, 12, 3, 13, 30]], [1, 4, 2, 3]);
+
+  expect(result).toStrictEqual([[1], [4, 14, 40, 400], [2, 12], [3, 13, 30]]);
+
+  // It works with cards
+
+  result = adjustValues(
+    [
+      [{ rank: King, suit: Spades }],
+      [{ rank: Queen, suit: Spades }],
+      [
+        { rank: King, suit: Spades },
+        { rank: Queen, suit: Spades },
+        { rank: Jack, suit: Spades },
+        { rank: Nine, suit: Spades }
+      ],
+      [
+        { rank: King, suit: Hearts },
+        { rank: Queen, suit: Diamonds }
+      ]
+    ],
+    [1, 1, 2, 2]
+  );
+
+  expect(result).toStrictEqual([
+    [{ rank: King, suit: Spades }],
+    [{ rank: Queen, suit: Spades }],
+    [
+      { rank: Jack, suit: Spades },
+      { rank: Nine, suit: Spades }
+    ],
+    [
+      { rank: King, suit: Hearts },
+      { rank: Queen, suit: Diamonds }
+    ]
+  ]);
 });
