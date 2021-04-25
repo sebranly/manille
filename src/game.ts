@@ -107,12 +107,7 @@ export const getPlayableCardsNonTrumpSuit = (
   return higherCardsTrump;
 };
 
-export const isTeammateLeading = (
-  playedCards: Card[],
-  currentPlayerId: number,
-  startingPlayerId: number,
-  suit: CardSuit | false
-) => {
+export const getLeaderIdSuit = (playedCards: Card[], startingPlayerId: number, suit: CardSuit | false) => {
   const highestPlayedCardTrump = getHighestPlayedCardSuit(playedCards, suit);
 
   const arrayId = findIndex(
@@ -122,5 +117,42 @@ export const isTeammateLeading = (
 
   const leaderId = (startingPlayerId + arrayId) % NUMBER_PLAYERS;
 
+  return leaderId;
+};
+
+export const isTeammateLeading = (
+  playedCards: Card[],
+  currentPlayerId: number,
+  startingPlayerId: number,
+  suit: CardSuit | false
+) => {
+  const leaderId = getLeaderIdSuit(playedCards, startingPlayerId, suit);
+
   return isSameTeam(currentPlayerId, leaderId);
+};
+
+export const getLeaderFold = (playedCards: Card[], startingPlayerId: number, trumpSuit: CardSuit | false) => {
+  if (playedCards.length !== NUMBER_PLAYERS) return -1;
+
+  const isTrumpSuit = trumpSuit === false || playedCards[0].suit === trumpSuit;
+
+  if (isTrumpSuit) {
+    const suit = playedCards[0].suit;
+    const leaderId = getLeaderIdSuit(playedCards, startingPlayerId, suit);
+
+    return leaderId;
+  }
+
+  const requestedSuit = playedCards[0].suit;
+  const playedCardsTrumpSuit = filterBySuit(playedCards, trumpSuit);
+
+  if (playedCardsTrumpSuit.length === 0) {
+    const leaderId = getLeaderIdSuit(playedCards, startingPlayerId, requestedSuit);
+
+    return leaderId;
+  }
+
+  const leaderId = getLeaderIdSuit(playedCards, startingPlayerId, trumpSuit);
+
+  return leaderId;
 };
