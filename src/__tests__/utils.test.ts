@@ -1,6 +1,6 @@
 import { generateSuit } from '../cards';
 import { CardSuit } from '../types';
-import { compareValues, flattenArray } from '../utils';
+import { compareValues, flattenArray, getSureValues } from '../utils';
 
 const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
 
@@ -34,4 +34,34 @@ test('flattenArray', () => {
   const flatArray = flattenArray(deepArray);
   expect(flatArray).toHaveLength(32);
   expect(flatArray).toMatchSnapshot();
+});
+
+test('getSureValues', () => {
+  expect(getSureValues([[]])).toStrictEqual([[]]);
+  expect(getSureValues([[], []])).toStrictEqual([[], []]);
+  expect(getSureValues([[1], [2], [3], [4]])).toStrictEqual([[1], [2], [3], [4]]);
+  expect(
+    getSureValues([
+      [1, 11],
+      [2, 12],
+      [3, 13],
+      [4, 14, 40]
+    ])
+  ).toStrictEqual([
+    [1, 11],
+    [2, 12],
+    [3, 13],
+    [4, 14, 40]
+  ]);
+
+  expect(
+    getSureValues([
+      [1, 2, 3, 4],
+      [1, 2, 3, 4],
+      [3, 1, 2, 4],
+      [4, 4, 4, 2, 1, 3]
+    ])
+  ).toStrictEqual([[], [], [], []]);
+
+  expect(getSureValues([[1, 2, 3, 4], [1], [3], [2]])).toStrictEqual([[4], [], [], []]);
 });

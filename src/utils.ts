@@ -7,7 +7,37 @@ export const compareValues = (a: number, b: number) => {
   return -1;
 };
 
-// TODO: use generic type
+// TODO: use generic type?
 export const flattenArray = (array: Card[][]) => {
   return array.reduce((a, b) => a.concat(b));
+};
+
+// TODO: use generic type?
+export const getSureValues = (array: any[][]) => {
+  const sureValues: any = [];
+
+  for (let i = 0; i < array.length; i++) {
+    sureValues[i] = [];
+  }
+
+  for (let i = 0; i < array.length; i++) {
+    const values = array[i];
+
+    values.forEach((value) => {
+      let isSureValue = true;
+
+      for (let j = 0; j < array.length; j++) {
+        if (i !== j) {
+          const otherValues = array[j];
+
+          // TODO: for performance, could be a short-circuit
+          if (otherValues.includes(value)) isSureValue = false;
+        }
+      }
+
+      if (isSureValue) sureValues[i].push(value);
+    });
+  }
+
+  return sureValues;
 };
