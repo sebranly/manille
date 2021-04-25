@@ -2,6 +2,7 @@ import { generateDeck, generateSuit } from '../cards';
 import {
   initializeKnowledgePanel,
   initializeKnowledgeCards,
+  updateKnowledgePanelCards,
   updateKnowledgePanelCardsBasic,
   updateKnowledgePanelSuits
 } from '../ia';
@@ -233,6 +234,46 @@ test('updateKnowledgePanelCardsBasic', () => {
   ];
 
   expect(updateKnowledgePanelCardsBasic(knowledgeSuits, knowledgeCards, 2)).toStrictEqual([
+    [...generateSuit(Clubs), ...generateSuit(Spades), ...generateSuit(Hearts)],
+    generateSuit(Diamonds),
+    [],
+    [...generateSuit(Spades), ...generateSuit(Hearts)]
+  ]);
+});
+
+// TODO: this is not really representative of the full functionality from this util
+test('updateKnowledgePanelCards', () => {
+  const deck = generateDeck();
+
+  const knowledgeCards = [deck, deck, [], deck];
+  const knowledgeSuits: KnowledgeSuit[] = [
+    {
+      hasClubs: true,
+      hasDiamonds: false,
+      hasHearts: true,
+      hasSpades: true
+    },
+    {
+      hasClubs: false,
+      hasDiamonds: true,
+      hasHearts: false,
+      hasSpades: false
+    },
+    {
+      hasClubs: true,
+      hasDiamonds: true,
+      hasHearts: true,
+      hasSpades: true
+    },
+    {
+      hasClubs: false,
+      hasDiamonds: false,
+      hasHearts: true,
+      hasSpades: true
+    }
+  ];
+
+  expect(updateKnowledgePanelCards(knowledgeSuits, knowledgeCards, [], 2, [1, 1, 1, 1])).toStrictEqual([
     [...generateSuit(Clubs), ...generateSuit(Spades), ...generateSuit(Hearts)],
     generateSuit(Diamonds),
     [],
