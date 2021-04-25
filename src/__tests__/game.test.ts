@@ -1,4 +1,4 @@
-import { getLeaderFold, getPlayableCards, getPlayableCardsTrumpSuit } from '../game';
+import { getLeaderFold, getPlayableCards, getPlayableCardsTrumpSuit, getPlayerId } from '../game';
 import { CardRank, CardSuit } from '../types';
 
 const { Ace, Eight, Jack, King, Nine, Queen, Seven, Ten } = CardRank;
@@ -1236,4 +1236,16 @@ test('getPlayableCards', () => {
     { rank: Eight, suit: Clubs },
     { rank: Seven, suit: Clubs }
   ]);
+});
+
+test('getPlayerId', () => {
+  expect(getPlayerId(0, 0)).toBe(0);
+  expect(getPlayerId(0, 1)).toBe(1);
+  expect(getPlayerId(0, 2)).toBe(2);
+  expect(getPlayerId(0, 3)).toBe(3);
+
+  expect(getPlayerId(1, 0)).toBe(1);
+  expect(getPlayerId(1, 1)).toBe(2);
+  expect(getPlayerId(1, 2)).toBe(3);
+  expect(getPlayerId(1, 3)).toBe(0);
 });

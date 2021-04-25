@@ -115,7 +115,7 @@ export const getLeaderIdSuit = (playedCards: Card[], startingPlayerId: number, s
     (card: Card) => card.rank === highestPlayedCardTrump.rank && card.suit === highestPlayedCardTrump.suit
   );
 
-  const leaderId = (startingPlayerId + arrayId) % NUMBER_PLAYERS;
+  const leaderId = getPlayerId(startingPlayerId, arrayId);
 
   return leaderId;
 };
@@ -155,4 +155,8 @@ export const getLeaderFold = (playedCards: Card[], startingPlayerId: number, tru
   const leaderId = getLeaderIdSuit(playedCards, startingPlayerId, trumpSuit);
 
   return leaderId;
+};
+
+export const getPlayerId = (startingPlayerId: number, arrayId: number) => {
+  return (startingPlayerId + arrayId) % NUMBER_PLAYERS;
 };

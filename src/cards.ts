@@ -44,6 +44,21 @@ export const filterBySuit = (cards: Card[], suit: CardSuit | false) => {
   return cardsSuit;
 };
 
+export const excludeSuit = (cards: Card[], suit: CardSuit) => {
+  const cardsSuit = cards.filter((card: Card) => card.suit !== suit);
+
+  return cardsSuit;
+};
+
+export const excludeCards = (cards: Card[], cardsToExclude: Card[]) => {
+  const newCards = cards.filter(
+    (card: Card) =>
+      !cardsToExclude.some((cardExclude: Card) => card.rank === cardExclude.rank && card.suit === cardExclude.suit)
+  );
+
+  return newCards;
+};
+
 export const orderCards = (cards: Card[]) => {
   const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
 

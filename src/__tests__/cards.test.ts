@@ -1,4 +1,13 @@
-import { cutDeck, filterBySuit, generateDeck, generateSuit, orderCards, sortSuit } from '../cards';
+import {
+  cutDeck,
+  excludeCards,
+  excludeSuit,
+  filterBySuit,
+  generateDeck,
+  generateSuit,
+  orderCards,
+  sortSuit
+} from '../cards';
 import { CardRank, CardSuit } from '../types';
 
 const { Ace, Eight, Jack, King, Nine, Queen, Seven, Ten } = CardRank;
@@ -111,6 +120,29 @@ test('filterBySuit', () => {
   expect(filterBySuit(deck, false)).toStrictEqual([]);
 });
 
+test('excludeSuit', () => {
+  expect(excludeSuit([], Clubs)).toStrictEqual([]);
+
+  const suit1 = generateSuit(Clubs);
+  expect(excludeSuit(suit1, Diamonds)).toStrictEqual([
+    { rank: Ten, suit: Clubs },
+    { rank: Ace, suit: Clubs },
+    { rank: King, suit: Clubs },
+    { rank: Queen, suit: Clubs },
+    { rank: Jack, suit: Clubs },
+    { rank: Nine, suit: Clubs },
+    { rank: Eight, suit: Clubs },
+    { rank: Seven, suit: Clubs }
+  ]);
+
+  const suit2 = generateSuit(Clubs);
+  expect(excludeSuit(suit2, Clubs)).toStrictEqual([]);
+
+  const deck = generateDeck();
+  expect(excludeSuit(deck, Clubs)).toHaveLength(24);
+  expect(excludeSuit(deck, Clubs)).toMatchSnapshot();
+});
+
 test('sortSuit', () => {
   const suit = generateSuit(Clubs);
 
@@ -145,5 +177,32 @@ test('sortSuit', () => {
     { rank: Nine, suit: Clubs },
     { rank: Eight, suit: Clubs },
     { rank: Seven, suit: Clubs }
+  ]);
+});
+
+test('excludeCards', () => {
+  const deck = generateDeck();
+
+  expect(excludeCards([], [])).toStrictEqual([]);
+  expect(excludeCards([], deck)).toStrictEqual([]);
+  expect(excludeCards(deck, [])).toStrictEqual(generateDeck());
+  expect(excludeCards(deck, deck)).toStrictEqual([]);
+
+  const result = excludeCards(
+    [
+      { rank: King, suit: Spades },
+      { rank: King, suit: Hearts },
+      { rank: Queen, suit: Spades },
+      { rank: Queen, suit: Hearts }
+    ],
+    [
+      { rank: King, suit: Spades },
+      { rank: Queen, suit: Hearts }
+    ]
+  );
+
+  expect(result).toStrictEqual([
+    { rank: King, suit: Hearts },
+    { rank: Queen, suit: Spades }
   ]);
 });
