@@ -39,3 +39,10 @@ export interface Game {
   players: Player[];
   rounds: Round[];
 }
+
+export interface Knowledge {
+  hasClubs: boolean;
+  hasDiamonds: boolean;
+  hasHearts: boolean;
+  hasSpades: boolean;
+}
