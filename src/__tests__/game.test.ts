@@ -186,6 +186,34 @@ test('getLeaderFold', () => {
   );
 
   expect(id17).toBe(3);
+
+  // It works even when startingPlayerId is not 0
+
+  const id18 = getLeaderFold(
+    [
+      { rank: Ten, suit: Spades },
+      { rank: Seven, suit: Clubs },
+      { rank: Eight, suit: Clubs },
+      { rank: Jack, suit: Spades }
+    ],
+    2,
+    Clubs
+  );
+
+  expect(id18).toBe(0);
+
+  const id19 = getLeaderFold(
+    [
+      { rank: Ten, suit: Spades },
+      { rank: Seven, suit: Clubs },
+      { rank: Eight, suit: Clubs },
+      { rank: Jack, suit: Clubs }
+    ],
+    2,
+    Clubs
+  );
+
+  expect(id19).toBe(1);
 });
 
 test('getPlayableCards', () => {
