@@ -44,7 +44,11 @@ export const updateKnowledgePanelSuits = (
   return kp;
 };
 
-export const updateKnowledgePanelCards = (knowledgePanel: KnowledgeSuit[], knowledgeCards: Card[][], botId: number) => {
+export const updateKnowledgePanelCardsBasic = (
+  knowledgePanel: KnowledgeSuit[],
+  knowledgeCards: Card[][],
+  botId: number
+) => {
   const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
 
   for (let playerId = 0; playerId < NUMBER_PLAYERS; playerId++) {

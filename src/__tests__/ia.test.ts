@@ -2,7 +2,7 @@ import { generateDeck, generateSuit } from '../cards';
 import {
   initializeKnowledgePanel,
   initializeKnowledgeCards,
-  updateKnowledgePanelCards,
+  updateKnowledgePanelCardsBasic,
   updateKnowledgePanelSuits
 } from '../ia';
 import { CardRank, CardSuit, KnowledgeSuit } from '../types';
@@ -201,7 +201,7 @@ test('updateKnowledgePanelSuits', () => {
   ]);
 });
 
-test('updateKnowledgePanelCards', () => {
+test('updateKnowledgePanelCardsBasic', () => {
   const deck = generateDeck();
 
   const knowledgeCards = [deck, deck, [], deck];
@@ -232,7 +232,7 @@ test('updateKnowledgePanelCards', () => {
     }
   ];
 
-  expect(updateKnowledgePanelCards(knowledgeSuits, knowledgeCards, 2)).toStrictEqual([
+  expect(updateKnowledgePanelCardsBasic(knowledgeSuits, knowledgeCards, 2)).toStrictEqual([
     [...generateSuit(Clubs), ...generateSuit(Spades), ...generateSuit(Hearts)],
     generateSuit(Diamonds),
     [],
