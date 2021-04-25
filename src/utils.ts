@@ -41,3 +41,9 @@ export const getSureValues = (array: any[][]) => {
 
   return sureValues;
 };
+
+export const getSureValuesWithLength = (array: any[][], length: number[]) => {
+  const sureValuesBasic = getSureValues(array);
+
+  return sureValuesBasic;
+};
