@@ -46,3 +46,10 @@ export interface KnowledgeSuit {
   hasHearts: boolean;
   hasSpades: boolean;
 }
+
+export interface KnowledgeHighest {
+  highestClubs: CardRank;
+  highestDiamonds: CardRank;
+  highestHearts: CardRank;
+  highestSpades: CardRank;
+}

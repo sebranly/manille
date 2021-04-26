@@ -16,6 +16,17 @@ test('getCardPoints', () => {
   expect(getCardPoints(Seven)).toBe(0);
 });
 
+test('getPreviousRank', () => {
+  expect(getPreviousRank(Ten)).toBe(Ace);
+  expect(getPreviousRank(Ace)).toBe(King);
+  expect(getPreviousRank(King)).toBe(Queen);
+  expect(getPreviousRank(Queen)).toBe(Jack);
+  expect(getPreviousRank(Jack)).toBe(Nine);
+  expect(getPreviousRank(Nine)).toBe(Eight);
+  expect(getPreviousRank(Eight)).toBe(Seven);
+  expect(getPreviousRank(Seven)).toBeUndefined();
+});
+
 test('getCardsPoints', () => {
   const cardsSuit = generateSuit(Spades);
   expect(getCardsPoints(cardsSuit)).toBe(15);

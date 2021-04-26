@@ -63,6 +63,37 @@ export const getLowCardNumericValue = (rank: CardRank) => {
   }
 };
 
+export const getPreviousRank = (rank: CardRank) => {
+  const { Ace, Eight, Jack, King, Nine, Queen, Seven, Ten } = CardRank;
+
+  switch (rank) {
+    case Ten:
+      return Ace;
+
+    case Ace:
+      return King;
+
+    case King:
+      return Queen;
+
+    case Queen:
+      return Jack;
+
+    case Jack:
+      return Nine;
+
+    case Nine:
+      return Eight;
+
+    case Eight:
+      return Seven;
+
+    case Seven:
+    default:
+      return undefined;
+  }
+};
+
 /**
  * Returns whether 1, 0 or -1 based on the comparison of two cards
  */

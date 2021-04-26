@@ -18,6 +18,7 @@ export const getPlayableCards = (
 
   if (canPlayAll) return cards;
 
+  // TODO: create a function for it
   const isTrumpSuit = trumpSuit === false || playedCards[0].suit === trumpSuit;
 
   if (isTrumpSuit) {

@@ -1,10 +1,11 @@
 import { generateDeck, generateSuit } from '../cards';
 import {
-  initializeKnowledgePanel,
+  initializeKnowledgeSuit,
   initializeKnowledgeCards,
   updateKnowledgePanelCards,
   updateKnowledgePanelCardsBasic,
-  updateKnowledgePanelSuits
+  updateKnowledgePanelSuits,
+  initializeKnowledgeHighest
 } from '../ia';
 import { CardRank, CardSuit, KnowledgeSuit } from '../types';
 
@@ -20,48 +21,40 @@ test('initializeKnowledgeCards', () => {
   expect(initializeKnowledgeCards(suit, 2)).toStrictEqual([otherSuits, otherSuits, suit, otherSuits]);
 });
 
-test('initializeKnowledgePanel', () => {
-  expect(initializeKnowledgePanel()).toStrictEqual([
-    {
-      hasClubs: true,
-      hasDiamonds: true,
-      hasHearts: true,
-      hasSpades: true
-    },
-    {
-      hasClubs: true,
-      hasDiamonds: true,
-      hasHearts: true,
-      hasSpades: true
-    },
-    {
-      hasClubs: true,
-      hasDiamonds: true,
-      hasHearts: true,
-      hasSpades: true
-    },
-    {
-      hasClubs: true,
-      hasDiamonds: true,
-      hasHearts: true,
-      hasSpades: true
-    }
-  ]);
+test('initializeKnowledgeSuit', () => {
+  const initialElement = {
+    hasClubs: true,
+    hasDiamonds: true,
+    hasHearts: true,
+    hasSpades: true
+  };
+
+  expect(initializeKnowledgeSuit()).toStrictEqual([initialElement, initialElement, initialElement, initialElement]);
+});
+
+test('initializeKnowledgeHighest', () => {
+  const initialElement = {
+    clubs: Ten,
+    diamonds: Ten,
+    hearts: Ten,
+    spades: Ten,
+
+  expect(initializeKnowledgeHighest()).toStrictEqual([initialElement, initialElement, initialElement, initialElement]);
 });
 
 test('updateKnowledgePanelSuits', () => {
-  const kp1 = updateKnowledgePanelSuits(initializeKnowledgePanel(), [], 0);
+  const kp1 = updateKnowledgePanelSuits(initializeKnowledgeSuit(), [], 0);
 
-  expect(kp1).toStrictEqual(initializeKnowledgePanel());
+  expect(kp1).toStrictEqual(initializeKnowledgeSuit());
 
-  const kp2 = updateKnowledgePanelSuits(initializeKnowledgePanel(), [{ rank: King, suit: Spades }], 0);
+  const kp2 = updateKnowledgePanelSuits(initializeKnowledgeSuit(), [{ rank: King, suit: Spades }], 0);
 
-  expect(kp2).toStrictEqual(initializeKnowledgePanel());
+  expect(kp2).toStrictEqual(initializeKnowledgeSuit());
 
   // No deductions can be made yet
 
   const kp3 = updateKnowledgePanelSuits(
-    initializeKnowledgePanel(),
+    initializeKnowledgeSuit(),
     [
       { rank: King, suit: Spades },
       { rank: Ten, suit: Spades }
@@ -69,10 +62,10 @@ test('updateKnowledgePanelSuits', () => {
     0
   );
 
-  expect(kp3).toStrictEqual(initializeKnowledgePanel());
+  expect(kp3).toStrictEqual(initializeKnowledgeSuit());
 
   const kp4 = updateKnowledgePanelSuits(
-    initializeKnowledgePanel(),
+    initializeKnowledgeSuit(),
     [
       { rank: King, suit: Spades },
       { rank: Ten, suit: Spades },
@@ -81,10 +74,10 @@ test('updateKnowledgePanelSuits', () => {
     0
   );
 
-  expect(kp4).toStrictEqual(initializeKnowledgePanel());
+  expect(kp4).toStrictEqual(initializeKnowledgeSuit());
 
   const kp5 = updateKnowledgePanelSuits(
-    initializeKnowledgePanel(),
+    initializeKnowledgeSuit(),
     [
       { rank: King, suit: Spades },
       { rank: Ten, suit: Spades },
@@ -94,12 +87,12 @@ test('updateKnowledgePanelSuits', () => {
     0
   );
 
-  expect(kp5).toStrictEqual(initializeKnowledgePanel());
+  expect(kp5).toStrictEqual(initializeKnowledgeSuit());
 
   // Deductions are made based on suits
 
   const kp6 = updateKnowledgePanelSuits(
-    initializeKnowledgePanel(),
+    initializeKnowledgeSuit(),
     [
       { rank: King, suit: Spades },
       { rank: Seven, suit: Diamonds },
