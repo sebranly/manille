@@ -200,7 +200,7 @@ test('updateKnowledgeCardsBasic', () => {
   const deck = generateDeck();
 
   const knowledgeCards = [deck, deck, [], deck];
-  const KnowledgePresences: KnowledgePresence[] = [
+  const knowledgePresence: KnowledgePresence[] = [
     {
       clubs: true,
       diamonds: false,
@@ -227,7 +227,7 @@ test('updateKnowledgeCardsBasic', () => {
     }
   ];
 
-  expect(updateKnowledgeCardsBasic(KnowledgePresences, knowledgeCards, 2)).toStrictEqual([
+  expect(updateKnowledgeCardsBasic(knowledgePresence, knowledgeCards, 2)).toStrictEqual([
     [...generateSuit(Clubs), ...generateSuit(Spades), ...generateSuit(Hearts)],
     generateSuit(Diamonds),
     [],
@@ -240,7 +240,7 @@ test('updateKnowledgeCards', () => {
   const deck = generateDeck();
 
   const knowledgeCards = [deck, deck, [], deck];
-  const KnowledgePresences: KnowledgePresence[] = [
+  const knowledgePresence: KnowledgePresence[] = [
     {
       clubs: true,
       diamonds: false,
@@ -267,7 +267,7 @@ test('updateKnowledgeCards', () => {
     }
   ];
 
-  expect(updateKnowledgeCards(KnowledgePresences, knowledgeCards, [], 2, [1, 1, 1, 1])).toStrictEqual([
+  expect(updateKnowledgeCards(knowledgePresence, knowledgeCards, [], 2, [1, 1, 1, 1])).toStrictEqual([
     [...generateSuit(Clubs), ...generateSuit(Spades), ...generateSuit(Hearts)],
     generateSuit(Diamonds),
     [],
