@@ -1,13 +1,12 @@
 import { generateDeck, generateSuit } from '../cards';
 import {
-  initializeKnowledgePresence,
   initializeKnowledgeCards,
   updateKnowledgeCards,
   updateKnowledgeCardsBasic,
   updateKnowledgePresence,
   initializeKnowledgeHighest
 } from '../ia';
-import { CardRank, CardSuit, KnowledgePresence } from '../types';
+import { CardRank, CardSuit, KnowledgeHighest } from '../types';
 
 const { Ace, Eight, Jack, King, Nine, Queen, Seven, Ten } = CardRank;
 const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
@@ -19,17 +18,6 @@ test('initializeKnowledgeCards', () => {
   const otherSuits = [...generateSuit(Clubs), ...generateSuit(Diamonds), ...generateSuit(Hearts)];
 
   expect(initializeKnowledgeCards(suit, 2)).toStrictEqual([otherSuits, otherSuits, suit, otherSuits]);
-});
-
-test('initializeKnowledgePresence', () => {
-  const initialElement = {
-    clubs: true,
-    diamonds: true,
-    hearts: true,
-    spades: true
-  };
-
-  expect(initializeKnowledgePresence()).toStrictEqual([initialElement, initialElement, initialElement, initialElement]);
 });
 
 test('initializeKnowledgeHighest', () => {
@@ -44,18 +32,18 @@ test('initializeKnowledgeHighest', () => {
 });
 
 test('updateKnowledgePresence', () => {
-  const kp1 = updateKnowledgePresence(initializeKnowledgePresence(), [], 0);
+  const kp1 = updateKnowledgePresence(initializeKnowledgeHighest(), [], 0);
 
-  expect(kp1).toStrictEqual(initializeKnowledgePresence());
+  expect(kp1).toStrictEqual(initializeKnowledgeHighest());
 
-  const kp2 = updateKnowledgePresence(initializeKnowledgePresence(), [{ rank: King, suit: Spades }], 0);
+  const kp2 = updateKnowledgePresence(initializeKnowledgeHighest(), [{ rank: King, suit: Spades }], 0);
 
-  expect(kp2).toStrictEqual(initializeKnowledgePresence());
+  expect(kp2).toStrictEqual(initializeKnowledgeHighest());
 
   // No deductions can be made yet
 
   const kp3 = updateKnowledgePresence(
-    initializeKnowledgePresence(),
+    initializeKnowledgeHighest(),
     [
       { rank: King, suit: Spades },
       { rank: Ten, suit: Spades }
@@ -63,10 +51,10 @@ test('updateKnowledgePresence', () => {
     0
   );
 
-  expect(kp3).toStrictEqual(initializeKnowledgePresence());
+  expect(kp3).toStrictEqual(initializeKnowledgeHighest());
 
   const kp4 = updateKnowledgePresence(
-    initializeKnowledgePresence(),
+    initializeKnowledgeHighest(),
     [
       { rank: King, suit: Spades },
       { rank: Ten, suit: Spades },
@@ -75,10 +63,10 @@ test('updateKnowledgePresence', () => {
     0
   );
 
-  expect(kp4).toStrictEqual(initializeKnowledgePresence());
+  expect(kp4).toStrictEqual(initializeKnowledgeHighest());
 
   const kp5 = updateKnowledgePresence(
-    initializeKnowledgePresence(),
+    initializeKnowledgeHighest(),
     [
       { rank: King, suit: Spades },
       { rank: Ten, suit: Spades },
@@ -88,12 +76,12 @@ test('updateKnowledgePresence', () => {
     0
   );
 
-  expect(kp5).toStrictEqual(initializeKnowledgePresence());
+  expect(kp5).toStrictEqual(initializeKnowledgeHighest());
 
   // Deductions are made based on suits
 
   const kp6 = updateKnowledgePresence(
-    initializeKnowledgePresence(),
+    initializeKnowledgeHighest(),
     [
       { rank: King, suit: Spades },
       { rank: Seven, suit: Diamonds },
@@ -105,28 +93,28 @@ test('updateKnowledgePresence', () => {
 
   expect(kp6).toStrictEqual([
     {
-      clubs: true,
-      diamonds: true,
-      hearts: true,
-      spades: true
+      clubs: Ten,
+      diamonds: Ten,
+      hearts: Ten,
+      spades: Ten
     },
     {
-      clubs: true,
-      diamonds: true,
-      hearts: true,
-      spades: false
+      clubs: Ten,
+      diamonds: Ten,
+      hearts: Ten,
+      spades: undefined
     },
     {
-      clubs: true,
-      diamonds: true,
-      hearts: true,
-      spades: false
+      clubs: Ten,
+      diamonds: Ten,
+      hearts: Ten,
+      spades: undefined
     },
     {
-      clubs: true,
-      diamonds: true,
-      hearts: true,
-      spades: false
+      clubs: Ten,
+      diamonds: Ten,
+      hearts: Ten,
+      spades: undefined
     }
   ]);
 
@@ -135,28 +123,28 @@ test('updateKnowledgePresence', () => {
   const kp7 = updateKnowledgePresence(
     [
       {
-        clubs: false,
-        diamonds: false,
-        hearts: true,
-        spades: true
+        clubs: undefined,
+        diamonds: undefined,
+        hearts: Ten,
+        spades: Ten
       },
       {
-        clubs: true,
-        diamonds: true,
-        hearts: true,
-        spades: false
+        clubs: Ten,
+        diamonds: Ten,
+        hearts: Ten,
+        spades: undefined
       },
       {
-        clubs: true,
-        diamonds: true,
-        hearts: true,
-        spades: true
+        clubs: Ten,
+        diamonds: Ten,
+        hearts: Ten,
+        spades: Ten
       },
       {
-        clubs: false,
-        diamonds: true,
-        hearts: true,
-        spades: true
+        clubs: undefined,
+        diamonds: Ten,
+        hearts: Ten,
+        spades: Ten
       }
     ],
     [
@@ -170,28 +158,28 @@ test('updateKnowledgePresence', () => {
 
   expect(kp7).toStrictEqual([
     {
-      clubs: false,
-      diamonds: false,
-      hearts: true,
-      spades: true
+      clubs: undefined,
+      diamonds: undefined,
+      hearts: Ten,
+      spades: Ten
     },
     {
-      clubs: true,
-      diamonds: true,
-      hearts: true,
-      spades: false
+      clubs: Ten,
+      diamonds: Ten,
+      hearts: Ten,
+      spades: undefined
     },
     {
-      clubs: true,
-      diamonds: true,
-      hearts: true,
-      spades: false
+      clubs: Ten,
+      diamonds: Ten,
+      hearts: Ten,
+      spades: undefined
     },
     {
-      clubs: false,
-      diamonds: true,
-      hearts: true,
-      spades: false
+      clubs: undefined,
+      diamonds: Ten,
+      hearts: Ten,
+      spades: undefined
     }
   ]);
 });
@@ -200,30 +188,30 @@ test('updateKnowledgeCardsBasic', () => {
   const deck = generateDeck();
 
   const knowledgeCards = [deck, deck, [], deck];
-  const knowledgePresence: KnowledgePresence[] = [
+  const knowledgePresence: KnowledgeHighest[] = [
     {
-      clubs: true,
-      diamonds: false,
-      hearts: true,
-      spades: true
+      clubs: Ten,
+      diamonds: undefined,
+      hearts: Ten,
+      spades: Ten
     },
     {
-      clubs: false,
-      diamonds: true,
-      hearts: false,
-      spades: false
+      clubs: undefined,
+      diamonds: Ten,
+      hearts: undefined,
+      spades: undefined
     },
     {
-      clubs: true,
-      diamonds: true,
-      hearts: true,
-      spades: true
+      clubs: Ten,
+      diamonds: Ten,
+      hearts: Ten,
+      spades: Ten
     },
     {
-      clubs: false,
-      diamonds: false,
-      hearts: true,
-      spades: true
+      clubs: undefined,
+      diamonds: undefined,
+      hearts: Ten,
+      spades: Ten
     }
   ];
 
@@ -240,30 +228,30 @@ test('updateKnowledgeCards', () => {
   const deck = generateDeck();
 
   const knowledgeCards = [deck, deck, [], deck];
-  const knowledgePresence: KnowledgePresence[] = [
+  const knowledgePresence: KnowledgeHighest[] = [
     {
-      clubs: true,
-      diamonds: false,
-      hearts: true,
-      spades: true
+      clubs: Ten,
+      diamonds: undefined,
+      hearts: Ten,
+      spades: Ten
     },
     {
-      clubs: false,
-      diamonds: true,
-      hearts: false,
-      spades: false
+      clubs: undefined,
+      diamonds: Ten,
+      hearts: undefined,
+      spades: undefined
     },
     {
-      clubs: true,
-      diamonds: true,
-      hearts: true,
-      spades: true
+      clubs: Ten,
+      diamonds: Ten,
+      hearts: Ten,
+      spades: Ten
     },
     {
-      clubs: false,
-      diamonds: false,
-      hearts: true,
-      spades: true
+      clubs: undefined,
+      diamonds: undefined,
+      hearts: Ten,
+      spades: Ten
     }
   ];
 

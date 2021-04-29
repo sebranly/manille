@@ -40,16 +40,9 @@ export interface Game {
   rounds: Round[];
 }
 
-export interface KnowledgePresence {
-  clubs: boolean;
-  diamonds: boolean;
-  hearts: boolean;
-  spades: boolean;
-}
-
 export interface KnowledgeHighest {
-  clubs: CardRank;
-  diamonds: CardRank;
-  hearts: CardRank;
-  spades: CardRank;
+  clubs?: CardRank;
+  diamonds?: CardRank;
+  hearts?: CardRank;
+  spades?: CardRank;
 }

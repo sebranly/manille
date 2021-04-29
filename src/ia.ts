@@ -3,11 +3,11 @@ import { excludeCards, excludeSuit, generateDeck } from './cards';
 import { NUMBER_PLAYERS } from './constants';
 import { getHighestPlayedCardSuit, getLeaderIdSuit, getPlayerId } from './game';
 import { getPreviousRank } from './scores';
-import { Card, CardRank, CardSuit, KnowledgeHighest, KnowledgePresence } from './types';
+import { Card, CardRank, CardSuit, KnowledgeHighest } from './types';
 import { adjustValues } from './utils';
 
 export const updateKnowledgePresence = (
-  knowledgePresence: KnowledgePresence[],
+  knowledgePresence: KnowledgeHighest[],
   playedCards: Card[],
   startingPlayerId: number
 ) => {
@@ -21,7 +21,7 @@ export const updateKnowledgePresence = (
     if (playedCards[i].suit !== requestedSuit) {
       const playerId = getPlayerId(startingPlayerId, i);
 
-      kp[playerId][requestedSuit] = false;
+      kp[playerId][requestedSuit] = undefined;
     }
   }
 
@@ -69,7 +69,7 @@ export const updateKnowledgeHighest = (
 };
 
 export const updateKnowledgeCardsBasic = (
-  knowledgePresence: KnowledgePresence[],
+  knowledgePresence: KnowledgeHighest[],
   knowledgeCards: Card[][],
   botId: number
 ) => {
@@ -80,7 +80,7 @@ export const updateKnowledgeCardsBasic = (
     const isBot = playerId === botId;
 
     if (!isBot) {
-      const suitArray: [boolean, CardSuit][] = [
+      const suitArray: [CardRank | undefined, CardSuit][] = [
         [clubs, Clubs],
         [diamonds, Diamonds],
         [hearts, Hearts],
@@ -100,7 +100,7 @@ export const updateKnowledgeCardsBasic = (
 };
 
 export const updateKnowledgeCards = (
-  knowledgePresence: KnowledgePresence[],
+  knowledgePresence: KnowledgeHighest[],
   knowledgeCards: Card[][],
   allPlayedCards: Card[],
   botId: number,
@@ -119,21 +119,6 @@ export const updateKnowledgeCards = (
   const newKnowledgeCards = adjustValues(tempKnowledgeCards, lengths) as Card[][];
 
   return newKnowledgeCards;
-};
-
-export const initializeKnowledgePresence = () => {
-  const knowledgePresence: KnowledgePresence[] = [];
-
-  for (let i = 0; i < NUMBER_PLAYERS; i++) {
-    knowledgePresence[i] = {
-      clubs: true,
-      diamonds: true,
-      hearts: true,
-      spades: true
-    };
-  }
-
-  return knowledgePresence;
 };
 
 export const initializeKnowledgeHighest = () => {
