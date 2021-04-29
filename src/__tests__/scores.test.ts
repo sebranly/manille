@@ -1,6 +1,7 @@
 import { compareCardRanks, getCardPoints, getCardsPoints, getLowCardNumericValue, getScore } from '../scores';
 import { generateDeck, generateSuit } from '../cards';
 import { CardRank, CardSuit } from '../types';
+import { getPreviousRank } from '../scores';
 
 const { Ace, Eight, Jack, King, Nine, Queen, Seven, Ten } = CardRank;
 const { Clubs, Diamonds, Hearts, Spades } = CardSuit;

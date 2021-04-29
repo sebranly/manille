@@ -34,10 +34,11 @@ test('initializeKnowledgeSuit', () => {
 
 test('initializeKnowledgeHighest', () => {
   const initialElement = {
-    clubs: Ten,
-    diamonds: Ten,
-    hearts: Ten,
-    spades: Ten,
+    highestClubs: Ten,
+    highestDiamonds: Ten,
+    highestHearts: Ten,
+    highestSpades: Ten
+  };
 
   expect(initializeKnowledgeHighest()).toStrictEqual([initialElement, initialElement, initialElement, initialElement]);
 });

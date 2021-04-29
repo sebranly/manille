@@ -1,7 +1,8 @@
-import { differenceWith, has, isEqual } from 'lodash';
+import { differenceWith, isEqual } from 'lodash';
 import { excludeCards, excludeSuit, generateDeck } from './cards';
 import { NUMBER_PLAYERS } from './constants';
 import { getHighestPlayedCardSuit, getLeaderIdSuit, getPlayerId } from './game';
+import { getPreviousRank } from './scores';
 import { Card, CardRank, CardSuit, KnowledgeHighest, KnowledgeSuit } from './types';
 import { adjustValues } from './utils';
 
@@ -45,6 +46,9 @@ export const updateKnowledgePanelSuits = (
   return kp;
 };
 
+/**
+ * TODO: add unit tests
+ */
 export const updateKnowledgePanelHighest = (
   knowledgePanel: KnowledgeHighest[],
   playedCards: Card[],
@@ -71,23 +75,25 @@ export const updateKnowledgePanelHighest = (
       const highestPlayedCard = getHighestPlayedCardSuit(subsetPlayedCars, requestedSuit);
       const leaderIdSuit = getLeaderIdSuit(subsetPlayedCars, startingPlayerId, requestedSuit);
       const playerLeads = leaderIdSuit === playerId;
+      const { rank: highestRank } = highestPlayedCard;
+      const tenIsPlayed = highestRank === Ten;
 
-      if (hasProvided && !playerLeads && highestPlayedCard.rank !== Ten) {
+      if (hasProvided && !playerLeads && !tenIsPlayed) {
         switch (requestedSuit) {
           case Clubs:
-            kp[playerId].highestClubs = highestPlayedCard.rank;
+            kp[playerId].highestClubs = getPreviousRank(highestRank) ?? Ten;
             break;
 
           case Diamonds:
-            kp[playerId].highestClubs = highestPlayedCard.rank;
+            kp[playerId].highestDiamonds = getPreviousRank(highestRank) ?? Ten;
             break;
 
           case Hearts:
-            kp[playerId].highestClubs = highestPlayedCard.rank;
+            kp[playerId].highestHearts = getPreviousRank(highestRank) ?? Ten;
             break;
 
           case Spades:
-            kp[playerId].highestClubs = highestPlayedCard.rank;
+            kp[playerId].highestSpades = getPreviousRank(highestRank) ?? Ten;
             break;
         }
       }
