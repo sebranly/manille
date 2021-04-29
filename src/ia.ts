@@ -37,7 +37,7 @@ export const updateKnowledgeHighest = (
   startingPlayerId: number,
   trumpSuit: CardSuit | false
 ) => {
-  const kp = [...knowledgeHighest];
+  const kh = [...knowledgeHighest];
 
   const { Ten } = CardRank;
 
@@ -60,12 +60,12 @@ export const updateKnowledgeHighest = (
       const tenIsPlayed = highestRank === Ten;
 
       if (hasProvided && !playerLeads && !tenIsPlayed) {
-        kp[playerId][requestedSuit] = getPreviousRank(highestRank) ?? Ten;
+        kh[playerId][requestedSuit] = getPreviousRank(highestRank) ?? Ten;
       }
     }
   }
 
-  return kp;
+  return kh;
 };
 
 export const updateKnowledgeCardsBasic = (
@@ -80,21 +80,19 @@ export const updateKnowledgeCardsBasic = (
     const isBot = playerId === botId;
 
     if (!isBot) {
-      if (!clubs) {
-        knowledgeCards[playerId] = excludeSuit(knowledgeCards[playerId], Clubs);
-      }
+      const suitArray: [boolean, CardSuit][] = [
+        [clubs, Clubs],
+        [diamonds, Diamonds],
+        [hearts, Hearts],
+        [spades, Spades]
+      ];
 
-      if (!diamonds) {
-        knowledgeCards[playerId] = excludeSuit(knowledgeCards[playerId], Diamonds);
-      }
-
-      if (!hearts) {
-        knowledgeCards[playerId] = excludeSuit(knowledgeCards[playerId], Hearts);
-      }
-
-      if (!spades) {
-        knowledgeCards[playerId] = excludeSuit(knowledgeCards[playerId], Spades);
-      }
+      suitArray.forEach((suitSubArray) => {
+        const [suitPresence, suit] = suitSubArray;
+        if (!suitPresence) {
+          knowledgeCards[playerId] = excludeSuit(knowledgeCards[playerId], suit);
+        }
+      });
     }
   }
 
