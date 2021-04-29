@@ -1,6 +1,7 @@
 import { compareCardRanks, getCardPoints, getCardsPoints, getLowCardNumericValue, getScore } from '../scores';
 import { generateDeck, generateSuit } from '../cards';
 import { CardRank, CardSuit } from '../types';
+import { getPreviousRank } from '../scores';
 
 const { Ace, Eight, Jack, King, Nine, Queen, Seven, Ten } = CardRank;
 const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
@@ -14,6 +15,17 @@ test('getCardPoints', () => {
   expect(getCardPoints(Nine)).toBe(0);
   expect(getCardPoints(Eight)).toBe(0);
   expect(getCardPoints(Seven)).toBe(0);
+});
+
+test('getPreviousRank', () => {
+  expect(getPreviousRank(Ten)).toBe(Ace);
+  expect(getPreviousRank(Ace)).toBe(King);
+  expect(getPreviousRank(King)).toBe(Queen);
+  expect(getPreviousRank(Queen)).toBe(Jack);
+  expect(getPreviousRank(Jack)).toBe(Nine);
+  expect(getPreviousRank(Nine)).toBe(Eight);
+  expect(getPreviousRank(Eight)).toBe(Seven);
+  expect(getPreviousRank(Seven)).toBeUndefined();
 });
 
 test('getCardsPoints', () => {
