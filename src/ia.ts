@@ -3,19 +3,17 @@ import { excludeCards, excludeSuit, generateDeck } from './cards';
 import { NUMBER_PLAYERS } from './constants';
 import { getHighestPlayedCardSuit, getLeaderIdSuit, getPlayerId } from './game';
 import { getPreviousRank } from './scores';
-import { Card, CardRank, CardSuit, KnowledgeHighest, KnowledgeSuit } from './types';
+import { Card, CardRank, CardSuit, KnowledgeHighest, KnowledgePresence } from './types';
 import { adjustValues } from './utils';
 
-export const updateKnowledgePanelSuits = (
-  knowledgePanel: KnowledgeSuit[],
+export const updateKnowledgePresence = (
+  knowledgePresence: KnowledgePresence[],
   playedCards: Card[],
   startingPlayerId: number
 ) => {
-  const kp = [...knowledgePanel];
+  const kp = [...knowledgePresence];
 
-  const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
-
-  if (playedCards.length <= 1) return knowledgePanel;
+  if (playedCards.length <= 1) return knowledgePresence;
 
   const requestedSuit = playedCards[0].suit;
 
@@ -23,23 +21,7 @@ export const updateKnowledgePanelSuits = (
     if (playedCards[i].suit !== requestedSuit) {
       const playerId = getPlayerId(startingPlayerId, i);
 
-      switch (requestedSuit) {
-        case Clubs:
-          kp[playerId].hasClubs = false;
-          break;
-
-        case Diamonds:
-          kp[playerId].hasDiamonds = false;
-          break;
-
-        case Hearts:
-          kp[playerId].hasHearts = false;
-          break;
-
-        case Spades:
-          kp[playerId].hasSpades = false;
-          break;
-      }
+      kp[playerId][requestedSuit] = false;
     }
   }
 
@@ -49,17 +31,17 @@ export const updateKnowledgePanelSuits = (
 /**
  * TODO: add unit tests
  */
-export const updateKnowledgePanelHighest = (
-  knowledgePanel: KnowledgeHighest[],
+export const updateKnowledgeHighest = (
+  knowledgeHighest: KnowledgeHighest[],
   playedCards: Card[],
   startingPlayerId: number,
   trumpSuit: CardSuit | false
 ) => {
-  const kp = [...knowledgePanel];
+  const kp = [...knowledgeHighest];
 
   const { Ten } = CardRank;
 
-  if (playedCards.length <= 1) return knowledgePanel;
+  if (playedCards.length <= 1) return knowledgeHighest;
 
   const requestedSuit = playedCards[0].suit;
 
@@ -86,31 +68,31 @@ export const updateKnowledgePanelHighest = (
   return kp;
 };
 
-export const updateKnowledgePanelCardsBasic = (
-  knowledgePanel: KnowledgeSuit[],
+export const updateKnowledgeCardsBasic = (
+  knowledgePresence: KnowledgePresence[],
   knowledgeCards: Card[][],
   botId: number
 ) => {
   const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
 
   for (let playerId = 0; playerId < NUMBER_PLAYERS; playerId++) {
-    const { hasClubs, hasDiamonds, hasHearts, hasSpades } = knowledgePanel[playerId];
+    const { clubs, diamonds, hearts, spades } = knowledgePresence[playerId];
     const isBot = playerId === botId;
 
     if (!isBot) {
-      if (!hasClubs) {
+      if (!clubs) {
         knowledgeCards[playerId] = excludeSuit(knowledgeCards[playerId], Clubs);
       }
 
-      if (!hasDiamonds) {
+      if (!diamonds) {
         knowledgeCards[playerId] = excludeSuit(knowledgeCards[playerId], Diamonds);
       }
 
-      if (!hasHearts) {
+      if (!hearts) {
         knowledgeCards[playerId] = excludeSuit(knowledgeCards[playerId], Hearts);
       }
 
-      if (!hasSpades) {
+      if (!spades) {
         knowledgeCards[playerId] = excludeSuit(knowledgeCards[playerId], Spades);
       }
     }
@@ -119,14 +101,14 @@ export const updateKnowledgePanelCardsBasic = (
   return knowledgeCards;
 };
 
-export const updateKnowledgePanelCards = (
-  knowledgePanel: KnowledgeSuit[],
+export const updateKnowledgeCards = (
+  knowledgePresence: KnowledgePresence[],
   knowledgeCards: Card[][],
   allPlayedCards: Card[],
   botId: number,
   lengths: number[]
 ) => {
-  const tempKnowledgeCards = updateKnowledgePanelCardsBasic(knowledgePanel, knowledgeCards, botId);
+  const tempKnowledgeCards = updateKnowledgeCardsBasic(knowledgePresence, knowledgeCards, botId);
 
   for (let playerId = 0; playerId < NUMBER_PLAYERS; playerId++) {
     const isBot = playerId === botId;
@@ -141,27 +123,27 @@ export const updateKnowledgePanelCards = (
   return newKnowledgeCards;
 };
 
-export const initializeKnowledgeSuit = () => {
-  const knowledgePanel: KnowledgeSuit[] = [];
+export const initializeKnowledgePresence = () => {
+  const knowledgePresence: KnowledgePresence[] = [];
 
   for (let i = 0; i < NUMBER_PLAYERS; i++) {
-    knowledgePanel[i] = {
-      hasClubs: true,
-      hasDiamonds: true,
-      hasHearts: true,
-      hasSpades: true
+    knowledgePresence[i] = {
+      clubs: true,
+      diamonds: true,
+      hearts: true,
+      spades: true
     };
   }
 
-  return knowledgePanel;
+  return knowledgePresence;
 };
 
 export const initializeKnowledgeHighest = () => {
   const { Ten } = CardRank;
-  const knowledgePanel: KnowledgeHighest[] = [];
+  const knowledgeHighest: KnowledgeHighest[] = [];
 
   for (let i = 0; i < NUMBER_PLAYERS; i++) {
-    knowledgePanel[i] = {
+    knowledgeHighest[i] = {
       clubs: Ten,
       diamonds: Ten,
       hearts: Ten,
@@ -169,7 +151,7 @@ export const initializeKnowledgeHighest = () => {
     };
   }
 
-  return knowledgePanel;
+  return knowledgeHighest;
 };
 
 export const initializeKnowledgeCards = (botCards: Card[], botId: number) => {
