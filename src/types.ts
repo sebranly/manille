@@ -48,8 +48,8 @@ export interface KnowledgeSuit {
 }
 
 export interface KnowledgeHighest {
-  highestClubs: CardRank;
-  highestDiamonds: CardRank;
-  highestHearts: CardRank;
-  highestSpades: CardRank;
+  clubs: CardRank;
+  diamonds: CardRank;
+  hearts: CardRank;
+  spades: CardRank;
 }

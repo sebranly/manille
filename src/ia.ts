@@ -57,7 +57,6 @@ export const updateKnowledgePanelHighest = (
 ) => {
   const kp = [...knowledgePanel];
 
-  const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
   const { Ten } = CardRank;
 
   if (playedCards.length <= 1) return knowledgePanel;
@@ -79,23 +78,7 @@ export const updateKnowledgePanelHighest = (
       const tenIsPlayed = highestRank === Ten;
 
       if (hasProvided && !playerLeads && !tenIsPlayed) {
-        switch (requestedSuit) {
-          case Clubs:
-            kp[playerId].highestClubs = getPreviousRank(highestRank) ?? Ten;
-            break;
-
-          case Diamonds:
-            kp[playerId].highestDiamonds = getPreviousRank(highestRank) ?? Ten;
-            break;
-
-          case Hearts:
-            kp[playerId].highestHearts = getPreviousRank(highestRank) ?? Ten;
-            break;
-
-          case Spades:
-            kp[playerId].highestSpades = getPreviousRank(highestRank) ?? Ten;
-            break;
-        }
+        kp[playerId][requestedSuit] = getPreviousRank(highestRank) ?? Ten;
       }
     }
   }
@@ -179,10 +162,10 @@ export const initializeKnowledgeHighest = () => {
 
   for (let i = 0; i < NUMBER_PLAYERS; i++) {
     knowledgePanel[i] = {
-      highestClubs: Ten,
-      highestDiamonds: Ten,
-      highestHearts: Ten,
-      highestSpades: Ten
+      clubs: Ten,
+      diamonds: Ten,
+      hearts: Ten,
+      spades: Ten
     };
   }
 
