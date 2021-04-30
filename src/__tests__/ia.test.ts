@@ -1,26 +1,26 @@
 import { generateDeck, generateSuit } from '../cards';
 import {
-  initializeKnowledgeCards,
-  updateKnowledgeCards,
-  updateKnowledgeCardsBasic,
-  updateKnowledgePresence,
-  initializeKnowledgeHighest
+  initializeInfoCards,
+  updateInfoCards,
+  updateInfoCardsBasic,
+  updateInfoPresence,
+  initializeInfoSuitHighest
 } from '../ia';
-import { CardRank, CardSuit, KnowledgeHighest } from '../types';
+import { CardRank, CardSuit, InfoSuitHighest } from '../types';
 
 const { Ace, Eight, Jack, King, Nine, Queen, Seven, Ten } = CardRank;
 const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
 
-test('initializeKnowledgeCards', () => {
-  expect(initializeKnowledgeCards([], 2)).toStrictEqual([generateDeck(), generateDeck(), [], generateDeck()]);
+test('initializeInfoCards', () => {
+  expect(initializeInfoCards([], 2)).toStrictEqual([generateDeck(), generateDeck(), [], generateDeck()]);
 
   const suit = generateSuit(Spades);
   const otherSuits = [...generateSuit(Clubs), ...generateSuit(Diamonds), ...generateSuit(Hearts)];
 
-  expect(initializeKnowledgeCards(suit, 2)).toStrictEqual([otherSuits, otherSuits, suit, otherSuits]);
+  expect(initializeInfoCards(suit, 2)).toStrictEqual([otherSuits, otherSuits, suit, otherSuits]);
 });
 
-test('initializeKnowledgeHighest', () => {
+test('initializeInfoSuitHighest', () => {
   const initialElement = {
     clubs: Ten,
     diamonds: Ten,
@@ -28,22 +28,22 @@ test('initializeKnowledgeHighest', () => {
     spades: Ten
   };
 
-  expect(initializeKnowledgeHighest()).toStrictEqual([initialElement, initialElement, initialElement, initialElement]);
+  expect(initializeInfoSuitHighest()).toStrictEqual([initialElement, initialElement, initialElement, initialElement]);
 });
 
-test('updateKnowledgePresence', () => {
-  const kp1 = updateKnowledgePresence(initializeKnowledgeHighest(), [], 0);
+test('updateInfoPresence', () => {
+  const info1 = updateInfoPresence(initializeInfoSuitHighest(), [], 0);
 
-  expect(kp1).toStrictEqual(initializeKnowledgeHighest());
+  expect(info1).toStrictEqual(initializeInfoSuitHighest());
 
-  const kp2 = updateKnowledgePresence(initializeKnowledgeHighest(), [{ rank: King, suit: Spades }], 0);
+  const info2 = updateInfoPresence(initializeInfoSuitHighest(), [{ rank: King, suit: Spades }], 0);
 
-  expect(kp2).toStrictEqual(initializeKnowledgeHighest());
+  expect(info2).toStrictEqual(initializeInfoSuitHighest());
 
   // No deductions can be made yet
 
-  const kp3 = updateKnowledgePresence(
-    initializeKnowledgeHighest(),
+  const info3 = updateInfoPresence(
+    initializeInfoSuitHighest(),
     [
       { rank: King, suit: Spades },
       { rank: Ten, suit: Spades }
@@ -51,10 +51,10 @@ test('updateKnowledgePresence', () => {
     0
   );
 
-  expect(kp3).toStrictEqual(initializeKnowledgeHighest());
+  expect(info3).toStrictEqual(initializeInfoSuitHighest());
 
-  const kp4 = updateKnowledgePresence(
-    initializeKnowledgeHighest(),
+  const info4 = updateInfoPresence(
+    initializeInfoSuitHighest(),
     [
       { rank: King, suit: Spades },
       { rank: Ten, suit: Spades },
@@ -63,10 +63,10 @@ test('updateKnowledgePresence', () => {
     0
   );
 
-  expect(kp4).toStrictEqual(initializeKnowledgeHighest());
+  expect(info4).toStrictEqual(initializeInfoSuitHighest());
 
-  const kp5 = updateKnowledgePresence(
-    initializeKnowledgeHighest(),
+  const info5 = updateInfoPresence(
+    initializeInfoSuitHighest(),
     [
       { rank: King, suit: Spades },
       { rank: Ten, suit: Spades },
@@ -76,12 +76,12 @@ test('updateKnowledgePresence', () => {
     0
   );
 
-  expect(kp5).toStrictEqual(initializeKnowledgeHighest());
+  expect(info5).toStrictEqual(initializeInfoSuitHighest());
 
   // Deductions are made based on suits
 
-  const kp6 = updateKnowledgePresence(
-    initializeKnowledgeHighest(),
+  const info6 = updateInfoPresence(
+    initializeInfoSuitHighest(),
     [
       { rank: King, suit: Spades },
       { rank: Seven, suit: Diamonds },
@@ -91,7 +91,7 @@ test('updateKnowledgePresence', () => {
     0
   );
 
-  expect(kp6).toStrictEqual([
+  expect(info6).toStrictEqual([
     {
       clubs: Ten,
       diamonds: Ten,
@@ -120,7 +120,7 @@ test('updateKnowledgePresence', () => {
 
   // Deductions are made based on suits and existing deductions are not overriden
 
-  const kp7 = updateKnowledgePresence(
+  const info7 = updateInfoPresence(
     [
       {
         clubs: undefined,
@@ -156,7 +156,7 @@ test('updateKnowledgePresence', () => {
     0
   );
 
-  expect(kp7).toStrictEqual([
+  expect(info7).toStrictEqual([
     {
       clubs: undefined,
       diamonds: undefined,
@@ -184,11 +184,11 @@ test('updateKnowledgePresence', () => {
   ]);
 });
 
-test('updateKnowledgeCardsBasic', () => {
+test('updateInfoCardsBasic', () => {
   const deck = generateDeck();
 
-  const knowledgeCards = [deck, deck, [], deck];
-  const knowledgePresence: KnowledgeHighest[] = [
+  const infoCards = [deck, deck, [], deck];
+  const infoPresence: InfoSuitHighest[] = [
     {
       clubs: Ten,
       diamonds: undefined,
@@ -215,7 +215,7 @@ test('updateKnowledgeCardsBasic', () => {
     }
   ];
 
-  expect(updateKnowledgeCardsBasic(knowledgePresence, knowledgeCards, 2)).toStrictEqual([
+  expect(updateInfoCardsBasic(infoPresence, infoCards, 2)).toStrictEqual([
     [...generateSuit(Clubs), ...generateSuit(Spades), ...generateSuit(Hearts)],
     generateSuit(Diamonds),
     [],
@@ -224,11 +224,11 @@ test('updateKnowledgeCardsBasic', () => {
 });
 
 // TODO: this is not really representative of the full functionality from this util
-test('updateKnowledgeCards', () => {
+test('updateInfoCards', () => {
   const deck = generateDeck();
 
-  const knowledgeCards = [deck, deck, [], deck];
-  const knowledgePresence: KnowledgeHighest[] = [
+  const infoCards = [deck, deck, [], deck];
+  const infoPresence: InfoSuitHighest[] = [
     {
       clubs: Ten,
       diamonds: undefined,
@@ -255,7 +255,7 @@ test('updateKnowledgeCards', () => {
     }
   ];
 
-  expect(updateKnowledgeCards(knowledgePresence, knowledgeCards, [], 2, [1, 1, 1, 1])).toStrictEqual([
+  expect(updateInfoCards(infoPresence, infoCards, [], 2, [1, 1, 1, 1])).toStrictEqual([
     [...generateSuit(Clubs), ...generateSuit(Spades), ...generateSuit(Hearts)],
     generateSuit(Diamonds),
     [],

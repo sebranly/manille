@@ -40,7 +40,7 @@ export interface Game {
   rounds: Round[];
 }
 
-export interface KnowledgeHighest {
+export interface InfoSuitHighest {
   clubs?: CardRank;
   diamonds?: CardRank;
   hearts?: CardRank;
