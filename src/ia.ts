@@ -6,26 +6,8 @@ import { getPreviousRank } from './scores';
 import { Card, CardRank, CardSuit, InfoSuitHighest } from './types';
 import { adjustValues } from './utils';
 
-export const updateInfoPresence = (infoPresence: InfoSuitHighest[], playedCards: Card[], startingPlayerId: number) => {
-  const info = [...infoPresence];
-
-  if (playedCards.length <= 1) return infoPresence;
-
-  const requestedSuit = playedCards[0].suit;
-
-  for (let i = 1; i < playedCards.length; i++) {
-    if (playedCards[i].suit !== requestedSuit) {
-      const playerId = getPlayerId(startingPlayerId, i);
-
-      info[playerId][requestedSuit] = undefined;
-    }
-  }
-
-  return info;
-};
-
 /**
- * TODO: add unit tests
+ * TODO: add more unit tests
  */
 export const updateInfoSuitHighest = (
   infoSuitHighest: InfoSuitHighest[],
@@ -48,14 +30,16 @@ export const updateInfoSuitHighest = (
 
     const isTrumpSuit = trumpSuit === false || requestedSuit === trumpSuit;
 
-    if (isTrumpSuit) {
+    if (!hasProvided) {
+      info[playerId][requestedSuit] = undefined;
+    } else if (isTrumpSuit) {
       const highestPlayedCard = getHighestPlayedCardSuit(subsetPlayedCars, requestedSuit);
       const leaderIdSuit = getLeaderIdSuit(subsetPlayedCars, startingPlayerId, requestedSuit);
       const playerLeads = leaderIdSuit === playerId;
       const { rank: highestRank } = highestPlayedCard;
       const tenIsPlayed = highestRank === Ten;
 
-      if (hasProvided && !playerLeads && !tenIsPlayed) {
+      if (!playerLeads && !tenIsPlayed) {
         info[playerId][requestedSuit] = getPreviousRank(highestRank);
       }
     }
@@ -64,11 +48,11 @@ export const updateInfoSuitHighest = (
   return info;
 };
 
-export const updateInfoCardsBasic = (infoPresence: InfoSuitHighest[], infoCards: Card[][], botId: number) => {
+export const updateInfoCardsBasic = (infoSuitHighest: InfoSuitHighest[], infoCards: Card[][], botId: number) => {
   const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
 
   for (let playerId = 0; playerId < NUMBER_PLAYERS; playerId++) {
-    const { clubs, diamonds, hearts, spades } = infoPresence[playerId];
+    const { clubs, diamonds, hearts, spades } = infoSuitHighest[playerId];
     const isBot = playerId === botId;
 
     if (!isBot) {
@@ -80,8 +64,8 @@ export const updateInfoCardsBasic = (infoPresence: InfoSuitHighest[], infoCards:
       ];
 
       suitArray.forEach((suitSubArray) => {
-        const [suitPresence, suit] = suitSubArray;
-        if (!suitPresence) {
+        const [suitHighest, suit] = suitSubArray;
+        if (!suitHighest) {
           infoCards[playerId] = excludeSuit(infoCards[playerId], suit);
         }
       });
@@ -92,13 +76,13 @@ export const updateInfoCardsBasic = (infoPresence: InfoSuitHighest[], infoCards:
 };
 
 export const updateInfoCards = (
-  infoPresence: InfoSuitHighest[],
+  infoSuitHighest: InfoSuitHighest[],
   infoCards: Card[][],
   allPlayedCards: Card[],
   botId: number,
   lengths: number[]
 ) => {
-  const tempInfoCards = updateInfoCardsBasic(infoPresence, infoCards, botId);
+  const tempInfoCards = updateInfoCardsBasic(infoSuitHighest, infoCards, botId);
 
   for (let playerId = 0; playerId < NUMBER_PLAYERS; playerId++) {
     const isBot = playerId === botId;

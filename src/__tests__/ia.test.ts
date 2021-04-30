@@ -3,7 +3,7 @@ import {
   initializeInfoCards,
   updateInfoCards,
   updateInfoCardsBasic,
-  updateInfoPresence,
+  updateInfoSuitHighest,
   initializeInfoSuitHighest
 } from '../ia';
 import { CardRank, CardSuit, InfoSuitHighest } from '../types';
@@ -31,41 +31,43 @@ test('initializeInfoSuitHighest', () => {
   expect(initializeInfoSuitHighest()).toStrictEqual([initialElement, initialElement, initialElement, initialElement]);
 });
 
-test('updateInfoPresence', () => {
-  const info1 = updateInfoPresence(initializeInfoSuitHighest(), [], 0);
+test('updateInfoSuitHighest', () => {
+  const info1 = updateInfoSuitHighest(initializeInfoSuitHighest(), [], 0, Diamonds);
 
   expect(info1).toStrictEqual(initializeInfoSuitHighest());
 
-  const info2 = updateInfoPresence(initializeInfoSuitHighest(), [{ rank: King, suit: Spades }], 0);
+  const info2 = updateInfoSuitHighest(initializeInfoSuitHighest(), [{ rank: King, suit: Spades }], 0, Diamonds);
 
   expect(info2).toStrictEqual(initializeInfoSuitHighest());
 
   // No deductions can be made yet
 
-  const info3 = updateInfoPresence(
+  const info3 = updateInfoSuitHighest(
     initializeInfoSuitHighest(),
     [
       { rank: King, suit: Spades },
       { rank: Ten, suit: Spades }
     ],
-    0
+    0,
+    Diamonds
   );
 
   expect(info3).toStrictEqual(initializeInfoSuitHighest());
 
-  const info4 = updateInfoPresence(
+  const info4 = updateInfoSuitHighest(
     initializeInfoSuitHighest(),
     [
       { rank: King, suit: Spades },
       { rank: Ten, suit: Spades },
       { rank: Ace, suit: Spades }
     ],
-    0
+    0,
+    Diamonds
   );
 
   expect(info4).toStrictEqual(initializeInfoSuitHighest());
 
-  const info5 = updateInfoPresence(
+  const info5 = updateInfoSuitHighest(
     initializeInfoSuitHighest(),
     [
       { rank: King, suit: Spades },
@@ -73,14 +75,15 @@ test('updateInfoPresence', () => {
       { rank: Ace, suit: Spades },
       { rank: Seven, suit: Spades }
     ],
-    0
+    0,
+    Diamonds
   );
 
   expect(info5).toStrictEqual(initializeInfoSuitHighest());
 
   // Deductions are made based on suits
 
-  const info6 = updateInfoPresence(
+  const info6 = updateInfoSuitHighest(
     initializeInfoSuitHighest(),
     [
       { rank: King, suit: Spades },
@@ -88,7 +91,8 @@ test('updateInfoPresence', () => {
       { rank: Eight, suit: Diamonds },
       { rank: Nine, suit: Diamonds }
     ],
-    0
+    0,
+    Diamonds
   );
 
   expect(info6).toStrictEqual([
@@ -120,7 +124,7 @@ test('updateInfoPresence', () => {
 
   // Deductions are made based on suits and existing deductions are not overriden
 
-  const info7 = updateInfoPresence(
+  const info7 = updateInfoSuitHighest(
     [
       {
         clubs: undefined,
@@ -153,7 +157,8 @@ test('updateInfoPresence', () => {
       { rank: Eight, suit: Diamonds },
       { rank: Nine, suit: Diamonds }
     ],
-    0
+    0,
+    Diamonds
   );
 
   expect(info7).toStrictEqual([
@@ -188,7 +193,7 @@ test('updateInfoCardsBasic', () => {
   const deck = generateDeck();
 
   const infoCards = [deck, deck, [], deck];
-  const infoPresence: InfoSuitHighest[] = [
+  const infoSuitHighest: InfoSuitHighest[] = [
     {
       clubs: Ten,
       diamonds: undefined,
@@ -215,7 +220,7 @@ test('updateInfoCardsBasic', () => {
     }
   ];
 
-  expect(updateInfoCardsBasic(infoPresence, infoCards, 2)).toStrictEqual([
+  expect(updateInfoCardsBasic(infoSuitHighest, infoCards, 2)).toStrictEqual([
     [...generateSuit(Clubs), ...generateSuit(Spades), ...generateSuit(Hearts)],
     generateSuit(Diamonds),
     [],
@@ -228,7 +233,7 @@ test('updateInfoCards', () => {
   const deck = generateDeck();
 
   const infoCards = [deck, deck, [], deck];
-  const infoPresence: InfoSuitHighest[] = [
+  const infoSuitHighest: InfoSuitHighest[] = [
     {
       clubs: Ten,
       diamonds: undefined,
@@ -255,7 +260,7 @@ test('updateInfoCards', () => {
     }
   ];
 
-  expect(updateInfoCards(infoPresence, infoCards, [], 2, [1, 1, 1, 1])).toStrictEqual([
+  expect(updateInfoCards(infoSuitHighest, infoCards, [], 2, [1, 1, 1, 1])).toStrictEqual([
     [...generateSuit(Clubs), ...generateSuit(Spades), ...generateSuit(Hearts)],
     generateSuit(Diamonds),
     [],
