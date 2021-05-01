@@ -3,45 +3,23 @@ import { excludeCards, excludeSuit, generateDeck } from './cards';
 import { NUMBER_PLAYERS } from './constants';
 import { getHighestPlayedCardSuit, getLeaderIdSuit, getPlayerId } from './game';
 import { getPreviousRank } from './scores';
-import { Card, CardRank, CardSuit, KnowledgeHighest, KnowledgePresence } from './types';
+import { Card, CardRank, CardSuit, InfoSuitHighest } from './types';
 import { adjustValues } from './utils';
 
-export const updateKnowledgePresence = (
-  knowledgePresence: KnowledgePresence[],
-  playedCards: Card[],
-  startingPlayerId: number
-) => {
-  const kp = [...knowledgePresence];
-
-  if (playedCards.length <= 1) return knowledgePresence;
-
-  const requestedSuit = playedCards[0].suit;
-
-  for (let i = 1; i < playedCards.length; i++) {
-    if (playedCards[i].suit !== requestedSuit) {
-      const playerId = getPlayerId(startingPlayerId, i);
-
-      kp[playerId][requestedSuit] = false;
-    }
-  }
-
-  return kp;
-};
-
 /**
- * TODO: add unit tests
+ * TODO: add more unit tests
  */
-export const updateKnowledgeHighest = (
-  knowledgeHighest: KnowledgeHighest[],
+export const updateInfoSuitHighest = (
+  infoSuitHighest: InfoSuitHighest[],
   playedCards: Card[],
   startingPlayerId: number,
   trumpSuit: CardSuit | false
 ) => {
-  const kh = [...knowledgeHighest];
+  const info = [...infoSuitHighest];
 
   const { Ten } = CardRank;
 
-  if (playedCards.length <= 1) return knowledgeHighest;
+  if (playedCards.length <= 1) return infoSuitHighest;
 
   const requestedSuit = playedCards[0].suit;
 
@@ -52,35 +30,33 @@ export const updateKnowledgeHighest = (
 
     const isTrumpSuit = trumpSuit === false || requestedSuit === trumpSuit;
 
-    if (isTrumpSuit) {
+    if (!hasProvided) {
+      info[playerId][requestedSuit] = undefined;
+    } else if (isTrumpSuit) {
       const highestPlayedCard = getHighestPlayedCardSuit(subsetPlayedCars, requestedSuit);
       const leaderIdSuit = getLeaderIdSuit(subsetPlayedCars, startingPlayerId, requestedSuit);
       const playerLeads = leaderIdSuit === playerId;
       const { rank: highestRank } = highestPlayedCard;
       const tenIsPlayed = highestRank === Ten;
 
-      if (hasProvided && !playerLeads && !tenIsPlayed) {
-        kh[playerId][requestedSuit] = getPreviousRank(highestRank) ?? Ten;
+      if (!playerLeads && !tenIsPlayed) {
+        info[playerId][requestedSuit] = getPreviousRank(highestRank);
       }
     }
   }
 
-  return kh;
+  return info;
 };
 
-export const updateKnowledgeCardsBasic = (
-  knowledgePresence: KnowledgePresence[],
-  knowledgeCards: Card[][],
-  botId: number
-) => {
+export const updateInfoCardsBasic = (infoSuitHighest: InfoSuitHighest[], infoCards: Card[][], botId: number) => {
   const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
 
   for (let playerId = 0; playerId < NUMBER_PLAYERS; playerId++) {
-    const { clubs, diamonds, hearts, spades } = knowledgePresence[playerId];
+    const { clubs, diamonds, hearts, spades } = infoSuitHighest[playerId];
     const isBot = playerId === botId;
 
     if (!isBot) {
-      const suitArray: [boolean, CardSuit][] = [
+      const suitArray: [CardRank | undefined, CardSuit][] = [
         [clubs, Clubs],
         [diamonds, Diamonds],
         [hearts, Hearts],
@@ -88,60 +64,45 @@ export const updateKnowledgeCardsBasic = (
       ];
 
       suitArray.forEach((suitSubArray) => {
-        const [suitPresence, suit] = suitSubArray;
-        if (!suitPresence) {
-          knowledgeCards[playerId] = excludeSuit(knowledgeCards[playerId], suit);
+        const [suitHighest, suit] = suitSubArray;
+        if (!suitHighest) {
+          infoCards[playerId] = excludeSuit(infoCards[playerId], suit);
         }
       });
     }
   }
 
-  return knowledgeCards;
+  return infoCards;
 };
 
-export const updateKnowledgeCards = (
-  knowledgePresence: KnowledgePresence[],
-  knowledgeCards: Card[][],
+export const updateInfoCards = (
+  infoSuitHighest: InfoSuitHighest[],
+  infoCards: Card[][],
   allPlayedCards: Card[],
   botId: number,
   lengths: number[]
 ) => {
-  const tempKnowledgeCards = updateKnowledgeCardsBasic(knowledgePresence, knowledgeCards, botId);
+  const tempInfoCards = updateInfoCardsBasic(infoSuitHighest, infoCards, botId);
 
   for (let playerId = 0; playerId < NUMBER_PLAYERS; playerId++) {
     const isBot = playerId === botId;
 
     if (!isBot) {
-      tempKnowledgeCards[playerId] = excludeCards(tempKnowledgeCards[playerId], allPlayedCards);
+      tempInfoCards[playerId] = excludeCards(tempInfoCards[playerId], allPlayedCards);
     }
   }
 
-  const newKnowledgeCards = adjustValues(tempKnowledgeCards, lengths) as Card[][];
+  const newInfoCards = adjustValues(tempInfoCards, lengths) as Card[][];
 
-  return newKnowledgeCards;
+  return newInfoCards;
 };
 
-export const initializeKnowledgePresence = () => {
-  const knowledgePresence: KnowledgePresence[] = [];
-
-  for (let i = 0; i < NUMBER_PLAYERS; i++) {
-    knowledgePresence[i] = {
-      clubs: true,
-      diamonds: true,
-      hearts: true,
-      spades: true
-    };
-  }
-
-  return knowledgePresence;
-};
-
-export const initializeKnowledgeHighest = () => {
+export const initializeInfoSuitHighest = () => {
   const { Ten } = CardRank;
-  const knowledgeHighest: KnowledgeHighest[] = [];
+  const infoSuitHighest: InfoSuitHighest[] = [];
 
   for (let i = 0; i < NUMBER_PLAYERS; i++) {
-    knowledgeHighest[i] = {
+    infoSuitHighest[i] = {
       clubs: Ten,
       diamonds: Ten,
       hearts: Ten,
@@ -149,21 +110,21 @@ export const initializeKnowledgeHighest = () => {
     };
   }
 
-  return knowledgeHighest;
+  return infoSuitHighest;
 };
 
-export const initializeKnowledgeCards = (botCards: Card[], botId: number) => {
+export const initializeInfoCards = (botCards: Card[], botId: number) => {
   const deck = generateDeck();
 
   const nonBotRemainingCards = differenceWith(deck, botCards, isEqual);
 
-  const knowledgeCards = [];
+  const infoCards = [];
 
   for (let playerId = 0; playerId < NUMBER_PLAYERS; playerId++) {
     const isBot = playerId === botId;
 
-    knowledgeCards[playerId] = isBot ? botCards : nonBotRemainingCards;
+    infoCards[playerId] = isBot ? botCards : nonBotRemainingCards;
   }
 
-  return knowledgeCards;
+  return infoCards;
 };
