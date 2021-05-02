@@ -2,12 +2,12 @@ import { differenceWith, isEqual } from 'lodash';
 import { excludeCards, excludeSuit, excludeSuitOver, generateDeck } from './cards';
 import { NUMBER_PLAYERS } from './constants';
 import { getHighestPlayedCardSuit, getLeaderIdSuit, getPlayerId } from './game';
-import { getPreviousRank } from './scores';
+import { compareCardRanks, getPreviousRank } from './scores';
 import { Card, CardRank, CardSuit, InfoSuitHighest } from './types';
 import { adjustValues } from './utils';
 
 /**
- * TODO: add more unit tests
+ * TODO: add more unit tests for else if
  */
 export const updateInfoSuitHighest = (
   infoSuitHighest: InfoSuitHighest[],
@@ -40,7 +40,15 @@ export const updateInfoSuitHighest = (
       const tenIsPlayed = highestRank === Ten;
 
       if (!playerLeads && !tenIsPlayed) {
-        info[playerId][requestedSuit] = getPreviousRank(highestRank);
+        const previousRank = getPreviousRank(highestRank);
+        if (!previousRank) {
+          info[playerId][requestedSuit] = undefined;
+        } else if (
+          !!info[playerId][requestedSuit] &&
+          compareCardRanks(info[playerId][requestedSuit]!, previousRank) > 1
+        ) {
+          info[playerId][requestedSuit] = previousRank;
+        }
       }
     }
   }
