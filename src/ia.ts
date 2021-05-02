@@ -45,7 +45,7 @@ export const updateInfoSuitHighest = (
           info[playerId][requestedSuit] = undefined;
         } else if (
           !!info[playerId][requestedSuit] &&
-          compareCardRanks(info[playerId][requestedSuit]!, previousRank) > 1
+          compareCardRanks(info[playerId][requestedSuit]!, previousRank) > 0
         ) {
           info[playerId][requestedSuit] = previousRank;
         }
