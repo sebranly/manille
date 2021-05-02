@@ -192,8 +192,8 @@ test('updateInfoSuitHighest', () => {
 test('updateInfoCardsBasic', () => {
   const deck = generateDeck();
 
-  const infoCards = [deck, deck, [], deck];
-  const infoSuitHighest: InfoSuitHighest[] = [
+  const infoCards1 = [deck, deck, [], deck];
+  const info1: InfoSuitHighest[] = [
     {
       clubs: Ten,
       diamonds: undefined,
@@ -220,11 +220,65 @@ test('updateInfoCardsBasic', () => {
     }
   ];
 
-  expect(updateInfoCardsBasic(infoSuitHighest, infoCards, 2)).toStrictEqual([
+  expect(updateInfoCardsBasic(info1, infoCards1, 2)).toStrictEqual([
     [...generateSuit(Clubs), ...generateSuit(Spades), ...generateSuit(Hearts)],
     generateSuit(Diamonds),
     [],
     [...generateSuit(Spades), ...generateSuit(Hearts)]
+  ]);
+
+  const infoCards2 = [deck, deck, [], deck];
+  const info2: InfoSuitHighest[] = [
+    {
+      clubs: Seven,
+      diamonds: undefined,
+      hearts: Ten,
+      spades: Nine
+    },
+    {
+      clubs: undefined,
+      diamonds: Ten,
+      hearts: undefined,
+      spades: undefined
+    },
+    {
+      clubs: undefined,
+      diamonds: undefined,
+      hearts: Ten,
+      spades: Ace
+    },
+    {
+      clubs: Ten,
+      diamonds: Jack,
+      hearts: Ten,
+      spades: King
+    }
+  ];
+
+  expect(updateInfoCardsBasic(info2, infoCards2, 2)).toStrictEqual([
+    [
+      { rank: Seven, suit: Clubs },
+      { rank: Nine, suit: Spades },
+      { rank: Eight, suit: Spades },
+      { rank: Seven, suit: Spades },
+      ...generateSuit(Hearts)
+    ],
+    generateSuit(Diamonds),
+    [],
+    [
+      ...generateSuit(Clubs),
+      { rank: Jack, suit: Diamonds },
+      { rank: Nine, suit: Diamonds },
+      { rank: Eight, suit: Diamonds },
+      { rank: Seven, suit: Diamonds },
+      { rank: King, suit: Spades },
+      { rank: Queen, suit: Spades },
+      { rank: Jack, suit: Spades },
+      { rank: Nine, suit: Spades },
+      { rank: Eight, suit: Spades },
+      { rank: Seven, suit: Spades },
+      ...generateSuit(Hearts)
+    ]
   ]);
 });
 

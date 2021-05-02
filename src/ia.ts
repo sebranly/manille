@@ -1,5 +1,5 @@
 import { differenceWith, isEqual } from 'lodash';
-import { excludeCards, excludeSuit, generateDeck } from './cards';
+import { excludeCards, excludeSuit, excludeSuitOver, generateDeck } from './cards';
 import { NUMBER_PLAYERS } from './constants';
 import { getHighestPlayedCardSuit, getLeaderIdSuit, getPlayerId } from './game';
 import { getPreviousRank } from './scores';
@@ -67,6 +67,8 @@ export const updateInfoCardsBasic = (infoSuitHighest: InfoSuitHighest[], infoCar
         const [suitHighest, suit] = suitSubArray;
         if (!suitHighest) {
           infoCards[playerId] = excludeSuit(infoCards[playerId], suit);
+        } else {
+          infoCards[playerId] = excludeSuitOver(infoCards[playerId], suit, suitHighest);
         }
       });
     }

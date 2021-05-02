@@ -162,6 +162,16 @@ test('excludeSuitOver', () => {
 
   const suit2 = generateSuit(Clubs);
   expect(excludeSuitOver(suit2, Clubs, Seven)).toStrictEqual([{ rank: Seven, suit: Clubs }]);
+  expect(excludeSuitOver(suit2, Clubs, Ten)).toStrictEqual([
+    { rank: Ten, suit: Clubs },
+    { rank: Ace, suit: Clubs },
+    { rank: King, suit: Clubs },
+    { rank: Queen, suit: Clubs },
+    { rank: Jack, suit: Clubs },
+    { rank: Nine, suit: Clubs },
+    { rank: Eight, suit: Clubs },
+    { rank: Seven, suit: Clubs }
+  ]);
 
   const deck = generateDeck();
   const result = excludeSuitOver(deck, Clubs, Nine);
