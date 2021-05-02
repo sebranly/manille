@@ -2,7 +2,7 @@ import { generateDeck, generateSuit } from '../cards';
 import {
   initializeInfoCards,
   updateInfoCards,
-  updateInfoCardsBasic,
+  updateInfoCardsHighest,
   updateInfoSuitHighest,
   initializeInfoSuitHighest
 } from '../ia';
@@ -189,7 +189,7 @@ test('updateInfoSuitHighest', () => {
   ]);
 });
 
-test('updateInfoCardsBasic', () => {
+test('updateInfoCardsHighest', () => {
   const deck = generateDeck();
 
   const infoCards1 = [deck, deck, [], deck];
@@ -220,7 +220,7 @@ test('updateInfoCardsBasic', () => {
     }
   ];
 
-  expect(updateInfoCardsBasic(info1, infoCards1, 2)).toStrictEqual([
+  expect(updateInfoCardsHighest(info1, infoCards1, 2)).toStrictEqual([
     [...generateSuit(Clubs), ...generateSuit(Spades), ...generateSuit(Hearts)],
     generateSuit(Diamonds),
     [],
@@ -255,7 +255,7 @@ test('updateInfoCardsBasic', () => {
     }
   ];
 
-  expect(updateInfoCardsBasic(info2, infoCards2, 2)).toStrictEqual([
+  expect(updateInfoCardsHighest(info2, infoCards2, 2)).toStrictEqual([
     [
       { rank: Seven, suit: Clubs },
       { rank: Nine, suit: Spades },

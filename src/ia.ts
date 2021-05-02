@@ -48,7 +48,7 @@ export const updateInfoSuitHighest = (
   return info;
 };
 
-export const updateInfoCardsBasic = (infoSuitHighest: InfoSuitHighest[], infoCards: Card[][], botId: number) => {
+export const updateInfoCardsHighest = (infoSuitHighest: InfoSuitHighest[], infoCards: Card[][], botId: number) => {
   const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
 
   for (let playerId = 0; playerId < NUMBER_PLAYERS; playerId++) {
@@ -84,7 +84,7 @@ export const updateInfoCards = (
   botId: number,
   lengths: number[]
 ) => {
-  const tempInfoCards = updateInfoCardsBasic(infoSuitHighest, infoCards, botId);
+  const tempInfoCards = updateInfoCardsHighest(infoSuitHighest, infoCards, botId);
 
   for (let playerId = 0; playerId < NUMBER_PLAYERS; playerId++) {
     const isBot = playerId === botId;
