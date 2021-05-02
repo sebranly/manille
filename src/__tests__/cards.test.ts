@@ -2,6 +2,7 @@ import {
   cutDeck,
   excludeCards,
   excludeSuit,
+  excludeSuitOver,
   filterBySuit,
   generateDeck,
   generateSuit,
@@ -139,8 +140,33 @@ test('excludeSuit', () => {
   expect(excludeSuit(suit2, Clubs)).toStrictEqual([]);
 
   const deck = generateDeck();
-  expect(excludeSuit(deck, Clubs)).toHaveLength(24);
-  expect(excludeSuit(deck, Clubs)).toMatchSnapshot();
+  const result = excludeSuit(deck, Clubs);
+  expect(result).toHaveLength(24);
+  expect(result).toMatchSnapshot();
+});
+
+test('excludeSuitOver', () => {
+  expect(excludeSuitOver([], Clubs, Seven)).toStrictEqual([]);
+
+  const suit1 = generateSuit(Clubs);
+  expect(excludeSuitOver(suit1, Diamonds, Seven)).toStrictEqual([
+    { rank: Ten, suit: Clubs },
+    { rank: Ace, suit: Clubs },
+    { rank: King, suit: Clubs },
+    { rank: Queen, suit: Clubs },
+    { rank: Jack, suit: Clubs },
+    { rank: Nine, suit: Clubs },
+    { rank: Eight, suit: Clubs },
+    { rank: Seven, suit: Clubs }
+  ]);
+
+  const suit2 = generateSuit(Clubs);
+  expect(excludeSuitOver(suit2, Clubs, Seven)).toStrictEqual([{ rank: Seven, suit: Clubs }]);
+
+  const deck = generateDeck();
+  const result = excludeSuitOver(deck, Clubs, Nine);
+  expect(result).toHaveLength(27);
+  expect(result).toMatchSnapshot();
 });
 
 test('sortSuit', () => {
