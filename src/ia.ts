@@ -17,8 +17,6 @@ export const updateInfoSuitHighest = (
 ) => {
   const info = [...infoSuitHighest];
 
-  const { Ten } = CardRank;
-
   if (playedCards.length <= 1) return infoSuitHighest;
 
   const requestedSuit = playedCards[0].suit;
@@ -37,9 +35,8 @@ export const updateInfoSuitHighest = (
       const leaderIdSuit = getLeaderIdSuit(subsetPlayedCars, startingPlayerId, requestedSuit);
       const playerLeads = leaderIdSuit === playerId;
       const { rank: highestRank } = highestPlayedCard;
-      const tenIsPlayed = highestRank === Ten;
 
-      if (!playerLeads && !tenIsPlayed) {
+      if (!playerLeads) {
         const previousRank = getPreviousRank(highestRank);
         if (!previousRank) {
           info[playerId][requestedSuit] = undefined;

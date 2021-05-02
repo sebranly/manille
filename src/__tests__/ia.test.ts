@@ -208,8 +208,27 @@ test('updateInfoSuitHighest', () => {
     { clubs: Ten, diamonds: Jack, hearts: Ten, spades: Ten }
   ]);
 
-  // It does not override
   const info9 = updateInfoSuitHighest(
+    initializeInfoSuitHighest(),
+    [
+      { rank: Ten, suit: Diamonds },
+      { rank: Queen, suit: Diamonds },
+      { rank: Jack, suit: Diamonds },
+      { rank: Seven, suit: Diamonds }
+    ],
+    0,
+    Diamonds
+  );
+
+  expect(info9).toStrictEqual([
+    { clubs: Ten, diamonds: Ten, hearts: Ten, spades: Ten },
+    { clubs: Ten, diamonds: Ace, hearts: Ten, spades: Ten },
+    { clubs: Ten, diamonds: Ace, hearts: Ten, spades: Ten },
+    { clubs: Ten, diamonds: Ace, hearts: Ten, spades: Ten }
+  ]);
+
+  // It does not override
+  const info10 = updateInfoSuitHighest(
     [
       {
         clubs: Ten,
@@ -246,7 +265,7 @@ test('updateInfoSuitHighest', () => {
     Diamonds
   );
 
-  expect(info9).toStrictEqual([
+  expect(info10).toStrictEqual([
     { clubs: Ten, diamonds: Ten, hearts: Ten, spades: Ten },
     { clubs: Ten, diamonds: Ten, hearts: Ten, spades: Ten },
     { clubs: Ten, diamonds: Nine, hearts: Ten, spades: Ten },
@@ -254,7 +273,7 @@ test('updateInfoSuitHighest', () => {
   ]);
 
   // Is trump suit (en voiture)
-  const info10 = updateInfoSuitHighest(
+  const info11 = updateInfoSuitHighest(
     initializeInfoSuitHighest(),
     [
       { rank: Nine, suit: Diamonds },
@@ -266,15 +285,34 @@ test('updateInfoSuitHighest', () => {
     false
   );
 
-  expect(info10).toStrictEqual([
+  expect(info11).toStrictEqual([
     { clubs: Ten, diamonds: Ten, hearts: Ten, spades: Ten },
     { clubs: Ten, diamonds: Ten, hearts: Ten, spades: Ten },
     { clubs: Ten, diamonds: Jack, hearts: Ten, spades: Ten },
     { clubs: Ten, diamonds: Jack, hearts: Ten, spades: Ten }
   ]);
 
+  const info12 = updateInfoSuitHighest(
+    initializeInfoSuitHighest(),
+    [
+      { rank: Ten, suit: Diamonds },
+      { rank: Queen, suit: Diamonds },
+      { rank: Jack, suit: Diamonds },
+      { rank: Seven, suit: Diamonds }
+    ],
+    0,
+    false
+  );
+
+  expect(info12).toStrictEqual([
+    { clubs: Ten, diamonds: Ten, hearts: Ten, spades: Ten },
+    { clubs: Ten, diamonds: Ace, hearts: Ten, spades: Ten },
+    { clubs: Ten, diamonds: Ace, hearts: Ten, spades: Ten },
+    { clubs: Ten, diamonds: Ace, hearts: Ten, spades: Ten }
+  ]);
+
   // It does not override
-  const info11 = updateInfoSuitHighest(
+  const info13 = updateInfoSuitHighest(
     [
       {
         clubs: Ten,
@@ -311,7 +349,7 @@ test('updateInfoSuitHighest', () => {
     false
   );
 
-  expect(info11).toStrictEqual([
+  expect(info13).toStrictEqual([
     { clubs: Ten, diamonds: Ten, hearts: Ten, spades: Ten },
     { clubs: Ten, diamonds: Ten, hearts: Ten, spades: Ten },
     { clubs: Ten, diamonds: Nine, hearts: Ten, spades: Ten },
