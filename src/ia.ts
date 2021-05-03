@@ -26,25 +26,20 @@ export const updateInfoSuitHighest = (
     const playerId = getPlayerId(startingPlayerId, i);
     const playerSuit = playedCards[i].suit;
     const hasProvided = playerSuit === requestedSuit;
-
     const isTrumpSuit = trumpSuit === false || requestedSuit === trumpSuit;
 
     if (!hasProvided) {
       info[playerId][requestedSuit] = undefined;
 
       const highestPlayedCardTrumpSuit = getHighestPlayedCardSuit(subsetPlayedCars, trumpSuit);
+
       if (trumpSuit) {
         if (!!highestPlayedCardTrumpSuit) {
           const isLeading = isTeammateLeading(subsetPlayedCars, playerId, startingPlayerId, trumpSuit);
           const { rank: highestRank } = highestPlayedCardTrumpSuit;
 
           if (!isLeading) {
-            const previousRank = getPreviousRank(highestRank);
-            if (!previousRank) {
-              info[playerId][trumpSuit] = undefined;
-            } else if (!!info[playerId][trumpSuit] && compareCardRanks(info[playerId][trumpSuit]!, previousRank) > 0) {
-              info[playerId][trumpSuit] = previousRank;
-            }
+            info[playerId][trumpSuit] = getNewSuitHighest(info[playerId][trumpSuit], highestRank);
           }
         } else {
           info[playerId][trumpSuit] = undefined;
@@ -57,20 +52,24 @@ export const updateInfoSuitHighest = (
       const { rank: highestRank } = highestPlayedCard;
 
       if (!playerLeads) {
-        const previousRank = getPreviousRank(highestRank);
-        if (!previousRank) {
-          info[playerId][requestedSuit] = undefined;
-        } else if (
-          !!info[playerId][requestedSuit] &&
-          compareCardRanks(info[playerId][requestedSuit]!, previousRank) > 0
-        ) {
-          info[playerId][requestedSuit] = previousRank;
-        }
+        info[playerId][requestedSuit] = getNewSuitHighest(info[playerId][requestedSuit], highestRank);
       }
     }
   }
 
   return info;
+};
+
+export const getNewSuitHighest = (highestSuit: CardRank | undefined, highestRank: CardRank) => {
+  const previousRank = getPreviousRank(highestRank);
+
+  if (!previousRank) {
+    return undefined;
+  } else if (!!highestSuit && compareCardRanks(highestSuit, previousRank) > 0) {
+    return previousRank;
+  }
+
+  return highestSuit;
 };
 
 export const updateInfoCardsHighest = (infoSuitHighest: InfoSuitHighest[], infoCards: Card[][], botId: number) => {

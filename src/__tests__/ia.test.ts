@@ -4,7 +4,8 @@ import {
   updateInfoCards,
   updateInfoCardsHighest,
   updateInfoSuitHighest,
-  initializeInfoSuitHighest
+  initializeInfoSuitHighest,
+  getNewSuitHighest
 } from '../ia';
 import { CardRank, CardSuit, InfoSuitHighest } from '../types';
 
@@ -29,6 +30,15 @@ test('initializeInfoSuitHighest', () => {
   };
 
   expect(initializeInfoSuitHighest()).toStrictEqual([initialElement, initialElement, initialElement, initialElement]);
+});
+
+test('getNewSuitHighest', () => {
+  expect(getNewSuitHighest(undefined, Seven)).toBeUndefined();
+  expect(getNewSuitHighest(Seven, Seven)).toBeUndefined();
+  expect(getNewSuitHighest(Seven, Eight)).toBe(Seven);
+  expect(getNewSuitHighest(Seven, Nine)).toBe(Seven);
+  expect(getNewSuitHighest(Eight, Eight)).toBe(Seven);
+  expect(getNewSuitHighest(Eight, Seven)).toBeUndefined();
 });
 
 test('updateInfoSuitHighest', () => {
