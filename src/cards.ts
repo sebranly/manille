@@ -45,9 +45,17 @@ export const filterBySuit = (cards: Card[], suit: CardSuit | false) => {
 };
 
 export const excludeSuit = (cards: Card[], suit: CardSuit) => {
-  const cardsSuit = cards.filter((card: Card) => card.suit !== suit);
+  const cardsOtherSuits = cards.filter((card: Card) => card.suit !== suit);
 
-  return cardsSuit;
+  return cardsOtherSuits;
+};
+
+export const excludeSuitOver = (cards: Card[], suit: CardSuit, cardRank: CardRank) => {
+  const cardsOtherSuitsOrSameSuitLow = cards.filter((card: Card) => {
+    return card.suit !== suit || compareCardRanks(cardRank, card.rank) > -1;
+  });
+
+  return cardsOtherSuitsOrSameSuitLow;
 };
 
 export const excludeCards = (cards: Card[], cardsToExclude: Card[]) => {

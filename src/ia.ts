@@ -1,14 +1,11 @@
 import { differenceWith, isEqual } from 'lodash';
-import { excludeCards, excludeSuit, generateDeck } from './cards';
+import { excludeCards, excludeSuit, excludeSuitOver, generateDeck } from './cards';
 import { NUMBER_PLAYERS } from './constants';
-import { getHighestPlayedCardSuit, getLeaderIdSuit, getPlayerId } from './game';
-import { getPreviousRank } from './scores';
+import { getHighestPlayedCardSuit, getLeaderIdSuit, getPlayerId, isTeammateLeading } from './game';
+import { compareCardRanks, getPreviousRank } from './scores';
 import { Card, CardRank, CardSuit, InfoSuitHighest } from './types';
 import { adjustValues } from './utils';
 
-/**
- * TODO: add more unit tests
- */
 export const updateInfoSuitHighest = (
   infoSuitHighest: InfoSuitHighest[],
   playedCards: Card[],
@@ -17,8 +14,6 @@ export const updateInfoSuitHighest = (
 ) => {
   const info = [...infoSuitHighest];
 
-  const { Ten } = CardRank;
-
   if (playedCards.length <= 1) return infoSuitHighest;
 
   const requestedSuit = playedCards[0].suit;
@@ -26,21 +21,35 @@ export const updateInfoSuitHighest = (
   for (let i = 1; i < playedCards.length; i++) {
     const subsetPlayedCars = playedCards.slice(0, i + 1);
     const playerId = getPlayerId(startingPlayerId, i);
-    const hasProvided = playedCards[i].suit === requestedSuit;
-
+    const playerSuit = playedCards[i].suit;
+    const hasProvided = playerSuit === requestedSuit;
     const isTrumpSuit = trumpSuit === false || requestedSuit === trumpSuit;
 
     if (!hasProvided) {
       info[playerId][requestedSuit] = undefined;
+
+      const highestPlayedCardTrumpSuit = getHighestPlayedCardSuit(subsetPlayedCars, trumpSuit);
+
+      if (trumpSuit) {
+        if (!!highestPlayedCardTrumpSuit) {
+          const isLeading = isTeammateLeading(subsetPlayedCars, playerId, startingPlayerId, trumpSuit);
+          const { rank: highestRank } = highestPlayedCardTrumpSuit;
+
+          if (!isLeading) {
+            info[playerId][trumpSuit] = getNewSuitHighest(info[playerId][trumpSuit], highestRank);
+          }
+        } else {
+          info[playerId][trumpSuit] = undefined;
+        }
+      }
     } else if (isTrumpSuit) {
       const highestPlayedCard = getHighestPlayedCardSuit(subsetPlayedCars, requestedSuit);
       const leaderIdSuit = getLeaderIdSuit(subsetPlayedCars, startingPlayerId, requestedSuit);
       const playerLeads = leaderIdSuit === playerId;
       const { rank: highestRank } = highestPlayedCard;
-      const tenIsPlayed = highestRank === Ten;
 
-      if (!playerLeads && !tenIsPlayed) {
-        info[playerId][requestedSuit] = getPreviousRank(highestRank);
+      if (!playerLeads) {
+        info[playerId][requestedSuit] = getNewSuitHighest(info[playerId][requestedSuit], highestRank);
       }
     }
   }
@@ -48,7 +57,19 @@ export const updateInfoSuitHighest = (
   return info;
 };
 
-export const updateInfoCardsBasic = (infoSuitHighest: InfoSuitHighest[], infoCards: Card[][], botId: number) => {
+export const getNewSuitHighest = (highestSuit: CardRank | undefined, highestRank: CardRank) => {
+  const previousRank = getPreviousRank(highestRank);
+
+  if (!previousRank) {
+    return undefined;
+  } else if (!!highestSuit && compareCardRanks(highestSuit, previousRank) > 0) {
+    return previousRank;
+  }
+
+  return highestSuit;
+};
+
+export const updateInfoCardsHighest = (infoSuitHighest: InfoSuitHighest[], infoCards: Card[][], botId: number) => {
   const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
 
   for (let playerId = 0; playerId < NUMBER_PLAYERS; playerId++) {
@@ -67,6 +88,8 @@ export const updateInfoCardsBasic = (infoSuitHighest: InfoSuitHighest[], infoCar
         const [suitHighest, suit] = suitSubArray;
         if (!suitHighest) {
           infoCards[playerId] = excludeSuit(infoCards[playerId], suit);
+        } else {
+          infoCards[playerId] = excludeSuitOver(infoCards[playerId], suit, suitHighest);
         }
       });
     }
@@ -82,7 +105,7 @@ export const updateInfoCards = (
   botId: number,
   lengths: number[]
 ) => {
-  const tempInfoCards = updateInfoCardsBasic(infoSuitHighest, infoCards, botId);
+  const tempInfoCards = updateInfoCardsHighest(infoSuitHighest, infoCards, botId);
 
   for (let playerId = 0; playerId < NUMBER_PLAYERS; playerId++) {
     const isBot = playerId === botId;
