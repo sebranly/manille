@@ -28,9 +28,9 @@ export const updateInfoSuitHighest = (
     if (!hasProvided) {
       info[playerId][requestedSuit] = undefined;
 
-      const highestPlayedCardTrumpSuit = getHighestPlayedCardSuit(subsetPlayedCars, trumpSuit);
-
       if (trumpSuit) {
+        const highestPlayedCardTrumpSuit = getHighestPlayedCardSuit(subsetPlayedCars, trumpSuit);
+
         if (!!highestPlayedCardTrumpSuit) {
           const isLeading = isTeammateLeading(subsetPlayedCars, playerId, startingPlayerId, trumpSuit);
           const { rank: highestRank } = highestPlayedCardTrumpSuit;
@@ -86,10 +86,10 @@ export const updateInfoCardsHighest = (infoSuitHighest: InfoSuitHighest[], infoC
 
       suitArray.forEach((suitSubArray) => {
         const [suitHighest, suit] = suitSubArray;
-        if (!suitHighest) {
-          infoCards[playerId] = excludeSuit(infoCards[playerId], suit);
-        } else {
+        if (suitHighest) {
           infoCards[playerId] = excludeSuitOver(infoCards[playerId], suit, suitHighest);
+        } else {
+          infoCards[playerId] = excludeSuit(infoCards[playerId], suit);
         }
       });
     }
