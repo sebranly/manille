@@ -1,7 +1,7 @@
 import { differenceWith, isEqual } from 'lodash';
 import { excludeCards, excludeSuit, excludeSuitOver, generateDeck } from './cards';
 import { NUMBER_PLAYERS } from './constants';
-import { getHighestPlayedCardSuit, getLeaderIdSuit, getPlayerId } from './game';
+import { getHighestPlayedCardSuit, getLeaderIdSuit, getPlayerId, isTeammateLeading } from './game';
 import { compareCardRanks, getPreviousRank } from './scores';
 import { Card, CardRank, CardSuit, InfoSuitHighest } from './types';
 import { adjustValues } from './utils';
@@ -24,12 +24,32 @@ export const updateInfoSuitHighest = (
   for (let i = 1; i < playedCards.length; i++) {
     const subsetPlayedCars = playedCards.slice(0, i + 1);
     const playerId = getPlayerId(startingPlayerId, i);
-    const hasProvided = playedCards[i].suit === requestedSuit;
+    const playerSuit = playedCards[i].suit;
+    const hasProvided = playerSuit === requestedSuit;
 
     const isTrumpSuit = trumpSuit === false || requestedSuit === trumpSuit;
 
     if (!hasProvided) {
       info[playerId][requestedSuit] = undefined;
+
+      const highestPlayedCardTrumpSuit = getHighestPlayedCardSuit(subsetPlayedCars, trumpSuit);
+      if (trumpSuit) {
+        if (!!highestPlayedCardTrumpSuit) {
+          const isLeading = isTeammateLeading(subsetPlayedCars, playerId, startingPlayerId, trumpSuit);
+          const { rank: highestRank } = highestPlayedCardTrumpSuit;
+
+          if (!isLeading) {
+            const previousRank = getPreviousRank(highestRank);
+            if (!previousRank) {
+              info[playerId][trumpSuit] = undefined;
+            } else if (!!info[playerId][trumpSuit] && compareCardRanks(info[playerId][trumpSuit]!, previousRank) > 0) {
+              info[playerId][trumpSuit] = previousRank;
+            }
+          }
+        } else {
+          info[playerId][trumpSuit] = undefined;
+        }
+      }
     } else if (isTrumpSuit) {
       const highestPlayedCard = getHighestPlayedCardSuit(subsetPlayedCars, requestedSuit);
       const leaderIdSuit = getLeaderIdSuit(subsetPlayedCars, startingPlayerId, requestedSuit);

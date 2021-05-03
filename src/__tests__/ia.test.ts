@@ -355,6 +355,127 @@ test('updateInfoSuitHighest', () => {
     { clubs: Ten, diamonds: Nine, hearts: Ten, spades: Ten },
     { clubs: Ten, diamonds: Seven, hearts: Ten, spades: Ten }
   ]);
+
+  const info14 = updateInfoSuitHighest(
+    initializeInfoSuitHighest(),
+    [
+      { rank: Nine, suit: Diamonds },
+      { rank: Queen, suit: Spades },
+      { rank: Jack, suit: Clubs },
+      { rank: Seven, suit: Diamonds }
+    ],
+    0,
+    Spades
+  );
+
+  expect(info14).toStrictEqual([
+    { clubs: Ten, diamonds: Ten, hearts: Ten, spades: Ten },
+    { clubs: Ten, diamonds: undefined, hearts: Ten, spades: Ten },
+    { clubs: Ten, diamonds: undefined, hearts: Ten, spades: Jack },
+    { clubs: Ten, diamonds: Ten, hearts: Ten, spades: Ten }
+  ]);
+
+  const info15 = updateInfoSuitHighest(
+    initializeInfoSuitHighest(),
+    [
+      { rank: Nine, suit: Diamonds },
+      { rank: Queen, suit: Spades },
+      { rank: Jack, suit: Clubs },
+      { rank: King, suit: Spades }
+    ],
+    0,
+    Spades
+  );
+
+  expect(info15).toStrictEqual([
+    { clubs: Ten, diamonds: Ten, hearts: Ten, spades: Ten },
+    { clubs: Ten, diamonds: undefined, hearts: Ten, spades: Ten },
+    { clubs: Ten, diamonds: undefined, hearts: Ten, spades: Jack },
+    { clubs: Ten, diamonds: undefined, hearts: Ten, spades: Ten }
+  ]);
+
+  const info16 = updateInfoSuitHighest(
+    initializeInfoSuitHighest(),
+    [
+      { rank: Nine, suit: Diamonds },
+      { rank: Jack, suit: Clubs },
+      { rank: Seven, suit: Diamonds },
+      { rank: Queen, suit: Spades }
+    ],
+    0,
+    Spades
+  );
+
+  expect(info16).toStrictEqual([
+    { clubs: Ten, diamonds: Ten, hearts: Ten, spades: Ten },
+    { clubs: Ten, diamonds: undefined, hearts: Ten, spades: undefined },
+    { clubs: Ten, diamonds: Ten, hearts: Ten, spades: Ten },
+    { clubs: Ten, diamonds: undefined, hearts: Ten, spades: Ten }
+  ]);
+
+  const info17 = updateInfoSuitHighest(
+    initializeInfoSuitHighest(),
+    [
+      { rank: Nine, suit: Diamonds },
+      { rank: Seven, suit: Spades },
+      { rank: Jack, suit: Clubs },
+      { rank: Seven, suit: Diamonds }
+    ],
+    0,
+    Spades
+  );
+
+  expect(info17).toStrictEqual([
+    { clubs: Ten, diamonds: Ten, hearts: Ten, spades: Ten },
+    { clubs: Ten, diamonds: undefined, hearts: Ten, spades: Ten },
+    { clubs: Ten, diamonds: undefined, hearts: Ten, spades: undefined },
+    { clubs: Ten, diamonds: Ten, hearts: Ten, spades: Ten }
+  ]);
+
+  // It does not override
+  const info18 = updateInfoSuitHighest(
+    [
+      {
+        clubs: Ten,
+        diamonds: Ten,
+        hearts: Ten,
+        spades: Ten
+      },
+      {
+        clubs: Ten,
+        diamonds: Ten,
+        hearts: Ten,
+        spades: Ten
+      },
+      {
+        clubs: Ten,
+        diamonds: Ten,
+        hearts: Ten,
+        spades: Nine
+      },
+      {
+        clubs: Ten,
+        diamonds: Ten,
+        hearts: Ten,
+        spades: Ten
+      }
+    ],
+    [
+      { rank: Nine, suit: Diamonds },
+      { rank: Queen, suit: Spades },
+      { rank: Jack, suit: Clubs },
+      { rank: Seven, suit: Diamonds }
+    ],
+    0,
+    Spades
+  );
+
+  expect(info18).toStrictEqual([
+    { clubs: Ten, diamonds: Ten, hearts: Ten, spades: Ten },
+    { clubs: Ten, diamonds: undefined, hearts: Ten, spades: Ten },
+    { clubs: Ten, diamonds: undefined, hearts: Ten, spades: Nine },
+    { clubs: Ten, diamonds: Ten, hearts: Ten, spades: Ten }
+  ]);
 });
 
 test('updateInfoCardsHighest', () => {
