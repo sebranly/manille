@@ -6,9 +6,6 @@ import { compareCardRanks, getPreviousRank } from './scores';
 import { Card, CardRank, CardSuit, InfoSuitHighest } from './types';
 import { adjustValues } from './utils';
 
-/**
- * TODO: add more unit tests for else if
- */
 export const updateInfoSuitHighest = (
   infoSuitHighest: InfoSuitHighest[],
   playedCards: Card[],
