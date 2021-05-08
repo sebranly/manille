@@ -26,7 +26,7 @@ export interface Card {
 }
 
 export interface Player {
-  id: number;
+  id: PlayerId;
   cards: Card[];
   name: string;
 }
