@@ -59,10 +59,7 @@ export const excludeSuitOver = (cards: Card[], suit: CardSuit, cardRank: CardRan
 };
 
 export const excludeCards = (cards: Card[], cardsToExclude: Card[]) => {
-  const newCards = cards.filter(
-    (card: Card) =>
-      !cardsToExclude.some((cardExclude: Card) => card.rank === cardExclude.rank && card.suit === cardExclude.suit)
-  );
+  const newCards = cards.filter((card: Card) => !hasCard(cardsToExclude, card));
 
   return newCards;
 };

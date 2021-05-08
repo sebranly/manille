@@ -158,6 +158,6 @@ export const getLeaderFold = (playedCards: Card[], startingPlayerId: PlayerId, t
   return leaderId;
 };
 
-export const getPlayerId = (startingPlayerId: PlayerId, arrayId: number) => {
-  return ((startingPlayerId + arrayId) % NUMBER_PLAYERS) as PlayerId;
+export const getPlayerId = (playerId: PlayerId, arrayId: number) => {
+  return ((playerId + arrayId) % NUMBER_PLAYERS) as PlayerId;
 };
