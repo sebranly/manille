@@ -1,7 +1,7 @@
-import { Card, Player } from './types';
+import { Card, Player, PlayerId } from './types';
 import { NUMBER_PLAYERS } from './constants';
 
-export const isSameTeam = (playerId1: number, playerId2: number) => {
+export const isSameTeam = (playerId1: PlayerId, playerId2: PlayerId) => {
   return playerId1 % 2 === playerId2 % 2;
 };
 

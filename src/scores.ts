@@ -30,11 +30,10 @@ export const getCardPoints = (rank: CardRank) => {
 };
 
 export const getCardsPoints = (cards: Card[]) => {
-  const points = cards.map((card: Card) => getCardPoints(card.rank));
+  const points = cards.map((card: Card) => getCardPoints(card.rank)) as number[];
   const reducer = (accumulator: number, currentValue: number) => accumulator + currentValue;
 
-  // TODO: find solution not involving cast
-  return (points as number[]).reduce(reducer);
+  return points.reduce(reducer);
 };
 
 export const getScore = (cards: Card[], multiplier: 1 | 2 | 4 = 1) => {
