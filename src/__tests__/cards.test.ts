@@ -251,11 +251,13 @@ test('hasCard', () => {
   const card = { rank: King, suit: Diamonds };
   const otherCard = { rank: Queen, suit: Diamonds };
 
-  expect(hasCard(deck, card)).toBe(true);
+  expect(hasCard([], card)).toBe(false);
   expect(hasCard(suit1, card)).toBe(false);
+  expect(hasCard([otherCard], card)).toBe(false);
+
+  expect(hasCard(deck, card)).toBe(true);
   expect(hasCard(suit2, card)).toBe(true);
   expect(hasCard([...suit1, ...suit2], card)).toBe(true);
-  expect(hasCard([otherCard], card)).toBe(false);
+  expect(hasCard([card], card)).toBe(true);
   expect(hasCard([card, otherCard], card)).toBe(true);
-  expect(hasCard([], card)).toBe(false);
 });

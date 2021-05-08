@@ -1,5 +1,5 @@
 import { compareCardRanks } from './scores';
-import { Card, CardSuit, Player, PlayerId } from './types';
+import { Card, CardSuit, PlayerId } from './types';
 import { findIndex } from 'lodash';
 import { NUMBER_PLAYERS } from './constants';
 import { isSameTeam } from '.';

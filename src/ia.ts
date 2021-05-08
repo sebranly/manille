@@ -105,7 +105,7 @@ export const updateInfoCards = (
   infoCards: Card[][],
   allPlayedCards: Card[],
   botId: PlayerId,
-  lengths: PlayerId[]
+  lengths: number[]
 ) => {
   const tempInfoCards = updateInfoCardsHighest(infoSuitHighest, infoCards, botId);
 
