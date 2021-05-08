@@ -3,23 +3,25 @@ import { excludeCards, excludeSuit, excludeSuitOver, generateDeck } from './card
 import { NUMBER_PLAYERS } from './constants';
 import { getHighestPlayedCardSuit, getLeaderIdSuit, getPlayerId, isTeammateLeading } from './game';
 import { compareCardRanks, getPreviousRank } from './scores';
-import { Card, CardRank, CardSuit, InfoSuitHighest } from './types';
+import { Card, CardRank, CardSuit, InfoSuitHighest, PlayerId } from './types';
 import { adjustValues } from './utils';
 
 export const updateInfoSuitHighest = (
   infoSuitHighest: InfoSuitHighest[],
   playedCards: Card[],
-  startingPlayerId: number,
+  startingPlayerId: PlayerId,
   trumpSuit: CardSuit | false
 ) => {
   const info = [...infoSuitHighest];
 
-  if (playedCards.length <= 1) return infoSuitHighest;
+  const playedCardsLength = playedCards.length;
+  if (playedCardsLength <= 1 || playedCardsLength > NUMBER_PLAYERS) return infoSuitHighest;
 
   const requestedSuit = playedCards[0].suit;
 
-  for (let i = 1; i < playedCards.length; i++) {
+  for (let i = 1; i < playedCardsLength; i++) {
     const subsetPlayedCars = playedCards.slice(0, i + 1);
+
     const playerId = getPlayerId(startingPlayerId, i);
     const playerSuit = playedCards[i].suit;
     const hasProvided = playerSuit === requestedSuit;
@@ -69,7 +71,7 @@ export const getNewSuitHighest = (highestSuit: CardRank | undefined, highestRank
   return highestSuit;
 };
 
-export const updateInfoCardsHighest = (infoSuitHighest: InfoSuitHighest[], infoCards: Card[][], botId: number) => {
+export const updateInfoCardsHighest = (infoSuitHighest: InfoSuitHighest[], infoCards: Card[][], botId: PlayerId) => {
   const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
 
   for (let playerId = 0; playerId < NUMBER_PLAYERS; playerId++) {
@@ -102,8 +104,8 @@ export const updateInfoCards = (
   infoSuitHighest: InfoSuitHighest[],
   infoCards: Card[][],
   allPlayedCards: Card[],
-  botId: number,
-  lengths: number[]
+  botId: PlayerId,
+  lengths: PlayerId[]
 ) => {
   const tempInfoCards = updateInfoCardsHighest(infoSuitHighest, infoCards, botId);
 
@@ -136,7 +138,7 @@ export const initializeInfoSuitHighest = () => {
   return infoSuitHighest;
 };
 
-export const initializeInfoCards = (botCards: Card[], botId: number) => {
+export const initializeInfoCards = (botCards: Card[], botId: PlayerId) => {
   const deck = generateDeck();
 
   const nonBotRemainingCards = differenceWith(deck, botCards, isEqual);

@@ -1,3 +1,5 @@
+export type PlayerId = 0 | 1 | 2 | 3;
+
 export enum CardSuit {
   Clubs = 'clubs',
   Diamonds = 'diamonds',
@@ -19,6 +21,8 @@ export enum CardRank {
 export interface Card {
   rank: CardRank;
   suit: CardSuit;
+  playedBy?: PlayerId;
+  playedAt?: number;
 }
 
 export interface Player {

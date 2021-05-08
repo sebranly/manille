@@ -1,5 +1,5 @@
 import { compareCardRanks } from './scores';
-import { Card, CardSuit } from './types';
+import { Card, CardSuit, Player, PlayerId } from './types';
 import { findIndex } from 'lodash';
 import { NUMBER_PLAYERS } from './constants';
 import { isSameTeam } from '.';
@@ -8,8 +8,8 @@ import { filterBySuit, sortSuit } from './cards';
 export const getPlayableCards = (
   cards: Card[],
   playedCards: Card[],
-  currentPlayerId: number,
-  startingPlayerId: number,
+  currentPlayerId: PlayerId,
+  startingPlayerId: PlayerId,
   trumpSuit: CardSuit | false
 ) => {
   const isPlayerStarting = playedCards.length === 0 || currentPlayerId === startingPlayerId;
@@ -69,8 +69,8 @@ export const getPlayableCardsTrumpSuit = (cards: Card[], playedCards: Card[]) =>
 export const getPlayableCardsNonTrumpSuit = (
   cards: Card[],
   playedCards: Card[],
-  currentPlayerId: number,
-  startingPlayerId: number,
+  currentPlayerId: PlayerId,
+  startingPlayerId: PlayerId,
   trumpSuit: CardSuit | false
 ) => {
   const requestedSuit = playedCards[0].suit;
@@ -108,7 +108,7 @@ export const getPlayableCardsNonTrumpSuit = (
   return higherCardsTrump;
 };
 
-export const getLeaderIdSuit = (playedCards: Card[], startingPlayerId: number, suit: CardSuit | false) => {
+export const getLeaderIdSuit = (playedCards: Card[], startingPlayerId: PlayerId, suit: CardSuit | false) => {
   const highestPlayedCardTrump = getHighestPlayedCardSuit(playedCards, suit);
 
   const arrayId = findIndex(
@@ -123,8 +123,8 @@ export const getLeaderIdSuit = (playedCards: Card[], startingPlayerId: number, s
 
 export const isTeammateLeading = (
   playedCards: Card[],
-  currentPlayerId: number,
-  startingPlayerId: number,
+  currentPlayerId: PlayerId,
+  startingPlayerId: PlayerId,
   suit: CardSuit | false
 ) => {
   const leaderId = getLeaderIdSuit(playedCards, startingPlayerId, suit);
@@ -132,7 +132,7 @@ export const isTeammateLeading = (
   return isSameTeam(currentPlayerId, leaderId);
 };
 
-export const getLeaderFold = (playedCards: Card[], startingPlayerId: number, trumpSuit: CardSuit | false) => {
+export const getLeaderFold = (playedCards: Card[], startingPlayerId: PlayerId, trumpSuit: CardSuit | false) => {
   if (playedCards.length !== NUMBER_PLAYERS) return -1;
 
   const isTrumpSuit = trumpSuit === false || playedCards[0].suit === trumpSuit;
@@ -158,6 +158,6 @@ export const getLeaderFold = (playedCards: Card[], startingPlayerId: number, tru
   return leaderId;
 };
 
-export const getPlayerId = (startingPlayerId: number, arrayId: number) => {
-  return (startingPlayerId + arrayId) % NUMBER_PLAYERS;
+export const getPlayerId = (startingPlayerId: PlayerId, arrayId: number) => {
+  return ((startingPlayerId + arrayId) % NUMBER_PLAYERS) as PlayerId;
 };

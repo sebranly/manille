@@ -67,6 +67,12 @@ export const excludeCards = (cards: Card[], cardsToExclude: Card[]) => {
   return newCards;
 };
 
+export const hasCard = (cards: Card[], card: Card) => {
+  const hasIt = cards.some((oneCard: Card) => oneCard.rank === card.rank && oneCard.suit === card.suit);
+
+  return hasIt;
+};
+
 export const orderCards = (cards: Card[]) => {
   const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
 

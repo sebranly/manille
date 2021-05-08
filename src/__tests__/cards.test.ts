@@ -6,6 +6,7 @@ import {
   filterBySuit,
   generateDeck,
   generateSuit,
+  hasCard,
   orderCards,
   sortSuit
 } from '../cards';
@@ -241,4 +242,20 @@ test('excludeCards', () => {
     { rank: King, suit: Hearts },
     { rank: Queen, suit: Spades }
   ]);
+});
+
+test('hasCard', () => {
+  const deck = generateDeck();
+  const suit1 = generateSuit(Clubs);
+  const suit2 = generateSuit(Diamonds);
+  const card = { rank: King, suit: Diamonds };
+  const otherCard = { rank: Queen, suit: Diamonds };
+
+  expect(hasCard(deck, card)).toBe(true);
+  expect(hasCard(suit1, card)).toBe(false);
+  expect(hasCard(suit2, card)).toBe(true);
+  expect(hasCard([...suit1, ...suit2], card)).toBe(true);
+  expect(hasCard([otherCard], card)).toBe(false);
+  expect(hasCard([card, otherCard], card)).toBe(true);
+  expect(hasCard([], card)).toBe(false);
 });
