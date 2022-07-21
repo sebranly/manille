@@ -6,7 +6,9 @@ import {
   filterBySuit,
   generateDeck,
   generateSuit,
+  getCardIndex,
   hasCard,
+  isSameCard,
   orderCards,
   sortSuit
 } from '../cards';
@@ -260,4 +262,34 @@ test('hasCard', () => {
   expect(hasCard([...suit1, ...suit2], card)).toBe(true);
   expect(hasCard([card], card)).toBe(true);
   expect(hasCard([card, otherCard], card)).toBe(true);
+});
+
+test('getCardIndex', () => {
+  const deck = generateDeck();
+  const suit1 = generateSuit(Clubs);
+  const suit2 = generateSuit(Diamonds);
+  const card = { rank: King, suit: Diamonds };
+  const otherCard = { rank: Queen, suit: Diamonds };
+
+  expect(getCardIndex([], card)).toBe(-1);
+  expect(getCardIndex(suit1, card)).toBe(-1);
+  expect(getCardIndex([otherCard], card)).toBe(-1);
+
+  expect(getCardIndex(deck, card)).toBe(10);
+  expect(getCardIndex(suit2, card)).toBe(2);
+  expect(getCardIndex([...suit1, ...suit2], card)).toBe(10);
+  expect(getCardIndex([card], card)).toBe(0);
+  expect(getCardIndex([card, otherCard], card)).toBe(0);
+});
+
+test('isSameCard', () => {
+  const cards = [
+    { rank: King, suit: Diamonds },
+    { rank: King, suit: Hearts },
+    { rank: Queen, suit: Diamonds },
+    { rank: King, suit: Diamonds }
+  ]
+  expect(isSameCard(cards[0], cards[1])).toBe(false)
+  expect(isSameCard(cards[0], cards[2])).toBe(false)
+  expect(isSameCard(cards[0], cards[3])).toBe(true)
 });

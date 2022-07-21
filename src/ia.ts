@@ -1,5 +1,5 @@
-import { differenceWith, isEqual } from 'lodash';
-import { excludeCards, excludeSuit, excludeSuitOver, generateDeck } from './cards';
+import { differenceWith } from 'lodash';
+import { excludeCards, excludeSuit, excludeSuitOver, generateDeck, isSameCard, } from './cards';
 import { NUMBER_PLAYERS } from './constants';
 import { getHighestPlayedCardSuit, getLeaderIdSuit, getPlayerId, isTeammateLeading } from './game';
 import { compareCardRanks, getPreviousRank } from './scores';
@@ -141,7 +141,7 @@ export const initializeInfoSuitHighest = () => {
 export const initializeInfoCards = (botCards: Card[], botId: PlayerId) => {
   const deck = generateDeck();
 
-  const nonBotRemainingCards = differenceWith(deck, botCards, isEqual);
+  const nonBotRemainingCards = differenceWith(deck, botCards, isSameCard);
 
   const infoCards = [];
 

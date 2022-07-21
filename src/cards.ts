@@ -64,8 +64,18 @@ export const excludeCards = (cards: Card[], cardsToExclude: Card[]) => {
   return newCards;
 };
 
+export const getCardIndex = (cards: Card[], card: Card) => {
+  const cardId = cards.findIndex((oneCard: Card) => isSameCard(card, oneCard));
+
+  return cardId;
+};
+
+export const isSameCard = (card1: Card, card2: Card) => {
+  return card1.rank === card2.rank && card1.suit === card2.suit
+}
+
 export const hasCard = (cards: Card[], card: Card) => {
-  const hasIt = cards.some((oneCard: Card) => oneCard.rank === card.rank && oneCard.suit === card.suit);
+  const hasIt = cards.some((oneCard: Card) => isSameCard(card, oneCard));
 
   return hasIt;
 };
