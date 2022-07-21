@@ -2,6 +2,8 @@
 
 Manille Engine
 
+- [BundlePhobia](https://bundlephobia.com/package/manille)
+
 ## Development
 
 ### Workflow
