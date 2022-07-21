@@ -8,14 +8,12 @@ export const compareValues = (a: number, b: number) => {
   return -1;
 };
 
-// TODO: use generic type?
 export const flattenArray = (array: Card[][]) => {
   return array.reduce((a, b) => a.concat(b));
 };
 
-// TODO: use generic type?
-export const getSureValues = (array: any[][]) => {
-  const sureValues: any = [];
+export const getSureValues = (array: Card[][]) => {
+  const sureValues: Card[][] = [];
 
   for (let i = 0; i < array.length; i++) {
     sureValues[i] = [];
@@ -36,14 +34,16 @@ export const getSureValues = (array: any[][]) => {
         }
       }
 
-      if (isSureValue) sureValues[i].push(value);
+      if (isSureValue) {
+        sureValues[i].push(value);
+      }
     });
   }
 
   return sureValues;
 };
 
-export const adjustValues = (array: any[][], length: number[]) => {
+export const adjustValues = (array: Card[][], length: number[]) => {
   let canLoopAgain = true;
 
   while (canLoopAgain) {

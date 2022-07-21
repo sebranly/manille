@@ -74,6 +74,11 @@ export const isSameCard = (card1: Card, card2: Card) => {
   return card1.rank === card2.rank && card1.suit === card2.suit
 }
 
+export const areSameOrderedCards = (cards1: Card[], cards2: Card[]) => {
+    if (cards1.length !== cards2.length) return false;
+    return cards1.every((c, i) => isSameCard(c, cards2[i]));
+};
+
 export const hasCard = (cards: Card[], card: Card) => {
   const hasIt = cards.some((oneCard: Card) => isSameCard(card, oneCard));
 
