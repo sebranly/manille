@@ -1,6 +1,7 @@
 import {
   areSameOrderedCards,
   cutDeck,
+  differenceWith,
   excludeCards,
   excludeSuit,
   excludeSuitOver,
@@ -290,6 +291,7 @@ test('isSameCard', () => {
     { rank: Queen, suit: Diamonds },
     { rank: King, suit: Diamonds }
   ];
+
   expect(isSameCard(cards[0], cards[1])).toBe(false);
   expect(isSameCard(cards[0], cards[2])).toBe(false);
   expect(isSameCard(cards[0], cards[3])).toBe(true);
@@ -304,4 +306,12 @@ test('areSameOrderedCards', () => {
   expect(areSameOrderedCards([card2, card1], [card1, card2])).toBe(false);
   expect(areSameOrderedCards([card1, card2], [card1, card2])).toBe(true);
   expect(areSameOrderedCards([card1], [{ rank: King, suit: Diamonds }])).toBe(true);
+});
+
+test('differenceWith', () => {
+  expect(differenceWith([], [])).toStrictEqual([]);
+  expect(differenceWith([], [{ rank: King, suit: Diamonds }])).toStrictEqual([]);
+  expect(differenceWith([{ rank: King, suit: Diamonds }], [])).toStrictEqual([{ rank: King, suit: Diamonds }]);
+  expect(differenceWith([{ rank: King, suit: Diamonds }], [{ rank: King, suit: Diamonds }])).toStrictEqual([]);
+  expect(differenceWith([{ rank: King, suit: Diamonds }, { rank: Queen, suit: Hearts }], [{ rank: King, suit: Diamonds }])).toStrictEqual([{ rank: Queen, suit: Hearts }]);
 });
