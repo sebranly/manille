@@ -85,6 +85,10 @@ export const hasCard = (cards: Card[], card: Card) => {
   return hasIt;
 };
 
+export const differenceWith = (cards1: Card[], cards2: Card[]) => {
+  return cards1.filter((card) => !hasCard(cards2, card));
+}
+
 export const orderCards = (cards: Card[]) => {
   const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
 

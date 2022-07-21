@@ -1,5 +1,4 @@
-import { differenceWith, isEqual } from 'lodash';
-import { areSameOrderedCards, isSameCard } from './cards';
+import { areSameOrderedCards, differenceWith } from './cards';
 import { Card } from './types';
 
 export const compareValues = (a: number, b: number) => {
@@ -66,7 +65,7 @@ export const adjustValues = (array: Card[][], length: number[]) => {
 
         for (let j = 0; j < array.length; j++) {
           if (i !== j) {
-            const newSubArray = differenceWith(array[j], values, isSameCard);
+            const newSubArray = differenceWith(array[j], values);
 
             if (!areSameOrderedCards(newSubArray, array[j])) {
               canLoopAgain = true;

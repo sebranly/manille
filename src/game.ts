@@ -111,7 +111,6 @@ export const getLeaderIdSuit = (playedCards: Card[], startingPlayerId: PlayerId,
   const highestPlayedCardTrump = getHighestPlayedCardSuit(playedCards, suit);
 
   const arrayId = getCardIndex(playedCards, highestPlayedCardTrump);
-
   const leaderId = getPlayerId(startingPlayerId, arrayId);
 
   return leaderId;
