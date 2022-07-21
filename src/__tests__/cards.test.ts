@@ -313,5 +313,13 @@ test('differenceWith', () => {
   expect(differenceWith([], [{ rank: King, suit: Diamonds }])).toStrictEqual([]);
   expect(differenceWith([{ rank: King, suit: Diamonds }], [])).toStrictEqual([{ rank: King, suit: Diamonds }]);
   expect(differenceWith([{ rank: King, suit: Diamonds }], [{ rank: King, suit: Diamonds }])).toStrictEqual([]);
-  expect(differenceWith([{ rank: King, suit: Diamonds }, { rank: Queen, suit: Hearts }], [{ rank: King, suit: Diamonds }])).toStrictEqual([{ rank: Queen, suit: Hearts }]);
+  expect(
+    differenceWith(
+      [
+        { rank: King, suit: Diamonds },
+        { rank: Queen, suit: Hearts }
+      ],
+      [{ rank: King, suit: Diamonds }]
+    )
+  ).toStrictEqual([{ rank: Queen, suit: Hearts }]);
 });
