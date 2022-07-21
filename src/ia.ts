@@ -1,5 +1,5 @@
 import { differenceWith } from 'lodash';
-import { excludeCards, excludeSuit, excludeSuitOver, generateDeck, isSameCard, } from './cards';
+import { excludeCards, excludeSuit, excludeSuitOver, generateDeck, isSameCard } from './cards';
 import { NUMBER_PLAYERS } from './constants';
 import { getHighestPlayedCardSuit, getLeaderIdSuit, getPlayerId, isTeammateLeading } from './game';
 import { compareCardRanks, getPreviousRank } from './scores';

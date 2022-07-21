@@ -289,19 +289,19 @@ test('isSameCard', () => {
     { rank: King, suit: Hearts },
     { rank: Queen, suit: Diamonds },
     { rank: King, suit: Diamonds }
-  ]
-  expect(isSameCard(cards[0], cards[1])).toBe(false)
-  expect(isSameCard(cards[0], cards[2])).toBe(false)
-  expect(isSameCard(cards[0], cards[3])).toBe(true)
+  ];
+  expect(isSameCard(cards[0], cards[1])).toBe(false);
+  expect(isSameCard(cards[0], cards[2])).toBe(false);
+  expect(isSameCard(cards[0], cards[3])).toBe(true);
 });
 
 test('areSameOrderedCards', () => {
   const card1 = { rank: King, suit: Diamonds };
   const card2 = { rank: Queen, suit: Hearts };
 
-  expect(areSameOrderedCards([card1], [card2])).toBe(false)
-  expect(areSameOrderedCards([card1], [card1, card2])).toBe(false)
-  expect(areSameOrderedCards([card2, card1], [card1, card2])).toBe(false)
-  expect(areSameOrderedCards([card1, card2], [card1, card2])).toBe(true)
-  expect(areSameOrderedCards([card1], [{ rank: King, suit: Diamonds }])).toBe(true)
+  expect(areSameOrderedCards([card1], [card2])).toBe(false);
+  expect(areSameOrderedCards([card1], [card1, card2])).toBe(false);
+  expect(areSameOrderedCards([card2, card1], [card1, card2])).toBe(false);
+  expect(areSameOrderedCards([card1, card2], [card1, card2])).toBe(true);
+  expect(areSameOrderedCards([card1], [{ rank: King, suit: Diamonds }])).toBe(true);
 });

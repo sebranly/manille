@@ -5,17 +5,19 @@ import { compareValues, flattenArray, getSureValues, adjustValues } from '../uti
 const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
 const { King, Queen, Jack, Nine } = CardRank;
 
-const card1 = { rank: King, suit: Diamonds };
-const card2 = { rank: King, suit: Clubs };
-const card3 = { rank: King, suit: Spades };
-const card4 = { rank: King, suit: Hearts };
-const card5 = { rank: Queen, suit: Diamonds };
-const card6 = { rank: Queen, suit: Clubs };
-const card7 = { rank: Queen, suit: Spades };
-const card8 = { rank: Queen, suit: Hearts };
-const card9 = { rank: Jack, suit: Diamonds };
-const card10 = { rank: Jack, suit: Clubs };
-const card11 = { rank: Jack, suit: Spades };
+const c1 = { rank: King, suit: Diamonds };
+const c2 = { rank: King, suit: Clubs };
+const c3 = { rank: King, suit: Spades };
+const c4 = { rank: King, suit: Hearts };
+
+const c5 = { rank: Queen, suit: Diamonds };
+const c6 = { rank: Queen, suit: Clubs };
+const c7 = { rank: Queen, suit: Spades };
+const c8 = { rank: Queen, suit: Hearts };
+
+const c9 = { rank: Jack, suit: Diamonds };
+const c10 = { rank: Jack, suit: Clubs };
+const c11 = { rank: Jack, suit: Spades };
 
 test('compareValues', () => {
   // Output is 1
@@ -52,31 +54,31 @@ test('flattenArray', () => {
 test('getSureValues', () => {
   expect(getSureValues([[]])).toStrictEqual([[]]);
   expect(getSureValues([[], []])).toStrictEqual([[], []]);
-  expect(getSureValues([[card1], [card2], [card3], [card4]])).toStrictEqual([[card1], [card2], [card3], [card4]]);
+  expect(getSureValues([[c1], [c2], [c3], [c4]])).toStrictEqual([[c1], [c2], [c3], [c4]]);
   expect(
     getSureValues([
-      [card1, card5],
-      [card2, card6],
-      [card3, card7],
-      [card4, card8, card9]
+      [c1, c5],
+      [c2, c6],
+      [c3, c7],
+      [c4, c8, c9]
     ])
   ).toStrictEqual([
-    [card1, card5],
-    [card2, card6],
-    [card3, card7],
-    [card4, card8, card9]
+    [c1, c5],
+    [c2, c6],
+    [c3, c7],
+    [c4, c8, c9]
   ]);
 
   expect(
     getSureValues([
-      [card1, card2, card3, card4],
-      [card1, card2, card3, card4],
-      [card3, card1, card2, card4],
-      [card4, card4, card4, card2, card1, card3]
+      [c1, c2, c3, c4],
+      [c1, c2, c3, c4],
+      [c3, c1, c2, c4],
+      [c4, c4, c4, c2, c1, c3]
     ])
   ).toStrictEqual([[], [], [], []]);
 
-  expect(getSureValues([[card1, card2, card3, card4], [card1], [card3], [card2]])).toStrictEqual([[card4], [], [], []]);
+  expect(getSureValues([[c1, c2, c3, c4], [c1], [c3], [c2]])).toStrictEqual([[c4], [], [], []]);
 });
 
 test('adjustValues', () => {
@@ -85,70 +87,51 @@ test('adjustValues', () => {
   expect(adjustValues([[]], [1])).toStrictEqual([[]]);
   expect(adjustValues([[], []], [1, 1])).toStrictEqual([[], []]);
 
-  result = adjustValues([[card1], [card2], [card3], [card4]], [1, 1, 1, 1]);
-  expect(result).toStrictEqual([[card1], [card2], [card3], [card4]]);
+  result = adjustValues([[c1], [c2], [c3], [c4]], [1, 1, 1, 1]);
+  expect(result).toStrictEqual([[c1], [c2], [c3], [c4]]);
 
   result = adjustValues(
     [
-      [card1, card5],
-      [card2, card6],
-      [card3, card7],
-      [card4, card8, card9]
+      [c1, c5],
+      [c2, c6],
+      [c3, c7],
+      [c4, c8, c9]
     ],
     [2, 2, 2, 3]
   );
 
   expect(result).toStrictEqual([
-    [card1, card5],
-    [card2, card6],
-    [card3, card7],
-    [card4, card8, card9]
+    [c1, c5],
+    [c2, c6],
+    [c3, c7],
+    [c4, c8, c9]
   ]);
 
-  result = adjustValues([[card1], [card2, card6], [card3, card7, card9], [card4, card8, card10, card11]], [1, 2, 3, 4]);
-  expect(result).toStrictEqual([[card1], [card2, card6], [card3, card7, card9], [card4, card8, card10, card11]]);
+  result = adjustValues([[c1], [c2, c6], [c3, c7, c9], [c4, c8, c10, c11]], [1, 2, 3, 4]);
+  expect(result).toStrictEqual([[c1], [c2, c6], [c3, c7, c9], [c4, c8, c10, c11]]);
 
-  result = adjustValues([[card1], [card1, card2, card6], [card1, card2, card6, card3, card7, card9], [card1, card2, card6, card3, card7, card9, card4, card8, card10, card11]], [1, 2, 3, 4]);
-
-  expect(result).toStrictEqual([[card1], [card2, card6], [card3, card7, card9], [card4, card8, card10, card11]]);
-
-  result = adjustValues([[card1, card2, card6, card3, card7, card9, card4, card8, card10, card11], [card1, card2, card6, card3, card7, card9], [card1, card2, card6], [card1]], [4, 3, 2, 1]);
-
-  expect(result).toStrictEqual([[card4, card8, card10, card11], [card3, card7, card9], [card2, card6], [card1]]);
-
-  result = adjustValues([[card1], [card1, card2, card6, card3, card7, card9, card4, card8, card10, card11], [card1, card2, card6], [card1, card2, card6, card3, card7, card9]], [1, 4, 2, 3]);
-
-  expect(result).toStrictEqual([[card1], [card4, card8, card10, card11], [card2, card6], [card3, card7, card9]]);
-
-  // TODO: legacy, remove by comparing with above
   result = adjustValues(
-    [
-      [{ rank: King, suit: Spades }],
-      [{ rank: Queen, suit: Spades }],
-      [
-        { rank: King, suit: Spades },
-        { rank: Queen, suit: Spades },
-        { rank: Jack, suit: Spades },
-        { rank: Nine, suit: Spades }
-      ],
-      [
-        { rank: King, suit: Hearts },
-        { rank: Queen, suit: Diamonds }
-      ]
-    ],
-    [1, 1, 2, 2]
+    [[c1], [c1, c2, c6], [c1, c2, c6, c3, c7, c9], [c1, c2, c6, c3, c7, c9, c4, c8, c10, c11]],
+    [1, 2, 3, 4]
   );
 
-  expect(result).toStrictEqual([
-    [{ rank: King, suit: Spades }],
-    [{ rank: Queen, suit: Spades }],
-    [
-      { rank: Jack, suit: Spades },
-      { rank: Nine, suit: Spades }
-    ],
-    [
-      { rank: King, suit: Hearts },
-      { rank: Queen, suit: Diamonds }
-    ]
-  ]);
+  expect(result).toStrictEqual([[c1], [c2, c6], [c3, c7, c9], [c4, c8, c10, c11]]);
+
+  result = adjustValues(
+    [[c1, c2, c6, c3, c7, c9, c4, c8, c10, c11], [c1, c2, c6, c3, c7, c9], [c1, c2, c6], [c1]],
+    [4, 3, 2, 1]
+  );
+
+  expect(result).toStrictEqual([[c4, c8, c10, c11], [c3, c7, c9], [c2, c6], [c1]]);
+
+  result = adjustValues(
+    [[c1], [c1, c2, c6, c3, c7, c9, c4, c8, c10, c11], [c1, c2, c6], [c1, c2, c6, c3, c7, c9]],
+    [1, 4, 2, 3]
+  );
+
+  expect(result).toStrictEqual([[c1], [c4, c8, c10, c11], [c2, c6], [c3, c7, c9]]);
+
+  result = adjustValues([[c1], [c2], [c1, c2, c3, c4], [c5, c6]], [1, 1, 2, 2]);
+
+  expect(result).toStrictEqual([[c1], [c2], [c3, c4], [c5, c6]]);
 });
