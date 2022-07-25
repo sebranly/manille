@@ -1,5 +1,5 @@
 import {
-  areSameOrderedCards,
+  areEqual,
   cutDeck,
   differenceWith,
   excludeCards,
@@ -291,12 +291,12 @@ test('isSameCard', () => {
   expect(isSameCard(cards[0], cards[3])).toBe(true);
 });
 
-test('areSameOrderedCards', () => {
-  expect(areSameOrderedCards([c1], [c2])).toBe(false);
-  expect(areSameOrderedCards([c1], [c1, c2])).toBe(false);
-  expect(areSameOrderedCards([c2, c1], [c1, c2])).toBe(false);
-  expect(areSameOrderedCards([c1, c2], [c1, c2])).toBe(true);
-  expect(areSameOrderedCards([c1], [{ rank: King, suit: Diamonds }])).toBe(true);
+test('areEqual', () => {
+  expect(areEqual([c1], [c2])).toBe(false);
+  expect(areEqual([c1], [c1, c2])).toBe(false);
+  expect(areEqual([c2, c1], [c1, c2])).toBe(true);
+  expect(areEqual([c1, c2], [c1, c2])).toBe(true);
+  expect(areEqual([c1], [{ rank: King, suit: Diamonds }])).toBe(true);
 });
 
 test('differenceWith', () => {

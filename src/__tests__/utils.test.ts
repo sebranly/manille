@@ -79,6 +79,7 @@ test('getSureValues', () => {
   ).toStrictEqual([[], [], [], []]);
 
   expect(getSureValues([[c1, c2, c3, c4], [c1], [c3], [c2]])).toStrictEqual([[c4], [], [], []]);
+  expect(getSureValues([[c1, c2, c3, c4], [c2, c1], [c3, c2], [c2, c1]])).toStrictEqual([[c4], [], [], []]);
 });
 
 test('adjustValues', () => {
@@ -119,6 +120,13 @@ test('adjustValues', () => {
 
   result = adjustValues(
     [[c1, c2, c6, c3, c7, c9, c4, c8, c10, c11], [c1, c2, c6, c3, c7, c9], [c1, c2, c6], [c1]],
+    [4, 3, 2, 1]
+  );
+
+  expect(result).toStrictEqual([[c4, c8, c10, c11], [c3, c7, c9], [c2, c6], [c1]]);
+
+  result = adjustValues(
+    [[c1, c2, c6, c3, c7, c9, c4, c8, c10, c11], [c2, c1, c3, c6, c7, c9], [c1, c2, c6], [c1]],
     [4, 3, 2, 1]
   );
 

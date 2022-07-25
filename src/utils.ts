@@ -1,4 +1,4 @@
-import { areSameOrderedCards, differenceWith } from './cards';
+import { areEqual, differenceWith } from './cards';
 import { Card } from './types';
 
 export const compareValues = (a: number, b: number) => {
@@ -58,7 +58,7 @@ export const adjustValues = (array: Card[][], length: number[]) => {
       if (values.length === expectedLength) {
         const newArray = sureValues[i];
 
-        if (!areSameOrderedCards(newArray, array[i])) {
+        if (!areEqual(newArray, array[i])) {
           canLoopAgain = true;
           array[i] = newArray;
         }
@@ -67,7 +67,7 @@ export const adjustValues = (array: Card[][], length: number[]) => {
           if (i !== j) {
             const newSubArray = differenceWith(array[j], values);
 
-            if (!areSameOrderedCards(newSubArray, array[j])) {
+            if (!areEqual(newSubArray, array[j])) {
               canLoopAgain = true;
               array[j] = newSubArray;
             }
