@@ -19,6 +19,12 @@ import { CardRank, CardSuit } from '../types';
 const { Ace, Eight, Jack, King, Nine, Queen, Seven, Ten } = CardRank;
 const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
 
+const deck = generateDeck();
+const suit1 = generateSuit(Clubs);
+const suit2 = generateSuit(Diamonds);
+const c1 = { rank: King, suit: Diamonds };
+const c2 = { rank: Queen, suit: Diamonds };
+
 test('generateSuit', () => {
   expect(generateSuit(Hearts)).toStrictEqual([
     { rank: Ten, suit: Hearts },
@@ -249,39 +255,27 @@ test('excludeCards', () => {
 });
 
 test('hasCard', () => {
-  const deck = generateDeck();
-  const suit1 = generateSuit(Clubs);
-  const suit2 = generateSuit(Diamonds);
-  const card = { rank: King, suit: Diamonds };
-  const otherCard = { rank: Queen, suit: Diamonds };
+  expect(hasCard([], c1)).toBe(false);
+  expect(hasCard(suit1, c1)).toBe(false);
+  expect(hasCard([c2], c1)).toBe(false);
 
-  expect(hasCard([], card)).toBe(false);
-  expect(hasCard(suit1, card)).toBe(false);
-  expect(hasCard([otherCard], card)).toBe(false);
-
-  expect(hasCard(deck, card)).toBe(true);
-  expect(hasCard(suit2, card)).toBe(true);
-  expect(hasCard([...suit1, ...suit2], card)).toBe(true);
-  expect(hasCard([card], card)).toBe(true);
-  expect(hasCard([card, otherCard], card)).toBe(true);
+  expect(hasCard(deck, c1)).toBe(true);
+  expect(hasCard(suit2, c1)).toBe(true);
+  expect(hasCard([...suit1, ...suit2], c1)).toBe(true);
+  expect(hasCard([c1], c1)).toBe(true);
+  expect(hasCard([c1, c2], c1)).toBe(true);
 });
 
 test('getCardIndex', () => {
-  const deck = generateDeck();
-  const suit1 = generateSuit(Clubs);
-  const suit2 = generateSuit(Diamonds);
-  const card = { rank: King, suit: Diamonds };
-  const otherCard = { rank: Queen, suit: Diamonds };
+  expect(getCardIndex([], c1)).toBe(-1);
+  expect(getCardIndex(suit1, c1)).toBe(-1);
+  expect(getCardIndex([c2], c1)).toBe(-1);
 
-  expect(getCardIndex([], card)).toBe(-1);
-  expect(getCardIndex(suit1, card)).toBe(-1);
-  expect(getCardIndex([otherCard], card)).toBe(-1);
-
-  expect(getCardIndex(deck, card)).toBe(10);
-  expect(getCardIndex(suit2, card)).toBe(2);
-  expect(getCardIndex([...suit1, ...suit2], card)).toBe(10);
-  expect(getCardIndex([card], card)).toBe(0);
-  expect(getCardIndex([card, otherCard], card)).toBe(0);
+  expect(getCardIndex(deck, c1)).toBe(10);
+  expect(getCardIndex(suit2, c1)).toBe(2);
+  expect(getCardIndex([...suit1, ...suit2], c1)).toBe(10);
+  expect(getCardIndex([c1], c1)).toBe(0);
+  expect(getCardIndex([c1, c2], c1)).toBe(0);
 });
 
 test('isSameCard', () => {
@@ -298,14 +292,11 @@ test('isSameCard', () => {
 });
 
 test('areSameOrderedCards', () => {
-  const card1 = { rank: King, suit: Diamonds };
-  const card2 = { rank: Queen, suit: Hearts };
-
-  expect(areSameOrderedCards([card1], [card2])).toBe(false);
-  expect(areSameOrderedCards([card1], [card1, card2])).toBe(false);
-  expect(areSameOrderedCards([card2, card1], [card1, card2])).toBe(false);
-  expect(areSameOrderedCards([card1, card2], [card1, card2])).toBe(true);
-  expect(areSameOrderedCards([card1], [{ rank: King, suit: Diamonds }])).toBe(true);
+  expect(areSameOrderedCards([c1], [c2])).toBe(false);
+  expect(areSameOrderedCards([c1], [c1, c2])).toBe(false);
+  expect(areSameOrderedCards([c2, c1], [c1, c2])).toBe(false);
+  expect(areSameOrderedCards([c1, c2], [c1, c2])).toBe(true);
+  expect(areSameOrderedCards([c1], [{ rank: King, suit: Diamonds }])).toBe(true);
 });
 
 test('differenceWith', () => {
