@@ -2,16 +2,15 @@ import {
   areEqual,
   cutDeck,
   differenceWith,
-  excludeCards,
   excludeSuit,
   excludeSuitOver,
   filterBySuit,
   generateDeck,
   generateSuit,
-  getCardIndex,
+  getCardId,
   hasCard,
-  isSameCard,
-  orderCards,
+  isEqual,
+  sortCards,
   sortSuit
 } from '../cards';
 import { CardRank, CardSuit } from '../types';
@@ -63,16 +62,16 @@ test('cutDeck', () => {
   expect(deck6).toHaveLength(32);
 });
 
-test('orderCards', () => {
+test('sortCards', () => {
   const cardsSuit = generateSuit(Spades);
   const copyCardsSuit = [...cardsSuit];
 
-  expect(orderCards(cardsSuit)).toStrictEqual(copyCardsSuit);
+  expect(sortCards(cardsSuit)).toStrictEqual(copyCardsSuit);
 
   const cardsDeck = generateDeck();
   const copyCardsDeck = [...cardsDeck];
 
-  expect(orderCards(cardsDeck)).toStrictEqual(copyCardsDeck);
+  expect(sortCards(cardsDeck)).toStrictEqual(copyCardsDeck);
 
   // TODO: should I create a mock?
   const cards = [
@@ -86,7 +85,7 @@ test('orderCards', () => {
     { rank: King, suit: Clubs }
   ];
 
-  expect(orderCards(cards)).toStrictEqual([
+  expect(sortCards(cards)).toStrictEqual([
     { rank: King, suit: Clubs },
     { rank: Nine, suit: Clubs },
     { rank: Eight, suit: Diamonds },
@@ -227,33 +226,6 @@ test('sortSuit', () => {
   ]);
 });
 
-test('excludeCards', () => {
-  const deck = generateDeck();
-
-  expect(excludeCards([], [])).toStrictEqual([]);
-  expect(excludeCards([], deck)).toStrictEqual([]);
-  expect(excludeCards(deck, [])).toStrictEqual(generateDeck());
-  expect(excludeCards(deck, deck)).toStrictEqual([]);
-
-  const result = excludeCards(
-    [
-      { rank: King, suit: Spades },
-      { rank: King, suit: Hearts },
-      { rank: Queen, suit: Spades },
-      { rank: Queen, suit: Hearts }
-    ],
-    [
-      { rank: King, suit: Spades },
-      { rank: Queen, suit: Hearts }
-    ]
-  );
-
-  expect(result).toStrictEqual([
-    { rank: King, suit: Hearts },
-    { rank: Queen, suit: Spades }
-  ]);
-});
-
 test('hasCard', () => {
   expect(hasCard([], c1)).toBe(false);
   expect(hasCard(suit1, c1)).toBe(false);
@@ -266,19 +238,19 @@ test('hasCard', () => {
   expect(hasCard([c1, c2], c1)).toBe(true);
 });
 
-test('getCardIndex', () => {
-  expect(getCardIndex([], c1)).toBe(-1);
-  expect(getCardIndex(suit1, c1)).toBe(-1);
-  expect(getCardIndex([c2], c1)).toBe(-1);
+test('getCardId', () => {
+  expect(getCardId([], c1)).toBe(-1);
+  expect(getCardId(suit1, c1)).toBe(-1);
+  expect(getCardId([c2], c1)).toBe(-1);
 
-  expect(getCardIndex(deck, c1)).toBe(10);
-  expect(getCardIndex(suit2, c1)).toBe(2);
-  expect(getCardIndex([...suit1, ...suit2], c1)).toBe(10);
-  expect(getCardIndex([c1], c1)).toBe(0);
-  expect(getCardIndex([c1, c2], c1)).toBe(0);
+  expect(getCardId(deck, c1)).toBe(10);
+  expect(getCardId(suit2, c1)).toBe(2);
+  expect(getCardId([...suit1, ...suit2], c1)).toBe(10);
+  expect(getCardId([c1], c1)).toBe(0);
+  expect(getCardId([c1, c2], c1)).toBe(0);
 });
 
-test('isSameCard', () => {
+test('isEqual', () => {
   const cards = [
     { rank: King, suit: Diamonds },
     { rank: King, suit: Hearts },
@@ -286,9 +258,9 @@ test('isSameCard', () => {
     { rank: King, suit: Diamonds }
   ];
 
-  expect(isSameCard(cards[0], cards[1])).toBe(false);
-  expect(isSameCard(cards[0], cards[2])).toBe(false);
-  expect(isSameCard(cards[0], cards[3])).toBe(true);
+  expect(isEqual(cards[0], cards[1])).toBe(false);
+  expect(isEqual(cards[0], cards[2])).toBe(false);
+  expect(isEqual(cards[0], cards[3])).toBe(true);
 });
 
 test('areEqual', () => {
@@ -313,4 +285,26 @@ test('differenceWith', () => {
       [{ rank: King, suit: Diamonds }]
     )
   ).toStrictEqual([{ rank: Queen, suit: Hearts }]);
+
+  expect(differenceWith([], deck)).toStrictEqual([]);
+  expect(differenceWith(deck, [])).toStrictEqual(generateDeck());
+  expect(differenceWith(deck, deck)).toStrictEqual([]);
+
+  const result = differenceWith(
+    [
+      { rank: King, suit: Spades },
+      { rank: King, suit: Hearts },
+      { rank: Queen, suit: Spades },
+      { rank: Queen, suit: Hearts }
+    ],
+    [
+      { rank: King, suit: Spades },
+      { rank: Queen, suit: Hearts }
+    ]
+  );
+
+  expect(result).toStrictEqual([
+    { rank: King, suit: Hearts },
+    { rank: Queen, suit: Spades }
+  ]);
 });

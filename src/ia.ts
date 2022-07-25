@@ -1,6 +1,6 @@
-import { differenceWith, excludeCards, excludeSuit, excludeSuitOver, generateDeck } from './cards';
+import { differenceWith, excludeSuit, excludeSuitOver, generateDeck } from './cards';
 import { NUMBER_PLAYERS } from './constants';
-import { getHighestPlayedCardSuit, getLeaderIdSuit, getPlayerId, isTeammateLeading } from './game';
+import { getHighestPlayedCardSuit, getLeaderIdSuit, getPlayerId, isPartnerLeadingSuit } from './game';
 import { compareCardRanks, getPreviousRank } from './scores';
 import { Card, CardRank, CardSuit, InfoSuitHighest, PlayerId } from './types';
 import { adjustValues } from './utils';
@@ -16,24 +16,24 @@ export const updateInfoSuitHighest = (
   const playedCardsLength = playedCards.length;
   if (playedCardsLength <= 1 || playedCardsLength > NUMBER_PLAYERS) return infoSuitHighest;
 
-  const requestedSuit = playedCards[0].suit;
+  const ledSuit = playedCards[0].suit;
 
   for (let i = 1; i < playedCardsLength; i++) {
     const subsetPlayedCars = playedCards.slice(0, i + 1);
 
     const playerId = getPlayerId(startingPlayerId, i);
     const playerSuit = playedCards[i].suit;
-    const hasProvided = playerSuit === requestedSuit;
-    const isTrumpSuit = trumpSuit === false || requestedSuit === trumpSuit;
+    const hasProvided = playerSuit === ledSuit;
+    const isTrumpSuit = trumpSuit === false || ledSuit === trumpSuit;
 
     if (!hasProvided) {
-      info[playerId][requestedSuit] = undefined;
+      info[playerId][ledSuit] = undefined;
 
       if (trumpSuit) {
         const highestPlayedCardTrumpSuit = getHighestPlayedCardSuit(subsetPlayedCars, trumpSuit);
 
         if (!!highestPlayedCardTrumpSuit) {
-          const isLeading = isTeammateLeading(subsetPlayedCars, playerId, startingPlayerId, trumpSuit);
+          const isLeading = isPartnerLeadingSuit(subsetPlayedCars, playerId, startingPlayerId, trumpSuit);
           const { rank: highestRank } = highestPlayedCardTrumpSuit;
 
           if (!isLeading) {
@@ -44,13 +44,13 @@ export const updateInfoSuitHighest = (
         }
       }
     } else if (isTrumpSuit) {
-      const highestPlayedCard = getHighestPlayedCardSuit(subsetPlayedCars, requestedSuit);
-      const leaderIdSuit = getLeaderIdSuit(subsetPlayedCars, startingPlayerId, requestedSuit);
+      const highestPlayedCard = getHighestPlayedCardSuit(subsetPlayedCars, ledSuit);
+      const leaderIdSuit = getLeaderIdSuit(subsetPlayedCars, startingPlayerId, ledSuit);
       const playerLeads = leaderIdSuit === playerId;
       const { rank: highestRank } = highestPlayedCard;
 
       if (!playerLeads) {
-        info[playerId][requestedSuit] = getNewSuitHighest(info[playerId][requestedSuit], highestRank);
+        info[playerId][ledSuit] = getNewSuitHighest(info[playerId][ledSuit], highestRank);
       }
     }
   }
@@ -112,7 +112,7 @@ export const updateInfoCards = (
     const isBot = playerId === botId;
 
     if (!isBot) {
-      tempInfoCards[playerId] = excludeCards(tempInfoCards[playerId], allPlayedCards);
+      tempInfoCards[playerId] = differenceWith(tempInfoCards[playerId], allPlayedCards);
     }
   }
 
