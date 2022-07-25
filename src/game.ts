@@ -1,9 +1,8 @@
 import { compareCardRanks } from './scores';
 import { Card, CardSuit, PlayerId } from './types';
-import { findIndex } from 'lodash';
 import { NUMBER_PLAYERS } from './constants';
 import { isSameTeam } from '.';
-import { filterBySuit, sortSuit } from './cards';
+import { filterBySuit, getCardIndex, sortSuit } from './cards';
 
 export const getPlayableCards = (
   cards: Card[],
@@ -111,11 +110,7 @@ export const getPlayableCardsNonTrumpSuit = (
 export const getLeaderIdSuit = (playedCards: Card[], startingPlayerId: PlayerId, suit: CardSuit | false) => {
   const highestPlayedCardTrump = getHighestPlayedCardSuit(playedCards, suit);
 
-  const arrayId = findIndex(
-    playedCards,
-    (card: Card) => card.rank === highestPlayedCardTrump.rank && card.suit === highestPlayedCardTrump.suit
-  );
-
+  const arrayId = getCardIndex(playedCards, highestPlayedCardTrump);
   const leaderId = getPlayerId(startingPlayerId, arrayId);
 
   return leaderId;
