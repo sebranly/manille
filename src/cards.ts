@@ -1,27 +1,17 @@
-import { Card, CardRank, CardSuit } from './types';
+import { Card, CardPoints, CardRank, CardSuit } from './types';
 import { CARDS_PER_DECK } from './constants';
 import { compareCardRanks } from './scores';
 import { flattenArray } from './utils';
+import { ORDERED_RANKS } from './constants';
 
 /**
  * @name generateSuit
  * @description Generates a full suit by following Manille's values (DESC sort)
  */
 export const generateSuit = (suit: CardSuit) => {
-  const { Ace, Eight, Jack, King, Nine, Queen, Seven, Ten } = CardRank;
+  const cards: Card[] = ORDERED_RANKS.map((cardPoints: CardPoints) => ({ rank: cardPoints.rank, suit }));
 
-  const cards: Card[] = [
-    { rank: Ten, suit },
-    { rank: Ace, suit },
-    { rank: King, suit },
-    { rank: Queen, suit },
-    { rank: Jack, suit },
-    { rank: Nine, suit },
-    { rank: Eight, suit },
-    { rank: Seven, suit }
-  ];
-
-  return cards;
+  return cards.reverse();
 };
 
 /**
