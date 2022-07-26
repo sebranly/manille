@@ -18,6 +18,11 @@ export enum CardRank {
   Ten = 'ten'
 }
 
+export interface CardPoints {
+  rank: CardRank;
+  points: number;
+}
+
 export interface Card {
   rank: CardRank;
   suit: CardSuit;
@@ -32,7 +37,7 @@ export interface Player {
 }
 
 export interface Turn {
-  tbd: any;
+  todo: any;
 }
 
 export interface Round {

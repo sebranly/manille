@@ -19,7 +19,7 @@ export const dealCards = (cards: Card[], players: Player[]) => {
   for (const length of dealtCardsLength) {
     for (let i = 0; i < NUMBER_PLAYERS; i++) {
       const pickedCards = cards.splice(0, length);
-      if (players[i].cards) players[i].cards.push(...pickedCards)
+      if (players[i].cards) players[i].cards.push(...pickedCards);
       else players[i].cards = pickedCards;
     }
   }

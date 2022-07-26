@@ -177,19 +177,19 @@ export const isPartnerLeadingSuit = (
 };
 
 /**
- * @name getWinnerIdFold
- * @description Returns the id of the winner of a fold (each player should have given one card, otherwise it returns -1)
+ * @name getWinnerIdTrick
+ * @description Returns the id of the winner of a trick (each player should have given one card, otherwise it returns -1)
  */
-export const getWinnerIdFold = (playedCards: Card[], startingPlayerId: PlayerId, trumpSuit: CardSuit | false) => {
+export const getWinnerIdTrick = (playedCards: Card[], startingPlayerId: PlayerId, trumpSuit: CardSuit | false) => {
   if (playedCards.length !== NUMBER_PLAYERS) return -1;
 
   const ledSuit = playedCards[0].suit;
   const isTrumpSuit = trumpSuit === false || ledSuit === trumpSuit;
   const playedCardsTrumpSuit = filterBySuit(playedCards, trumpSuit);
 
-  // If the led suit is the trump suit, the leader of this suit is the leader of the fold
-  // If no cards from the trump suit has been played, the leader of the led suit is the leader of the fold
-  // Otherwise, the leader of the trump suit is the leader of the fold
+  // If the led suit is the trump suit, the leader of this suit is the leader of the trick
+  // If no cards from the trump suit has been played, the leader of the led suit is the leader of the trick
+  // Otherwise, the leader of the trump suit is the leader of the trick
   // @todo tests by removing one or the other
   const importantSuit = isTrumpSuit || playedCardsTrumpSuit.length === 0 ? ledSuit : trumpSuit;
   const leaderId = getLeaderIdSuit(playedCards, startingPlayerId, importantSuit);

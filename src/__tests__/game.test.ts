@@ -1,24 +1,24 @@
-import { getWinnerIdFold, getPlayableCards, getPlayableCardsTrumpSuit, getPlayerId } from '../game';
+import { getWinnerIdTrick, getPlayableCards, getPlayableCardsTrumpSuit, getPlayerId } from '../game';
 import { CardRank, CardSuit } from '../types';
 
 const { Ace, Eight, Jack, King, Nine, Queen, Seven, Ten } = CardRank;
 const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
 
-test('getWinnerIdFold', () => {
+test('getWinnerIdTrick', () => {
   // It returns -1 if no 4 played cards
-  const id1 = getWinnerIdFold([], 0, false);
+  const id1 = getWinnerIdTrick([], 0, false);
   expect(id1).toBe(-1);
 
-  const id2 = getWinnerIdFold([], 0, Spades);
+  const id2 = getWinnerIdTrick([], 0, Spades);
   expect(id2).toBe(-1);
 
-  const id3 = getWinnerIdFold([{ rank: Ten, suit: Spades }], 0, false);
+  const id3 = getWinnerIdTrick([{ rank: Ten, suit: Spades }], 0, false);
   expect(id3).toBe(-1);
 
-  const id4 = getWinnerIdFold([{ rank: Ten, suit: Spades }], 0, Spades);
+  const id4 = getWinnerIdTrick([{ rank: Ten, suit: Spades }], 0, Spades);
   expect(id4).toBe(-1);
 
-  const id5 = getWinnerIdFold(
+  const id5 = getWinnerIdTrick(
     [
       { rank: Ten, suit: Spades },
       { rank: Ace, suit: Spades }
@@ -29,7 +29,7 @@ test('getWinnerIdFold', () => {
 
   expect(id5).toBe(-1);
 
-  const id6 = getWinnerIdFold(
+  const id6 = getWinnerIdTrick(
     [
       { rank: Ten, suit: Spades },
       { rank: Ace, suit: Spades }
@@ -40,7 +40,7 @@ test('getWinnerIdFold', () => {
 
   expect(id6).toBe(-1);
 
-  const id7 = getWinnerIdFold(
+  const id7 = getWinnerIdTrick(
     [
       { rank: Ten, suit: Spades },
       { rank: Ace, suit: Spades },
@@ -52,7 +52,7 @@ test('getWinnerIdFold', () => {
 
   expect(id7).toBe(-1);
 
-  const id8 = getWinnerIdFold(
+  const id8 = getWinnerIdTrick(
     [
       { rank: Ten, suit: Spades },
       { rank: Ace, suit: Spades },
@@ -65,7 +65,7 @@ test('getWinnerIdFold', () => {
   expect(id8).toBe(-1);
 
   // Is "en voiture"
-  const id9 = getWinnerIdFold(
+  const id9 = getWinnerIdTrick(
     [
       { rank: Ace, suit: Spades },
       { rank: Ten, suit: Spades },
@@ -78,7 +78,7 @@ test('getWinnerIdFold', () => {
 
   expect(id9).toBe(1);
 
-  const id10 = getWinnerIdFold(
+  const id10 = getWinnerIdTrick(
     [
       { rank: Ace, suit: Spades },
       { rank: Ten, suit: Spades },
@@ -92,7 +92,7 @@ test('getWinnerIdFold', () => {
   expect(id10).toBe(1);
 
   // Is "atout"
-  const id11 = getWinnerIdFold(
+  const id11 = getWinnerIdTrick(
     [
       { rank: Ace, suit: Spades },
       { rank: Ten, suit: Spades },
@@ -105,7 +105,7 @@ test('getWinnerIdFold', () => {
 
   expect(id11).toBe(1);
 
-  const id12 = getWinnerIdFold(
+  const id12 = getWinnerIdTrick(
     [
       { rank: Ace, suit: Spades },
       { rank: Ten, suit: Spades },
@@ -120,7 +120,7 @@ test('getWinnerIdFold', () => {
 
   // Is not "atout" and there is no "atout" being played
 
-  const id13 = getWinnerIdFold(
+  const id13 = getWinnerIdTrick(
     [
       { rank: Ace, suit: Spades },
       { rank: Ten, suit: Spades },
@@ -133,7 +133,7 @@ test('getWinnerIdFold', () => {
 
   expect(id13).toBe(1);
 
-  const id14 = getWinnerIdFold(
+  const id14 = getWinnerIdTrick(
     [
       { rank: Ace, suit: Spades },
       { rank: Ten, suit: Spades },
@@ -148,7 +148,7 @@ test('getWinnerIdFold', () => {
 
   // It not "atout" but there are "atouts"
 
-  const id15 = getWinnerIdFold(
+  const id15 = getWinnerIdTrick(
     [
       { rank: Ace, suit: Spades },
       { rank: King, suit: Spades },
@@ -161,7 +161,7 @@ test('getWinnerIdFold', () => {
 
   expect(id15).toBe(3);
 
-  const id16 = getWinnerIdFold(
+  const id16 = getWinnerIdTrick(
     [
       { rank: Ten, suit: Spades },
       { rank: Seven, suit: Clubs },
@@ -174,7 +174,7 @@ test('getWinnerIdFold', () => {
 
   expect(id16).toBe(2);
 
-  const id17 = getWinnerIdFold(
+  const id17 = getWinnerIdTrick(
     [
       { rank: Ten, suit: Spades },
       { rank: Seven, suit: Clubs },
@@ -189,7 +189,7 @@ test('getWinnerIdFold', () => {
 
   // It works even when startingPlayerId is not 0
 
-  const id18 = getWinnerIdFold(
+  const id18 = getWinnerIdTrick(
     [
       { rank: Ten, suit: Spades },
       { rank: Seven, suit: Clubs },
@@ -202,7 +202,7 @@ test('getWinnerIdFold', () => {
 
   expect(id18).toBe(0);
 
-  const id19 = getWinnerIdFold(
+  const id19 = getWinnerIdTrick(
     [
       { rank: Ten, suit: Spades },
       { rank: Seven, suit: Clubs },

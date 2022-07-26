@@ -38,7 +38,7 @@ export const generateDeck = () => {
 
 /**
  * @name cutDeck
- * @description Cuts a deck into two parts then join them 
+ * @description Cuts a deck into two parts then join them
  */
 export const cutDeck = (cards: Card[], cardsBefore: number) => {
   const isInvalidCardsBefore = cardsBefore <= 0 || cardsBefore >= CARDS_PER_DECK;

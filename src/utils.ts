@@ -1,6 +1,10 @@
 import { areEqual, differenceWith } from './cards';
 import { Card } from './types';
 
+/**
+ * @name compareValues
+ * @description Returns whether 1, 0 or -1 based on the comparison of two values
+ */
 export const compareValues = (a: number, b: number) => {
   if (a > b) return 1;
   if (a === b) return 0;
@@ -8,6 +12,10 @@ export const compareValues = (a: number, b: number) => {
   return -1;
 };
 
+/**
+ * @name flattenArray
+ * @description Returns a flattened version of the array (only one level)
+ */
 export const flattenArray = (array: Card[][]) => {
   return array.reduce((a, b) => a.concat(b));
 };
