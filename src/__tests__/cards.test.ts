@@ -44,11 +44,11 @@ test('generateDeck', () => {
 });
 
 test('cutDeck', () => {
-  const deck1 = cutDeck(generateDeck(), -1);
-  const deck2 = cutDeck(generateDeck(), 0);
-  const deck3 = cutDeck(generateDeck(), 16);
-  const deck4 = cutDeck(generateDeck(), 32);
-  const deck5 = cutDeck(generateDeck(), 33);
+  const deck1 = cutDeck(deck, -1);
+  const deck2 = cutDeck(deck, 0);
+  const deck3 = cutDeck(deck, 16);
+  const deck4 = cutDeck(deck, 32);
+  const deck5 = cutDeck(deck, 33);
 
   expect(deck1).toHaveLength(32);
   expect(deck1).toStrictEqual(deck2);
@@ -56,7 +56,7 @@ test('cutDeck', () => {
   expect(deck3).toStrictEqual(deck4);
   expect(deck4).toStrictEqual(deck5);
 
-  const deck6 = cutDeck(generateDeck(), 10);
+  const deck6 = cutDeck(deck, 10);
 
   expect(deck6).toMatchSnapshot();
   expect(deck6).toHaveLength(32);
@@ -287,7 +287,7 @@ test('differenceWith', () => {
   ).toStrictEqual([{ rank: Queen, suit: Hearts }]);
 
   expect(differenceWith([], deck)).toStrictEqual([]);
-  expect(differenceWith(deck, [])).toStrictEqual(generateDeck());
+  expect(differenceWith(deck, [])).toStrictEqual(deck);
   expect(differenceWith(deck, deck)).toStrictEqual([]);
 
   const result = differenceWith(

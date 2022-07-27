@@ -20,6 +20,7 @@ export const flattenArray = (array: Card[][]) => {
   return array.reduce((a, b) => a.concat(b));
 };
 
+// TODO: add comments below
 export const getSureValues = (array: Card[][]) => {
   const sureValues: Card[][] = [];
 

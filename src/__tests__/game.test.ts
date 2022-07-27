@@ -380,7 +380,7 @@ test('getPlayableCards', () => {
   expect(c18).toStrictEqual(copyOneCard);
 
   // Trump suit
-  // Player 3 starts and requests trump suit, player 0 plays next and has no suit
+  // Player 3 starts and leads with trump suit, player 0 plays next and has no suit
   const c19 = getPlayableCards(
     [
       { rank: King, suit: Clubs },
@@ -409,7 +409,7 @@ test('getPlayableCards', () => {
     { rank: Ace, suit: Hearts }
   ]);
 
-  // Player 1 starts and requests trump suit, player 0 plays last and has no suit
+  // Player 1 starts and leads with trump suit, player 0 plays last and has no suit
   const c20 = getPlayableCards(
     [
       { rank: King, suit: Clubs },
@@ -442,7 +442,7 @@ test('getPlayableCards', () => {
     { rank: Ace, suit: Hearts }
   ]);
 
-  // Player 3 starts and requests trump suit, player 0 plays next and has only one card from that suit
+  // Player 3 starts and leads with trump suit, player 0 plays next and has only one card from that suit
   const c21 = getPlayableCards(
     [
       { rank: King, suit: Clubs },
@@ -462,7 +462,7 @@ test('getPlayableCards', () => {
 
   expect(c21).toStrictEqual([{ rank: Jack, suit: Spades }]);
 
-  // Player 1 starts and requests trump suit, player 0 plays last and has only one card from that suit
+  // Player 1 starts and leads with trump suit, player 0 plays last and has only one card from that suit
   const c22 = getPlayableCards(
     [
       { rank: King, suit: Clubs },
@@ -657,7 +657,7 @@ test('getPlayableCards', () => {
 
   // No-trump suit ("en voiture")
 
-  // Player 3 starts and requests trump suit, player 0 plays next and has no suit
+  // Player 3 starts and leads with trump suit, player 0 plays next and has no suit
   const c29 = getPlayableCards(
     [
       { rank: King, suit: Clubs },
@@ -686,7 +686,7 @@ test('getPlayableCards', () => {
     { rank: Ace, suit: Hearts }
   ]);
 
-  // Player 1 starts and requests any suit ("en voiture"), player 0 plays last and has no suit
+  // Player 1 starts and leads with any suit ("en voiture"), player 0 plays last and has no suit
   const c30 = getPlayableCards(
     [
       { rank: King, suit: Clubs },
@@ -719,7 +719,7 @@ test('getPlayableCards', () => {
     { rank: Ace, suit: Hearts }
   ]);
 
-  // Player 3 starts and requests any suit ("en voiture"), player 0 plays next and has only one card from that suit
+  // Player 3 starts and leads with any suit ("en voiture"), player 0 plays next and has only one card from that suit
   const c31 = getPlayableCards(
     [
       { rank: King, suit: Clubs },
@@ -739,7 +739,7 @@ test('getPlayableCards', () => {
 
   expect(c31).toStrictEqual([{ rank: Jack, suit: Spades }]);
 
-  // Player 1 starts and requests any suit ("en voiture"), player 0 plays last and has only one card from that suit
+  // Player 1 starts and leads with any suit ("en voiture"), player 0 plays last and has only one card from that suit
   const c32 = getPlayableCards(
     [
       { rank: King, suit: Clubs },

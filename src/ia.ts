@@ -1,9 +1,11 @@
 import { differenceWith, excludeSuit, excludeSuitOver, generateDeck } from './cards';
 import { NUMBER_PLAYERS } from './constants';
-import { getHighestPlayedCardSuit, getLeaderIdSuit, getPlayerId, isPartnerLeadingSuit } from './game';
+import { getHighestCardSuit, getLeaderIdSuit, getPlayerId, isPartnerLeadingSuit } from './game';
 import { compareCardRanks, getPreviousRank } from './scores';
 import { Card, CardRank, CardSuit, InfoSuitHighest, PlayerId } from './types';
 import { adjustValues } from './utils';
+
+// TODO: add comments on functions
 
 export const updateInfoSuitHighest = (
   infoSuitHighest: InfoSuitHighest[],
@@ -30,7 +32,7 @@ export const updateInfoSuitHighest = (
       info[playerId][ledSuit] = undefined;
 
       if (trumpSuit) {
-        const highestPlayedCardTrumpSuit = getHighestPlayedCardSuit(subsetPlayedCars, trumpSuit);
+        const highestPlayedCardTrumpSuit = getHighestCardSuit(subsetPlayedCars, trumpSuit);
 
         if (!!highestPlayedCardTrumpSuit) {
           const isLeading = isPartnerLeadingSuit(subsetPlayedCars, playerId, startingPlayerId, trumpSuit);
@@ -44,7 +46,7 @@ export const updateInfoSuitHighest = (
         }
       }
     } else if (isTrumpSuit) {
-      const highestPlayedCard = getHighestPlayedCardSuit(subsetPlayedCars, ledSuit);
+      const highestPlayedCard = getHighestCardSuit(subsetPlayedCars, ledSuit);
       const leaderIdSuit = getLeaderIdSuit(subsetPlayedCars, startingPlayerId, ledSuit);
       const playerLeads = leaderIdSuit === playerId;
       const { rank: highestRank } = highestPlayedCard;

@@ -42,11 +42,13 @@ export const getScore = (cards: Card[], multiplier: 1 | 2 | 4 | 8 = 1) => {
  * @description Returns the previous rank for a given rank
  */
 export const getPreviousRank = (rank: CardRank) => {
-  const indexRank = ORDERED_RANKS.findIndex((c) => c.rank === rank);
+  const idRank = ORDERED_RANKS.findIndex((c) => c.rank === rank);
 
-  if (indexRank === -1 || indexRank === 0) return undefined;
+  if ([-1, 0].includes(idRank)) return undefined;
 
-  return ORDERED_RANKS[indexRank - 1].rank;
+  const { rank: previousRank } = ORDERED_RANKS[idRank - 1];
+
+  return previousRank;
 };
 
 /**
@@ -54,10 +56,10 @@ export const getPreviousRank = (rank: CardRank) => {
  * @description Returns whether 1, 0 or -1 based on the comparison of two cards
  */
 export const compareCardRanks = (rank1: CardRank, rank2: CardRank) => {
-  const indexCardPoints1 = ORDERED_RANKS.findIndex((c) => c.rank === rank1);
-  const indexCardPoints2 = ORDERED_RANKS.findIndex((c) => c.rank === rank2);
+  const idCardPoints1 = ORDERED_RANKS.findIndex((c) => c.rank === rank1);
+  const idCardPoints2 = ORDERED_RANKS.findIndex((c) => c.rank === rank2);
 
-  if (indexCardPoints1 === -1 || indexCardPoints2 === -1) return 0;
+  if ([idCardPoints1, idCardPoints2].includes(-1)) return 0;
 
-  return compareValues(indexCardPoints1, indexCardPoints2);
+  return compareValues(idCardPoints1, idCardPoints2);
 };

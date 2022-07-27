@@ -16,7 +16,7 @@ export const generateSuit = (suit: CardSuit) => {
 
 /**
  * @name generateDeck
- * @description Generates a full deck with an arbitrary order (same as `sortCards`)
+ * @description Generates a full deck with an arbitrary order regarding suits (same as `sortCards`)
  */
 export const generateDeck = () => {
   const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
@@ -122,7 +122,7 @@ export const differenceWith = (cards1: Card[], cards2: Card[]) => {
 
 /**
  * @name sortCards
- * @description Sorts all the cards with an arbitrary order (same as `generateDeck`)
+ * @description Sorts all the cards with an arbitrary order regarding suits (same as `generateDeck`)
  */
 export const sortCards = (cards: Card[]) => {
   const { Clubs, Diamonds, Hearts, Spades } = CardSuit;

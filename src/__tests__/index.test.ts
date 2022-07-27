@@ -25,6 +25,7 @@ test('arePartners', () => {
 });
 
 test('dealCards', () => {
+  const deck = generateDeck();
   const players: Player[] = [
     { id: 0, cards: [], name: 'a' },
     { id: 1, cards: [], name: 'b' },
@@ -32,7 +33,7 @@ test('dealCards', () => {
     { id: 3, cards: [], name: 'd' }
   ];
 
-  dealCards(generateDeck(), players);
+  dealCards(deck, players);
 
   expect(players[0].cards).toHaveLength(8);
   expect(players[1].cards).toHaveLength(8);
