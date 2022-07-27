@@ -1,42 +1,35 @@
 import { Card, CardRank } from './types';
-import { SCORE_THRESHOLD } from './constants';
+import { ORDERED_RANKS, SCORE_THRESHOLD } from './constants';
 import { compareValues } from './utils';
 
-export const getCardPoints = (rank: CardRank) => {
-  const { Ace, Eight, Jack, King, Nine, Queen, Seven, Ten } = CardRank;
+/**
+ * @name getRankPoints
+ * @description Returns the points for a given rank of a card
+ */
+export const getRankPoints = (rank: CardRank) => {
+  const cardPoints = ORDERED_RANKS.find((c) => c.rank === rank);
 
-  switch (rank) {
-    case Ten:
-      return 5;
+  if (!cardPoints) return 0;
 
-    case Ace:
-      return 4;
-
-    case King:
-      return 3;
-
-    case Queen:
-      return 2;
-
-    case Jack:
-      return 1;
-
-    case Seven:
-    case Eight:
-    case Nine:
-    default:
-      return 0;
-  }
+  return cardPoints.points;
 };
 
+/**
+ * @name getCardsPoints
+ * @description Returns the points for a set of cards
+ */
 export const getCardsPoints = (cards: Card[]) => {
-  const points = cards.map((card: Card) => getCardPoints(card.rank)) as number[];
+  const points = cards.map((card: Card) => getRankPoints(card.rank)) as number[];
   const reducer = (accumulator: number, currentValue: number) => accumulator + currentValue;
 
   return points.reduce(reducer);
 };
 
-export const getScore = (cards: Card[], multiplier: 1 | 2 | 4 = 1) => {
+/**
+ * @name getScore
+ * @description Returns the score for a hand (round of tricks)
+ */
+export const getScore = (cards: Card[], multiplier: 1 | 2 | 4 | 8 = 1) => {
   const points = getCardsPoints(cards);
 
   if (points <= SCORE_THRESHOLD) return 0;
@@ -44,68 +37,29 @@ export const getScore = (cards: Card[], multiplier: 1 | 2 | 4 = 1) => {
   return (points - SCORE_THRESHOLD) * multiplier;
 };
 
-export const getLowCardNumericValue = (rank: CardRank) => {
-  const { Eight, Nine, Seven } = CardRank;
-
-  switch (rank) {
-    case Seven:
-      return 7;
-
-    case Eight:
-      return 8;
-
-    case Nine:
-      return 9;
-
-    default:
-      return -1;
-  }
-};
-
+/**
+ * @name getPreviousRank
+ * @description Returns the previous rank for a given rank
+ */
 export const getPreviousRank = (rank: CardRank) => {
-  const { Ace, Eight, Jack, King, Nine, Queen, Seven, Ten } = CardRank;
+  const idRank = ORDERED_RANKS.findIndex((c) => c.rank === rank);
 
-  switch (rank) {
-    case Ten:
-      return Ace;
+  if ([-1, 0].includes(idRank)) return undefined;
 
-    case Ace:
-      return King;
+  const { rank: previousRank } = ORDERED_RANKS[idRank - 1];
 
-    case King:
-      return Queen;
-
-    case Queen:
-      return Jack;
-
-    case Jack:
-      return Nine;
-
-    case Nine:
-      return Eight;
-
-    case Eight:
-      return Seven;
-
-    case Seven:
-    default:
-      return undefined;
-  }
+  return previousRank;
 };
 
 /**
- * Returns whether 1, 0 or -1 based on the comparison of two cards
+ * @name compareCardRanks
+ * @description Returns whether 1, 0 or -1 based on the comparison of two cards
  */
 export const compareCardRanks = (rank1: CardRank, rank2: CardRank) => {
-  const points1 = getCardPoints(rank1);
-  const points2 = getCardPoints(rank2);
+  const idCardPoints1 = ORDERED_RANKS.findIndex((c) => c.rank === rank1);
+  const idCardPoints2 = ORDERED_RANKS.findIndex((c) => c.rank === rank2);
 
-  if (points1 !== 0 || points2 !== 0) {
-    return compareValues(points1, points2);
-  }
+  if ([idCardPoints1, idCardPoints2].includes(-1)) return 0;
 
-  const value1 = getLowCardNumericValue(rank1);
-  const value2 = getLowCardNumericValue(rank2);
-
-  return compareValues(value1, value2);
+  return compareValues(idCardPoints1, idCardPoints2);
 };

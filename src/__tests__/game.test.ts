@@ -1,24 +1,24 @@
-import { getLeaderFold, getPlayableCards, getPlayableCardsTrumpSuit, getPlayerId } from '../game';
+import { getWinnerIdTrick, getPlayableCards, getPlayableCardsTrumpSuit, getPlayerId } from '../game';
 import { CardRank, CardSuit } from '../types';
 
 const { Ace, Eight, Jack, King, Nine, Queen, Seven, Ten } = CardRank;
 const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
 
-test('getLeaderFold', () => {
+test('getWinnerIdTrick', () => {
   // It returns -1 if no 4 played cards
-  const id1 = getLeaderFold([], 0, false);
+  const id1 = getWinnerIdTrick([], 0, false);
   expect(id1).toBe(-1);
 
-  const id2 = getLeaderFold([], 0, Spades);
+  const id2 = getWinnerIdTrick([], 0, Spades);
   expect(id2).toBe(-1);
 
-  const id3 = getLeaderFold([{ rank: Ten, suit: Spades }], 0, false);
+  const id3 = getWinnerIdTrick([{ rank: Ten, suit: Spades }], 0, false);
   expect(id3).toBe(-1);
 
-  const id4 = getLeaderFold([{ rank: Ten, suit: Spades }], 0, Spades);
+  const id4 = getWinnerIdTrick([{ rank: Ten, suit: Spades }], 0, Spades);
   expect(id4).toBe(-1);
 
-  const id5 = getLeaderFold(
+  const id5 = getWinnerIdTrick(
     [
       { rank: Ten, suit: Spades },
       { rank: Ace, suit: Spades }
@@ -29,7 +29,7 @@ test('getLeaderFold', () => {
 
   expect(id5).toBe(-1);
 
-  const id6 = getLeaderFold(
+  const id6 = getWinnerIdTrick(
     [
       { rank: Ten, suit: Spades },
       { rank: Ace, suit: Spades }
@@ -40,7 +40,7 @@ test('getLeaderFold', () => {
 
   expect(id6).toBe(-1);
 
-  const id7 = getLeaderFold(
+  const id7 = getWinnerIdTrick(
     [
       { rank: Ten, suit: Spades },
       { rank: Ace, suit: Spades },
@@ -52,7 +52,7 @@ test('getLeaderFold', () => {
 
   expect(id7).toBe(-1);
 
-  const id8 = getLeaderFold(
+  const id8 = getWinnerIdTrick(
     [
       { rank: Ten, suit: Spades },
       { rank: Ace, suit: Spades },
@@ -65,7 +65,7 @@ test('getLeaderFold', () => {
   expect(id8).toBe(-1);
 
   // Is "en voiture"
-  const id9 = getLeaderFold(
+  const id9 = getWinnerIdTrick(
     [
       { rank: Ace, suit: Spades },
       { rank: Ten, suit: Spades },
@@ -78,7 +78,7 @@ test('getLeaderFold', () => {
 
   expect(id9).toBe(1);
 
-  const id10 = getLeaderFold(
+  const id10 = getWinnerIdTrick(
     [
       { rank: Ace, suit: Spades },
       { rank: Ten, suit: Spades },
@@ -92,7 +92,7 @@ test('getLeaderFold', () => {
   expect(id10).toBe(1);
 
   // Is "atout"
-  const id11 = getLeaderFold(
+  const id11 = getWinnerIdTrick(
     [
       { rank: Ace, suit: Spades },
       { rank: Ten, suit: Spades },
@@ -105,7 +105,7 @@ test('getLeaderFold', () => {
 
   expect(id11).toBe(1);
 
-  const id12 = getLeaderFold(
+  const id12 = getWinnerIdTrick(
     [
       { rank: Ace, suit: Spades },
       { rank: Ten, suit: Spades },
@@ -120,7 +120,7 @@ test('getLeaderFold', () => {
 
   // Is not "atout" and there is no "atout" being played
 
-  const id13 = getLeaderFold(
+  const id13 = getWinnerIdTrick(
     [
       { rank: Ace, suit: Spades },
       { rank: Ten, suit: Spades },
@@ -133,7 +133,7 @@ test('getLeaderFold', () => {
 
   expect(id13).toBe(1);
 
-  const id14 = getLeaderFold(
+  const id14 = getWinnerIdTrick(
     [
       { rank: Ace, suit: Spades },
       { rank: Ten, suit: Spades },
@@ -148,7 +148,7 @@ test('getLeaderFold', () => {
 
   // It not "atout" but there are "atouts"
 
-  const id15 = getLeaderFold(
+  const id15 = getWinnerIdTrick(
     [
       { rank: Ace, suit: Spades },
       { rank: King, suit: Spades },
@@ -161,7 +161,7 @@ test('getLeaderFold', () => {
 
   expect(id15).toBe(3);
 
-  const id16 = getLeaderFold(
+  const id16 = getWinnerIdTrick(
     [
       { rank: Ten, suit: Spades },
       { rank: Seven, suit: Clubs },
@@ -174,7 +174,7 @@ test('getLeaderFold', () => {
 
   expect(id16).toBe(2);
 
-  const id17 = getLeaderFold(
+  const id17 = getWinnerIdTrick(
     [
       { rank: Ten, suit: Spades },
       { rank: Seven, suit: Clubs },
@@ -189,7 +189,7 @@ test('getLeaderFold', () => {
 
   // It works even when startingPlayerId is not 0
 
-  const id18 = getLeaderFold(
+  const id18 = getWinnerIdTrick(
     [
       { rank: Ten, suit: Spades },
       { rank: Seven, suit: Clubs },
@@ -202,7 +202,7 @@ test('getLeaderFold', () => {
 
   expect(id18).toBe(0);
 
-  const id19 = getLeaderFold(
+  const id19 = getWinnerIdTrick(
     [
       { rank: Ten, suit: Spades },
       { rank: Seven, suit: Clubs },
@@ -380,7 +380,7 @@ test('getPlayableCards', () => {
   expect(c18).toStrictEqual(copyOneCard);
 
   // Trump suit
-  // Player 3 starts and requests trump suit, player 0 plays next and has no suit
+  // Player 3 starts and leads with trump suit, player 0 plays next and has no suit
   const c19 = getPlayableCards(
     [
       { rank: King, suit: Clubs },
@@ -409,7 +409,7 @@ test('getPlayableCards', () => {
     { rank: Ace, suit: Hearts }
   ]);
 
-  // Player 1 starts and requests trump suit, player 0 plays last and has no suit
+  // Player 1 starts and leads with trump suit, player 0 plays last and has no suit
   const c20 = getPlayableCards(
     [
       { rank: King, suit: Clubs },
@@ -442,7 +442,7 @@ test('getPlayableCards', () => {
     { rank: Ace, suit: Hearts }
   ]);
 
-  // Player 3 starts and requests trump suit, player 0 plays next and has only one card from that suit
+  // Player 3 starts and leads with trump suit, player 0 plays next and has only one card from that suit
   const c21 = getPlayableCards(
     [
       { rank: King, suit: Clubs },
@@ -462,7 +462,7 @@ test('getPlayableCards', () => {
 
   expect(c21).toStrictEqual([{ rank: Jack, suit: Spades }]);
 
-  // Player 1 starts and requests trump suit, player 0 plays last and has only one card from that suit
+  // Player 1 starts and leads with trump suit, player 0 plays last and has only one card from that suit
   const c22 = getPlayableCards(
     [
       { rank: King, suit: Clubs },
@@ -514,7 +514,7 @@ test('getPlayableCards', () => {
     { rank: Seven, suit: Spades }
   ]);
 
-  // Same team player plays the ten of trump suit so player 0 can play any card from trump suit
+  // Partner plays the ten of trump suit so player 0 can play any card from trump suit
   const c24 = getPlayableCards(
     [
       { rank: Ace, suit: Spades },
@@ -571,7 +571,7 @@ test('getPlayableCards', () => {
     { rank: Jack, suit: Spades }
   ]);
 
-  // Same team player plays a middle card from trump suit so player 0 has to play any higher card from trump
+  // Partner plays a middle card from trump suit so player 0 has to play any higher card from trump
   const c26 = getPlayableCards(
     [
       { rank: Ten, suit: Spades },
@@ -626,7 +626,7 @@ test('getPlayableCards', () => {
     { rank: Seven, suit: Spades }
   ]);
 
-  // Same team player plays a middle card from trump suit and player 0 cannot go higher but has to provide trump suit
+  // Partner plays a middle card from trump suit and player 0 cannot go higher but has to provide trump suit
   const c28 = getPlayableCards(
     [
       { rank: Ten, suit: Hearts },
@@ -657,7 +657,7 @@ test('getPlayableCards', () => {
 
   // No-trump suit ("en voiture")
 
-  // Player 3 starts and requests trump suit, player 0 plays next and has no suit
+  // Player 3 starts and leads with trump suit, player 0 plays next and has no suit
   const c29 = getPlayableCards(
     [
       { rank: King, suit: Clubs },
@@ -686,7 +686,7 @@ test('getPlayableCards', () => {
     { rank: Ace, suit: Hearts }
   ]);
 
-  // Player 1 starts and requests any suit ("en voiture"), player 0 plays last and has no suit
+  // Player 1 starts and leads with any suit ("en voiture"), player 0 plays last and has no suit
   const c30 = getPlayableCards(
     [
       { rank: King, suit: Clubs },
@@ -719,7 +719,7 @@ test('getPlayableCards', () => {
     { rank: Ace, suit: Hearts }
   ]);
 
-  // Player 3 starts and requests any suit ("en voiture"), player 0 plays next and has only one card from that suit
+  // Player 3 starts and leads with any suit ("en voiture"), player 0 plays next and has only one card from that suit
   const c31 = getPlayableCards(
     [
       { rank: King, suit: Clubs },
@@ -739,7 +739,7 @@ test('getPlayableCards', () => {
 
   expect(c31).toStrictEqual([{ rank: Jack, suit: Spades }]);
 
-  // Player 1 starts and requests any suit ("en voiture"), player 0 plays last and has only one card from that suit
+  // Player 1 starts and leads with any suit ("en voiture"), player 0 plays last and has only one card from that suit
   const c32 = getPlayableCards(
     [
       { rank: King, suit: Clubs },
@@ -791,7 +791,7 @@ test('getPlayableCards', () => {
     { rank: Seven, suit: Spades }
   ]);
 
-  // Same team player plays the ten of any suit ("en voiture") so player 0 can play any card from that suit
+  // Partner plays the ten of any suit ("en voiture") so player 0 can play any card from that suit
   const c34 = getPlayableCards(
     [
       { rank: Ace, suit: Spades },
@@ -848,7 +848,7 @@ test('getPlayableCards', () => {
     { rank: Jack, suit: Spades }
   ]);
 
-  // Same team player plays a middle card from any suit ("en voiture") so player 0 has to play any higher card from that suit
+  // Partner plays a middle card from any suit ("en voiture") so player 0 has to play any higher card from that suit
   const c36 = getPlayableCards(
     [
       { rank: Ten, suit: Spades },
@@ -903,7 +903,7 @@ test('getPlayableCards', () => {
     { rank: Seven, suit: Spades }
   ]);
 
-  // Same team player plays a middle card from any suit ("en voiture") and player 0 cannot go higher but has to provide that suit
+  // Partner plays a middle card from any suit ("en voiture") and player 0 cannot go higher but has to provide that suit
   const c38 = getPlayableCards(
     [
       { rank: Ten, suit: Hearts },

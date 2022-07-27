@@ -1,23 +1,26 @@
 import { Card, Player, PlayerId } from './types';
 import { NUMBER_PLAYERS } from './constants';
 
-export const isSameTeam = (playerId1: PlayerId, playerId2: PlayerId) => {
+/**
+ * @name arePartners
+ * @description Returns whether two players are partners
+ */
+export const arePartners = (playerId1: PlayerId, playerId2: PlayerId) => {
   return playerId1 % 2 === playerId2 % 2;
 };
 
-export const distributeCards = (cards: Card[], players: Player[]) => {
-  for (let i = 0; i < NUMBER_PLAYERS; i++) {
-    const pickedCards = cards.splice(0, 3);
-    players[i].cards = pickedCards;
-  }
+/**
+ * @name dealCards
+ * @description Deals cards by following the 3-2-3 pattern from Manille
+ */
+export const dealCards = (cards: Card[], players: Player[]) => {
+  const dealtCardsLength = [3, 2, 3];
 
-  for (let i = 0; i < NUMBER_PLAYERS; i++) {
-    const pickedCards = cards.splice(0, 2);
-    players[i].cards = [...players[i].cards, ...pickedCards];
-  }
-
-  for (let i = 0; i < NUMBER_PLAYERS; i++) {
-    const pickedCards = cards.splice(0, 3);
-    players[i].cards = [...players[i].cards, ...pickedCards];
+  for (const length of dealtCardsLength) {
+    for (let i = 0; i < NUMBER_PLAYERS; i++) {
+      const pickedCards = cards.splice(0, length);
+      if (players[i].cards) players[i].cards.push(...pickedCards);
+      else players[i].cards = pickedCards;
+    }
   }
 };
