@@ -37,13 +37,13 @@ export const getPlayableCards = (
 
 /**
  * @name getHighestCardSuit
- * @description Returns the from the same suit
+ * @description Returns the highest card from the same suit
  * @todo tests
  */
 export const getHighestCardSuit = (cards: Card[], suit: CardSuit | false) => {
   const cardsSuit = filterBySuit(cards, suit);
   const sortedCardsSuit = sortSuit(cardsSuit);
-  const highestCardSuit = sortedCardsSuit[0];
+  const [highestCardSuit] = sortedCardsSuit;
 
   return highestCardSuit;
 };
