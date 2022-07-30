@@ -1,6 +1,6 @@
 import { generateSuit } from '../cards';
 import { CardRank, CardSuit } from '../types';
-import { compareValues, flattenArray, getSureValues, adjustValues } from '../utils';
+import { compareValues, flattenArray, getUniqueCards, reduceOwnershipCards } from '../utils';
 
 const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
 const { King, Queen, Jack, Nine } = CardRank;
@@ -51,12 +51,12 @@ test('flattenArray', () => {
   expect(flatArray).toMatchSnapshot();
 });
 
-test('getSureValues', () => {
-  expect(getSureValues([[]])).toStrictEqual([[]]);
-  expect(getSureValues([[], []])).toStrictEqual([[], []]);
-  expect(getSureValues([[c1], [c2], [c3], [c4]])).toStrictEqual([[c1], [c2], [c3], [c4]]);
+test('getUniqueCards', () => {
+  expect(getUniqueCards([[]])).toStrictEqual([[]]);
+  expect(getUniqueCards([[], []])).toStrictEqual([[], []]);
+  expect(getUniqueCards([[c1], [c2], [c3], [c4]])).toStrictEqual([[c1], [c2], [c3], [c4]]);
   expect(
-    getSureValues([
+    getUniqueCards([
       [c1, c5],
       [c2, c6],
       [c3, c7],
@@ -70,7 +70,7 @@ test('getSureValues', () => {
   ]);
 
   expect(
-    getSureValues([
+    getUniqueCards([
       [c1, c2, c3, c4],
       [c1, c2, c3, c4],
       [c3, c1, c2, c4],
@@ -78,27 +78,29 @@ test('getSureValues', () => {
     ])
   ).toStrictEqual([[], [], [], []]);
 
-  expect(getSureValues([[c1, c2, c3, c4], [c1], [c3], [c2]])).toStrictEqual([[c4], [], [], []]);
+  expect(getUniqueCards([[c1, c2, c3, c4], [c1], [c3], [c2]])).toStrictEqual([[c4], [], [], []]);
   expect(
-    getSureValues([
+    getUniqueCards([
       [c1, c2, c3, c4],
       [c2, c1],
       [c3, c2],
       [c2, c1]
     ])
   ).toStrictEqual([[c4], [], [], []]);
+
+  expect(getUniqueCards([[c1, c2, c5], [c2, c3], [c2, c4], [c5]])).toStrictEqual([[c1], [c3], [c4], []]);
 });
 
-test('adjustValues', () => {
+test('reduceOwnershipCards', () => {
   let result;
 
-  expect(adjustValues([[]], [1])).toStrictEqual([[]]);
-  expect(adjustValues([[], []], [1, 1])).toStrictEqual([[], []]);
+  expect(reduceOwnershipCards([[]], [1])).toStrictEqual([[]]);
+  expect(reduceOwnershipCards([[], []], [1, 1])).toStrictEqual([[], []]);
 
-  result = adjustValues([[c1], [c2], [c3], [c4]], [1, 1, 1, 1]);
+  result = reduceOwnershipCards([[c1], [c2], [c3], [c4]], [1, 1, 1, 1]);
   expect(result).toStrictEqual([[c1], [c2], [c3], [c4]]);
 
-  result = adjustValues(
+  result = reduceOwnershipCards(
     [
       [c1, c5],
       [c2, c6],
@@ -115,38 +117,41 @@ test('adjustValues', () => {
     [c4, c8, c9]
   ]);
 
-  result = adjustValues([[c1], [c2, c6], [c3, c7, c9], [c4, c8, c10, c11]], [1, 2, 3, 4]);
+  result = reduceOwnershipCards([[c1], [c2, c6], [c3, c7, c9], [c4, c8, c10, c11]], [1, 2, 3, 4]);
   expect(result).toStrictEqual([[c1], [c2, c6], [c3, c7, c9], [c4, c8, c10, c11]]);
 
-  result = adjustValues(
+  result = reduceOwnershipCards(
     [[c1], [c1, c2, c6], [c1, c2, c6, c3, c7, c9], [c1, c2, c6, c3, c7, c9, c4, c8, c10, c11]],
     [1, 2, 3, 4]
   );
 
   expect(result).toStrictEqual([[c1], [c2, c6], [c3, c7, c9], [c4, c8, c10, c11]]);
 
-  result = adjustValues(
+  result = reduceOwnershipCards(
     [[c1, c2, c6, c3, c7, c9, c4, c8, c10, c11], [c1, c2, c6, c3, c7, c9], [c1, c2, c6], [c1]],
     [4, 3, 2, 1]
   );
 
   expect(result).toStrictEqual([[c4, c8, c10, c11], [c3, c7, c9], [c2, c6], [c1]]);
 
-  result = adjustValues(
+  result = reduceOwnershipCards(
     [[c1, c2, c6, c3, c7, c9, c4, c8, c10, c11], [c2, c1, c3, c6, c7, c9], [c1, c2, c6], [c1]],
     [4, 3, 2, 1]
   );
 
   expect(result).toStrictEqual([[c4, c8, c10, c11], [c3, c7, c9], [c2, c6], [c1]]);
 
-  result = adjustValues(
+  result = reduceOwnershipCards(
     [[c1], [c1, c2, c6, c3, c7, c9, c4, c8, c10, c11], [c1, c2, c6], [c1, c2, c6, c3, c7, c9]],
     [1, 4, 2, 3]
   );
 
   expect(result).toStrictEqual([[c1], [c4, c8, c10, c11], [c2, c6], [c3, c7, c9]]);
 
-  result = adjustValues([[c1], [c2], [c1, c2, c3, c4], [c5, c6]], [1, 1, 2, 2]);
+  result = reduceOwnershipCards([[c1], [c2], [c1, c2, c3, c4], [c5, c6]], [1, 1, 2, 2]);
 
   expect(result).toStrictEqual([[c1], [c2], [c3, c4], [c5, c6]]);
+
+  result = reduceOwnershipCards([[c1, c2, c5], [c2, c3], [c2, c4], [c5]], [2, 1, 1, 1]);
+  expect(result).toStrictEqual([[c1, c2], [c3], [c4], [c5]]);
 });

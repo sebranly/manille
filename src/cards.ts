@@ -53,6 +53,14 @@ export const filterBySuit = (cards: Card[], suit: CardSuit | false) => {
 };
 
 /**
+ * @name isTrump
+ * @description Returns whether the led suit is the trump suit (or "en voiture")
+ */
+export const isTrump = (ledSuit: CardSuit, trumpSuit: CardSuit | false) => {
+  return trumpSuit === false || ledSuit === trumpSuit;
+};
+
+/**
  * @name excludeSuit
  * @description Returns only the cards from the other suits
  */

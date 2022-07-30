@@ -10,6 +10,7 @@ import {
   getCardId,
   hasCard,
   isEqual,
+  isTrump,
   sortCards,
   sortSuit
 } from '../cards';
@@ -23,6 +24,21 @@ const suit1 = generateSuit(Clubs);
 const suit2 = generateSuit(Diamonds);
 const c1 = { rank: King, suit: Diamonds };
 const c2 = { rank: Queen, suit: Diamonds };
+
+test('isTrump', () => {
+  expect(isTrump(Clubs, Diamonds)).toBe(false);
+  expect(isTrump(Clubs, Hearts)).toBe(false);
+  expect(isTrump(Clubs, Spades)).toBe(false);
+
+  expect(isTrump(Clubs, Clubs)).toBe(true);
+  expect(isTrump(Diamonds, Diamonds)).toBe(true);
+  expect(isTrump(Hearts, Hearts)).toBe(true);
+  expect(isTrump(Spades, Spades)).toBe(true);
+  expect(isTrump(Clubs, false)).toBe(true);
+  expect(isTrump(Diamonds, false)).toBe(true);
+  expect(isTrump(Hearts, false)).toBe(true);
+  expect(isTrump(Spades, false)).toBe(true);
+});
 
 test('generateSuit', () => {
   expect(generateSuit(Hearts)).toStrictEqual([

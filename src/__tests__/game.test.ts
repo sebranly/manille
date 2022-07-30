@@ -1,8 +1,64 @@
-import { getWinnerIdTrick, getPlayableCards, getPlayableCardsTrumpSuit, getPlayerId } from '../game';
+import { generateDeck, generateSuit } from '../cards';
+import { getWinnerIdTrick, getPlayableCards, getHigherCardsSuit, getHighestCardSuit, getPlayerId } from '../game';
 import { CardRank, CardSuit } from '../types';
 
 const { Ace, Eight, Jack, King, Nine, Queen, Seven, Ten } = CardRank;
 const { Clubs, Diamonds, Hearts, Spades } = CardSuit;
+
+const deck = generateDeck();
+const suit = generateSuit(Clubs);
+
+test('getHighestCardSuit', () => {
+  expect(getHighestCardSuit(deck, false)).toBeUndefined();
+  expect(getHighestCardSuit(deck, Clubs)).toStrictEqual({ rank: Ten, suit: Clubs });
+  expect(getHighestCardSuit(suit, Clubs)).toStrictEqual({ rank: Ten, suit: Clubs });
+  expect(getHighestCardSuit(suit, Diamonds)).toBeUndefined();
+
+  expect(
+    getHighestCardSuit(
+      [
+        { rank: Nine, suit: Clubs },
+        { rank: Eight, suit: Clubs }
+      ],
+      Clubs
+    )
+  ).toStrictEqual({ rank: Nine, suit: Clubs });
+});
+
+test('getHigherCardsSuit', () => {
+  expect(getHigherCardsSuit(deck, [], false)).toStrictEqual([]);
+  expect(getHigherCardsSuit(deck, [], Clubs)).toStrictEqual(suit);
+
+  expect(
+    getHigherCardsSuit(
+      deck,
+      [
+        { rank: Nine, suit: Clubs },
+        { rank: King, suit: Clubs }
+      ],
+      Clubs
+    )
+  ).toStrictEqual([
+    { rank: Ten, suit: Clubs },
+    { rank: Ace, suit: Clubs }
+  ]);
+
+  expect(getHigherCardsSuit(suit, [], Clubs)).toStrictEqual(suit);
+  expect(getHigherCardsSuit(suit, [], Diamonds)).toStrictEqual([]);
+  expect(
+    getHigherCardsSuit(
+      [
+        { rank: Nine, suit: Clubs },
+        { rank: Eight, suit: Clubs }
+      ],
+      [],
+      Clubs
+    )
+  ).toStrictEqual([
+    { rank: Nine, suit: Clubs },
+    { rank: Eight, suit: Clubs }
+  ]);
+});
 
 test('getWinnerIdTrick', () => {
   // It returns -1 if no 4 played cards
