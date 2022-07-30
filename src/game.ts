@@ -38,11 +38,13 @@ export const getPlayableCards = (
 /**
  * @name getHighestCardSuit
  * @description Returns the highest card from the same suit
- * @todo tests
  */
 export const getHighestCardSuit = (cards: Card[], suit: CardSuit | false) => {
   const cardsSuit = filterBySuit(cards, suit);
   const sortedCardsSuit = sortSuit(cardsSuit);
+
+  if (sortedCardsSuit.length === 0) return undefined;
+
   const [highestCardSuit] = sortedCardsSuit;
 
   return highestCardSuit;
@@ -51,11 +53,11 @@ export const getHighestCardSuit = (cards: Card[], suit: CardSuit | false) => {
 /**
  * @name getHigherCardsSuit
  * @description Returns the cards from the same suit that are higher than the current highest
- * @todo tests
  */
 export const getHigherCardsSuit = (cards: Card[], playedCards: Card[], suit: CardSuit | false) => {
   const cardsSuit = filterBySuit(cards, suit);
   const highestPlayedCardSuit = getHighestCardSuit(playedCards, suit);
+  if (!highestPlayedCardSuit) return cardsSuit;
 
   const higherCardsSuit = cardsSuit.filter(
     (card: Card) => compareCardRanks(card.rank, highestPlayedCardSuit.rank) === 1
@@ -154,6 +156,8 @@ export const getPlayableCardsNonTrumpSuit = (
 export const getLeaderIdSuit = (playedCards: Card[], startingPlayerId: PlayerId, suit: CardSuit | false) => {
   const highestPlayedCardSuit = getHighestCardSuit(playedCards, suit);
 
+  if (!highestPlayedCardSuit) return -1;
+
   const cardId = getCardId(playedCards, highestPlayedCardSuit);
   const leaderId = getPlayerId(startingPlayerId, cardId);
 
@@ -172,6 +176,8 @@ export const isPartnerLeadingSuit = (
   suit: CardSuit | false
 ) => {
   const leaderId = getLeaderIdSuit(playedCards, startingPlayerId, suit);
+
+  if (leaderId === -1) return false;
 
   return arePartners(currentPlayerId, leaderId);
 };

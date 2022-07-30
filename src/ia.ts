@@ -49,10 +49,13 @@ export const updateInfoSuitHighest = (
       const highestPlayedCard = getHighestCardSuit(subsetPlayedCars, ledSuit);
       const leaderIdSuit = getLeaderIdSuit(subsetPlayedCars, startingPlayerId, ledSuit);
       const playerLeads = leaderIdSuit === playerId;
-      const { rank: highestRank } = highestPlayedCard;
 
-      if (!playerLeads) {
-        info[playerId][ledSuit] = getNewSuitHighest(info[playerId][ledSuit], highestRank);
+      if (highestPlayedCard) {
+        const { rank: highestRank } = highestPlayedCard;
+
+        if (!playerLeads) {
+          info[playerId][ledSuit] = getNewSuitHighest(info[playerId][ledSuit], highestRank);
+        }
       }
     }
   }
