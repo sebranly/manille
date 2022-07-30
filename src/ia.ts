@@ -1,4 +1,4 @@
-import { differenceWith, excludeSuit, excludeSuitOver, generateDeck } from './cards';
+import { differenceWith, excludeSuit, excludeSuitOver, generateDeck, isTrump } from './cards';
 import { NUMBER_PLAYERS } from './constants';
 import { getHighestCardSuit, getLeaderIdSuit, getPlayerId, isPartnerLeadingSuit } from './game';
 import { compareCardRanks, getPreviousRank } from './scores';
@@ -26,7 +26,7 @@ export const updateInfoSuitHighest = (
     const playerId = getPlayerId(startingPlayerId, i);
     const playerSuit = playedCards[i].suit;
     const hasProvided = playerSuit === ledSuit;
-    const isTrumpSuit = trumpSuit === false || ledSuit === trumpSuit;
+    const isTrumpSuit = isTrump(ledSuit, trumpSuit);
 
     if (!hasProvided) {
       info[playerId][ledSuit] = undefined;

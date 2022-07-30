@@ -2,7 +2,7 @@ import { compareCardRanks } from './scores';
 import { Card, CardSuit, PlayerId } from './types';
 import { NUMBER_PLAYERS } from './constants';
 import { arePartners } from '.';
-import { filterBySuit, getCardId, sortSuit } from './cards';
+import { filterBySuit, getCardId, isTrump, sortSuit } from './cards';
 
 /**
  * @name getPlayableCards
@@ -21,8 +21,8 @@ export const getPlayableCards = (
 
   if (canPlayAny) return cards;
 
-  // TODO: create a function for it
-  const isTrumpSuit = trumpSuit === false || playedCards[0].suit === trumpSuit;
+  const ledSuit = playedCards[0].suit;
+  const isTrumpSuit = isTrump(ledSuit, trumpSuit);
 
   if (isTrumpSuit) {
     const playableCards = getPlayableCardsTrumpSuit(cards, playedCards);
@@ -190,7 +190,7 @@ export const getWinnerIdTrick = (playedCards: Card[], startingPlayerId: PlayerId
   if (playedCards.length !== NUMBER_PLAYERS) return -1;
 
   const ledSuit = playedCards[0].suit;
-  const isTrumpSuit = trumpSuit === false || ledSuit === trumpSuit;
+  const isTrumpSuit = isTrump(ledSuit, trumpSuit);
   const playedCardsTrumpSuit = filterBySuit(playedCards, trumpSuit);
 
   // If the led suit is the trump suit, the leader of this suit is the leader of the trick
