@@ -3,7 +3,7 @@ import { NUMBER_PLAYERS } from './constants';
 import { getHighestCardSuit, getLeaderIdSuit, getPlayerId, isPartnerLeadingSuit } from './game';
 import { compareCardRanks, getPreviousRank } from './scores';
 import { Card, CardRank, CardSuit, InfoSuitHighest, PlayerId } from './types';
-import { adjustValues } from './utils';
+import { reduceOwnershipCards } from './utils';
 
 // TODO: add comments on functions
 
@@ -118,7 +118,7 @@ export const updateInfoCards = (
     }
   }
 
-  const newInfoCards = adjustValues(tempInfoCards, lengths) as Card[][];
+  const newInfoCards = reduceOwnershipCards(tempInfoCards, lengths) as Card[][];
 
   return newInfoCards;
 };
