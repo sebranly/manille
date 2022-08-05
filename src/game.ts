@@ -2,7 +2,7 @@ import { compareCardRanks } from './scores';
 import { Card, CardSuit, PlayerId } from './types';
 import { NUMBER_PLAYERS } from './constants';
 import { arePartners } from '.';
-import { filterBySuit, getCardId, sortSuit } from './cards';
+import { filterBySuit, getCardId, isTrump, sortSuit } from './cards';
 
 /**
  * @name getPlayableCards
@@ -21,8 +21,8 @@ export const getPlayableCards = (
 
   if (canPlayAny) return cards;
 
-  // TODO: create a function for it
-  const isTrumpSuit = trumpSuit === false || playedCards[0].suit === trumpSuit;
+  const ledSuit = playedCards[0].suit;
+  const isTrumpSuit = isTrump(ledSuit, trumpSuit);
 
   if (isTrumpSuit) {
     const playableCards = getPlayableCardsTrumpSuit(cards, playedCards);
@@ -38,11 +38,13 @@ export const getPlayableCards = (
 /**
  * @name getHighestCardSuit
  * @description Returns the highest card from the same suit
- * @todo tests
  */
 export const getHighestCardSuit = (cards: Card[], suit: CardSuit | false) => {
   const cardsSuit = filterBySuit(cards, suit);
   const sortedCardsSuit = sortSuit(cardsSuit);
+
+  if (sortedCardsSuit.length === 0) return undefined;
+
   const [highestCardSuit] = sortedCardsSuit;
 
   return highestCardSuit;
@@ -51,11 +53,11 @@ export const getHighestCardSuit = (cards: Card[], suit: CardSuit | false) => {
 /**
  * @name getHigherCardsSuit
  * @description Returns the cards from the same suit that are higher than the current highest
- * @todo tests
  */
 export const getHigherCardsSuit = (cards: Card[], playedCards: Card[], suit: CardSuit | false) => {
   const cardsSuit = filterBySuit(cards, suit);
   const highestPlayedCardSuit = getHighestCardSuit(playedCards, suit);
+  if (!highestPlayedCardSuit) return cardsSuit;
 
   const higherCardsSuit = cardsSuit.filter(
     (card: Card) => compareCardRanks(card.rank, highestPlayedCardSuit.rank) === 1
@@ -154,6 +156,8 @@ export const getPlayableCardsNonTrumpSuit = (
 export const getLeaderIdSuit = (playedCards: Card[], startingPlayerId: PlayerId, suit: CardSuit | false) => {
   const highestPlayedCardSuit = getHighestCardSuit(playedCards, suit);
 
+  if (!highestPlayedCardSuit) return -1;
+
   const cardId = getCardId(playedCards, highestPlayedCardSuit);
   const leaderId = getPlayerId(startingPlayerId, cardId);
 
@@ -173,6 +177,8 @@ export const isPartnerLeadingSuit = (
 ) => {
   const leaderId = getLeaderIdSuit(playedCards, startingPlayerId, suit);
 
+  if (leaderId === -1) return false;
+
   return arePartners(currentPlayerId, leaderId);
 };
 
@@ -184,7 +190,7 @@ export const getWinnerIdTrick = (playedCards: Card[], startingPlayerId: PlayerId
   if (playedCards.length !== NUMBER_PLAYERS) return -1;
 
   const ledSuit = playedCards[0].suit;
-  const isTrumpSuit = trumpSuit === false || ledSuit === trumpSuit;
+  const isTrumpSuit = isTrump(ledSuit, trumpSuit);
   const playedCardsTrumpSuit = filterBySuit(playedCards, trumpSuit);
 
   // If the led suit is the trump suit, the leader of this suit is the leader of the trick

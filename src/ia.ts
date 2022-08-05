@@ -1,9 +1,9 @@
-import { differenceWith, excludeSuit, excludeSuitOver, generateDeck } from './cards';
+import { differenceWith, excludeSuit, excludeSuitOver, generateDeck, isTrump } from './cards';
 import { NUMBER_PLAYERS } from './constants';
 import { getHighestCardSuit, getLeaderIdSuit, getPlayerId, isPartnerLeadingSuit } from './game';
 import { compareCardRanks, getPreviousRank } from './scores';
 import { Card, CardRank, CardSuit, InfoSuitHighest, PlayerId } from './types';
-import { adjustValues } from './utils';
+import { reduceOwnershipCards } from './utils';
 
 // TODO: add comments on functions
 
@@ -26,7 +26,7 @@ export const updateInfoSuitHighest = (
     const playerId = getPlayerId(startingPlayerId, i);
     const playerSuit = playedCards[i].suit;
     const hasProvided = playerSuit === ledSuit;
-    const isTrumpSuit = trumpSuit === false || ledSuit === trumpSuit;
+    const isTrumpSuit = isTrump(ledSuit, trumpSuit);
 
     if (!hasProvided) {
       info[playerId][ledSuit] = undefined;
@@ -49,10 +49,13 @@ export const updateInfoSuitHighest = (
       const highestPlayedCard = getHighestCardSuit(subsetPlayedCars, ledSuit);
       const leaderIdSuit = getLeaderIdSuit(subsetPlayedCars, startingPlayerId, ledSuit);
       const playerLeads = leaderIdSuit === playerId;
-      const { rank: highestRank } = highestPlayedCard;
 
-      if (!playerLeads) {
-        info[playerId][ledSuit] = getNewSuitHighest(info[playerId][ledSuit], highestRank);
+      if (highestPlayedCard) {
+        const { rank: highestRank } = highestPlayedCard;
+
+        if (!playerLeads) {
+          info[playerId][ledSuit] = getNewSuitHighest(info[playerId][ledSuit], highestRank);
+        }
       }
     }
   }
@@ -118,7 +121,7 @@ export const updateInfoCards = (
     }
   }
 
-  const newInfoCards = adjustValues(tempInfoCards, lengths) as Card[][];
+  const newInfoCards = reduceOwnershipCards(tempInfoCards, lengths) as Card[][];
 
   return newInfoCards;
 };

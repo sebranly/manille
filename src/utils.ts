@@ -20,12 +20,17 @@ export const flattenArray = (array: Card[][]) => {
   return array.reduce((a, b) => a.concat(b));
 };
 
-// TODO: add comments below
-export const getSureValues = (array: Card[][]) => {
-  const sureValues: Card[][] = [];
+/**
+ * @name getUniqueCards
+ * @description Based on an exhaustive list of cards possibly in each player's hands,
+ * it returns an array of the same format with only cards for which the owner is unique
+ * e.g. [[c1, c2, c5], [c2, c3], [c2, c4], [c5]] becomes [[c1], [c3], [c4], []]
+ */
+export const getUniqueCards = (array: Card[][]) => {
+  const uniqueCards: Card[][] = [];
 
   for (let i = 0; i < array.length; i++) {
-    sureValues[i] = [];
+    uniqueCards[i] = [];
   }
 
   for (let i = 0; i < array.length; i++) {
@@ -44,28 +49,38 @@ export const getSureValues = (array: Card[][]) => {
       }
 
       if (isSureValue) {
-        sureValues[i].push(value);
+        uniqueCards[i].push(value);
       }
     });
   }
 
-  return sureValues;
+  return uniqueCards;
 };
 
-export const adjustValues = (array: Card[][], length: number[]) => {
+/**
+ * @name reduceOwnershipCards
+ * @description Based on an exhaustive list of cards possibly in each player's hands,
+ * it returns an array of the same format by removing ownership of a card if a player
+ * does not have it for sure. This is based on deductions from the second argument
+ * which indicates the exact number of cards each player has currently
+ * e.g. [[c1, c2, c5], [c2, c3], [c2, c4], [c5]], [2, 1, 1, 1]
+ * becomes
+ * [[c1, c2], [c3], [c4], [c5]]
+ */
+export const reduceOwnershipCards = (array: Card[][], length: number[]) => {
   let canLoopAgain = true;
 
   while (canLoopAgain) {
     canLoopAgain = false;
 
-    const sureValues = getSureValues(array);
+    const uniqueCards = getUniqueCards(array);
 
     for (let i = 0; i < array.length; i++) {
       const expectedLength = length[i];
-      const values = sureValues[i];
+      const values = uniqueCards[i];
 
       if (values.length === expectedLength) {
-        const newArray = sureValues[i];
+        const newArray = uniqueCards[i];
 
         if (!areEqual(newArray, array[i])) {
           canLoopAgain = true;
