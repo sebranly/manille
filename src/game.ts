@@ -119,8 +119,10 @@ export const getPlayableCardsNonTrumpSuit = (
   // If the player does not have cards from the trump suit, they can play any card
   if (!cardsTrump.length) return cards;
 
-  // At this point, the player has some cards from the trump suit
-  // If they play second, they have to use a card from the trump suit
+  /**
+   * At this point, the player has some cards from the trump suit
+   * If they play second, they have to use a card from the trump suit
+   */
   if (playedCards.length === 1) return cardsTrump;
 
   // We determine if using a card from the trump suit is an obligation, based on the partner
@@ -193,11 +195,13 @@ export const getWinnerIdTrick = (playedCards: Card[], startingPlayerId: PlayerId
   const isTrumpSuit = isTrump(ledSuit, trumpSuit);
   const playedCardsTrumpSuit = filterBySuit(playedCards, trumpSuit);
 
-  // If the led suit is the trump suit, the leader of this suit is the leader of the trick
-  // If no cards from the trump suit has been played, the leader of the led suit is the leader of the trick
-  // Otherwise, the leader of the trump suit is the leader of the trick
-  // @todo tests by removing one or the other
-  // @todo I think we can remove isTrumpSuit condition here (think about "en voiture" though)
+  /**
+   * If the led suit is the trump suit, the leader of this suit is the leader of the trick
+   * If no cards from the trump suit has been played, the leader of the led suit is the leader of the trick
+   * Otherwise, the leader of the trump suit is the leader of the trick
+   * @todo tests by removing one or the other
+   * @todo I think we can remove isTrumpSuit condition here (think about "en voiture" though)
+   */
   const importantSuit = isTrumpSuit || playedCardsTrumpSuit.length === 0 ? ledSuit : trumpSuit;
   const leaderId = getLeaderIdSuit(playedCards, startingPlayerId, importantSuit);
 
