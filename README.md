@@ -8,7 +8,8 @@ Manille Engine
 
 ### Workflow
 
-`nvm` is being used in order to have a common Node version
+`nvm` is being used in order to have a common Node version:
+- `nvm use`
 
 ### Publishing
 
